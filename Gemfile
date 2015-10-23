@@ -45,3 +45,6 @@ group :development do
   gem 'spring'
 end
 
+source 'http://gems.alces-software.com' do
+  gem         'polymorph_client', '~> 0.4.0.a'
+end
