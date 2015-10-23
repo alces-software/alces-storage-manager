@@ -7,6 +7,14 @@ class LoginController < ApplicationController
   def authenticate
     emohawk = PolymorphClient::Connection.new({})
     auth_response = emohawk.authenticate?(params[:username], params[:password])
-    render html: "Auth response was <em>%s</em>".html_safe % [auth_response]
+    if auth_response
+      reset_session
+      session[:authenticated_username] = params[:username]
+      render plain: "You have authenticated successfully as %s." % [session[:authenticated_username]]
+    else
+      @errors = true
+      @user = params[:username]
+      render :index
+    end
   end
 end

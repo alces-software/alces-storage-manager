@@ -3,9 +3,13 @@
 <h1>Log in</h1>
 <p>Please log in with your cluster username and password to access the storage manager.</p>
 
+<% if defined?(@errors) && @errors %>
+<p class="error">Username or password incorrect.</p>
+<% end %>
+
 <%= form_tag({controller: "login", action: "authenticate"}, method: "post") do %>
   <%= label_tag(:username, "Username:") %>
-  <%= text_field_tag(:username) %>
+  <%= text_field_tag(:username, @user) %>
   <%= label_tag(:password, "Password:") %>
   <%= password_field_tag(:password) %>
   <%= submit_tag("Log in") %>
