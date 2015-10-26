@@ -24,3 +24,9 @@ module AlcesStorageManager
     config.active_record.raise_in_transactional_callbacks = true
   end
 end
+
+elfinder = ElfinderRailsConnector::Server.run(
+  origins: '*',
+  environment: {},
+  config_file: File.join(Rails.root, 'config', 'volumes.rb')
+)

@@ -47,4 +47,7 @@ end
 
 source 'http://gems.alces-software.com' do
   gem         'polymorph_client', '~> 0.4.0.a'
+  gem 'elfinder-rails-connector', '~> 0.2.0.a'
+  gem                   'arriba', '~> 0.5.0.a'
+  gem         'arriba-polymorph', '~> 0.4.1.a'
 end
