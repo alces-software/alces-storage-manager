@@ -1,2 +1,12 @@
 <h1>Files#index</h1>
 <p>Find me in app/views/files/index.html.erb</p>
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    $('#elfinder').elfinder({
+      url : '/finder/api'  // connector URL (REQUIRED)
+    });
+  });
+</script>
+
+<div id="elfinder"></div>
