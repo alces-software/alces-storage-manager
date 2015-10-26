@@ -1,10 +1,32 @@
-<h1>Files#index</h1>
-<p>Find me in app/views/files/index.html.erb</p>
+<h1>Alces Storage Manager</h1>
+<p>Logged in as <%= session[:authenticated_username] %></p>
 
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
     $('#elfinder').elfinder({
-      url : '/finder/api'  // connector URL (REQUIRED)
+      contextmenu: {
+        navbar: ['open', '|', 'duplicate', 'copy', 'cut', 'paste', '|', 'rm', '|', 'info'],
+        cwd: ['reload', 'back', '|', 'mkdir', 'mkfile', 'paste', '|', 'sort', '|', 'info'],
+        files: ['getfile', 'submit', '|', 'download', 'open', 'quicklook', '|', 'duplicate', 'copy', 'cut', 'paste', '|', 'rename', 'rm', 'edit', '|', 'archive', 'extract', '|', 'info']
+      },
+      height: $(window).height() - $('#elfinder').position().top - 30,
+      ui: ['toolbar', 'tree', 'path', 'stat'],
+      uiOptions: {
+        toolbar: [
+          ['back', 'forward'],
+          ['reload'],
+          ['home', 'up'],
+          ['mkdir', 'mkfile'],
+          ['upload', 'download', 'open'],
+          ['info', 'quicklook', 'submit'],
+          ['duplicate', 'copy', 'cut', 'paste'],
+          ['rename', 'rm', 'edit'],
+          ['extract', 'archive'],
+          ['view','sort'],
+          ['help']
+        ]
+      },
+      url : '/finder/api'
     });
   });
 </script>
