@@ -1,18 +1,34 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
+ * ==============================================================================
+ * Copyright (C) 2015 Stephen F. Norledge and Alces Software Ltd.
  *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ * This file/package is part of Alces Storage Manager.
  *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
+ * Alces Storage Manager is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License
+ * as published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * Alces Storage Manager is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this package.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * For more information on the Alces Storage Manager, please visit:
+ * https://github.com/alces-software/alces-storage-manager
+ *==============================================================================
  *
  *= require_tree .
  *= require_self
  *= require jquery-ui
  */
 @import "bootstrap-sprockets";
-@import "bootstrap"
+@import "bootstrap";
+
+.navbar-brand {
+  background: url('/img/stamp50.png') top left no-repeat;
+  padding-left: 45px;
+}

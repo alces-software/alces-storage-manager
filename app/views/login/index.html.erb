@@ -7,10 +7,12 @@
 <p class="error">Username or password incorrect.</p>
 <% end %>
 
-<%= form_tag({controller: "login", action: "authenticate"}, method: "post") do %>
+<%= form_tag({controller: "login", action: "authenticate", class: "form"}, method: "post") do %>
+<div class="form-group">
   <%= label_tag(:username, "Username:") %>
-  <%= text_field_tag(:username, @user) %>
+  <%= text_field_tag(:username, @user, class: "form-control") %>
   <%= label_tag(:password, "Password:") %>
-  <%= password_field_tag(:password) %>
-  <%= submit_tag("Log in") %>
+  <%= password_field_tag(:password, "", class: "form-control") %>
+  <%= submit_tag("Log in", class: "btn btn-default") %>
+</div>
 <% end %>
