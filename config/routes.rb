@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   root 'login#index'
   get 'login/index'
   post 'login/authenticate'
+  get 'logout', to: 'login#logout'
 
   get 'files', to: 'files#index'
   get 'finder/api'

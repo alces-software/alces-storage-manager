@@ -28,7 +28,7 @@ class LoginController < ApplicationController
       redirect_to files_url
     end
   end
-  
+
   def authenticate
     emohawk = PolymorphClient::Connection.new({:timeout => 5})
     auth_response = emohawk.authenticate?(params[:username], params[:password])
@@ -42,4 +42,10 @@ class LoginController < ApplicationController
       render :index
     end
   end
+
+  def logout
+    reset_session
+    redirect_to action: :index
+  end
+
 end
