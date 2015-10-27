@@ -24,6 +24,9 @@ require 'polymorph_client'
 
 class LoginController < ApplicationController
   def index
+    if session.has_key?(:authenticated_username)
+      redirect_to files_url
+    end
   end
   
   def authenticate
