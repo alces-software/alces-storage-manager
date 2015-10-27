@@ -32,7 +32,7 @@ class LoginController < ApplicationController
     if auth_response
       reset_session
       session[:authenticated_username] = params[:username]
-      render plain: "You have authenticated successfully as %s." % [session[:authenticated_username]]
+      redirect_to files_url
     else
       @errors = true
       @user = params[:username]
