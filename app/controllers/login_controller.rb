@@ -27,7 +27,7 @@ class LoginController < ApplicationController
   end
   
   def authenticate
-    emohawk = PolymorphClient::Connection.new({})
+    emohawk = PolymorphClient::Connection.new({:timeout => 5})
     auth_response = emohawk.authenticate?(params[:username], params[:password])
     if auth_response
       reset_session
