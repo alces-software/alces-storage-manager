@@ -27,8 +27,21 @@
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "fonts";
+
+$heading-font: "Magra", helvetica, arial, sans-serif;
+$body-font: "Quattrocento Sans", serif;
 
 .navbar-brand {
+  font-family: $heading-font;
   background: url('/img/stamp50.png') top left no-repeat;
   padding-left: 45px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $heading-font;
+}
+
+a, p, input, textarea, label {
+  font-family: $body-font;
 }
