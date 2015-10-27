@@ -1,5 +1,5 @@
 <h1>Alces Storage Manager</h1>
-<p>Logged in as <%= session[:authenticated_username] %></p>
+<p>Logged in as <%= session[:authenticated_username] %>. <%= link_to "Log out", :controller => "login", :action => :logout %></p>
 
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
