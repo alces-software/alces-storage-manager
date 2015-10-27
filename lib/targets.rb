@@ -93,12 +93,7 @@ module Alces
       end
 
       def data
-        {
-          "Home" => {
-            :type => :polymorph,
-            :dir_spec => :home
-          }
-        }
+        YAML.load_file(Rails.root.join("config", "targets.yml"))[:targets]
       end
     end
   end
