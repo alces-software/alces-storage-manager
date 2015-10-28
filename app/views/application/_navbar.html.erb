@@ -14,7 +14,10 @@
           <ul class="nav navbar-nav navbar-right">
 <% if session.has_key?(:authenticated_username) %>
             <li><p class="navbar-text">Logged in as <strong><%= session[:authenticated_username] %></strong></p></li>
-            <li><%= link_to "Log out", :controller => "login", :action => :logout %></li>
+            <li><%= link_to :controller => "login", :action => :logout do %>
+              <span class="glyphicon glyphicon-log-out"></span> Log out
+            <% end %>
+            </li>
 <% else %>
             <li><p class="navbar-text">Not logged in</strong></p></li>
 <% end %>
