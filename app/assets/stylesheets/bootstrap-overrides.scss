@@ -26,3 +26,9 @@ $font-family-sans-serif: $heading-font;
 $font-family-serif: $body-font;
 $font-family-base: $font-family-serif;
 $headings-font-family: $heading-font;
+
+$navbar-default-bg: #013557;
+$navbar-default-color: white;
+$navbar-default-link-color: white;
+$navbar-default-link-hover-color: darken($navbar-default-link-color, 10%);
+$navbar-border-radius: 0;

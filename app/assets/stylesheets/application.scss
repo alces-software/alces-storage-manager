@@ -34,6 +34,10 @@
 
 .navbar-brand {
   font-family: $heading-font;
-  background: url('/img/stamp50.png') top left no-repeat;
+  background: image-url("stamp50.png") top left no-repeat;
   padding-left: 45px;
+}
+
+nav {
+  background-image: image-url("binding_light_alpha.png");
 }
