@@ -21,21 +21,15 @@
  * https://github.com/alces-software/alces-storage-manager
  *==============================================================================
  */
+
+@import "fonts";
+@import "bootstrap-overrides";
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "jquery-ui";
-@import "fonts";
 
 .navbar-brand {
   font-family: $heading-font;
   background: url('/img/stamp50.png') top left no-repeat;
   padding-left: 45px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: $heading-font;
-}
-
-a, p, input, textarea, label {
-  font-family: $body-font;
 }
