@@ -6,7 +6,7 @@
         cwd: ['reload', 'back', '|', 'mkdir', 'mkfile', 'paste', '|', 'sort', '|', 'info'],
         files: ['getfile', 'submit', '|', 'download', 'open', 'quicklook', '|', 'duplicate', 'copy', 'cut', 'paste', '|', 'rename', 'rm', 'edit', '|', 'archive', 'extract', '|', 'info']
       },
-      height: $(window).height() - $('#elfinder').position().top - 30,
+      height: $(window).height() - $('#elfinder').offset().top - 30,
       ui: ['toolbar', 'tree', 'path', 'stat'],
       uiOptions: {
         toolbar: [
