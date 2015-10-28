@@ -9,7 +9,7 @@
   <body>
     <%= render "navbar" %>
     <div class="container-fluid">
-     <div class="row"></div>
+     <%= render "flashbar" if !flash.empty? %>
      <div class="row">
       <div class="col-xs-12"><%= yield %></div>
      </div>
