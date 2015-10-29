@@ -53,4 +53,5 @@ source 'http://gems.alces-software.com' do
   gem 'elfinder-rails-connector', '~> 0.2.0.a'
   gem                   'arriba', '~> 0.5.0.a'
   gem         'arriba-polymorph', '~> 0.4.1.a'
+  gem              'alces-tools', '~> 0.12.0.a'
 end

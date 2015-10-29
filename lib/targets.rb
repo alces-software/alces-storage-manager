@@ -21,6 +21,7 @@
 #==============================================================================
 
 require 'digest/md5'
+require 'alces/tools/ssl_configurator'
 require 'arriba'
 
 module Alces
@@ -86,7 +87,18 @@ module Alces
 
       def ssl_for(ssl_key)
         if ssl_key == true
-          Valet.config.browser
+            @my_ssl ||= Class.new do
+              include Alces::Tools::SSLConfigurator
+              def ssl
+                ssl_opts = YAML.load_file(Rails.root.join("config", "ssl.yml")).dup
+                Alces::Tools::SSLConfigurator::Configuration.new(
+                  root: ssl_opts[:root],
+                  certificate: ssl_opts[:certificate],
+                  key: ssl_opts[:key],
+                  ca: ssl_opts[:ca]
+                )
+              end
+            end.new
         else
           nil
         end
