@@ -1,4 +1,0 @@
-:root: /home/james/ssl
-:certificate: polymorph_crt.pem
-:key: polymorph_key.pem
-:ca: alces-ca_crt.pem
