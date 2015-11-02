@@ -23,3 +23,9 @@
 //= require jquery-ui
 //= require plupload/plupload.full.min
 //= require plupload/jquery.ui.plupload/jquery.ui.plupload
+//= require base64
+
+jQuery.fn.elfinderPortalUploadButton = (cmd) ->
+      @.each ->
+        jQuery(@).elfinderbutton(cmd).unbind('click').bind 'click', ->
+          jQuery("#uploader").dialog("open")

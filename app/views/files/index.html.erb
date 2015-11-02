@@ -1,4 +1,5 @@
 <script type="text/javascript" charset="utf-8">
+  var cwd = "";
   $(document).ready(function() {
     $('#elfinder').elfinder({
       contextmenu: {
@@ -23,9 +24,34 @@
           ['help']
         ]
       },
+      commandsOptions: {
+        upload: {
+          ui: 'PortalUploadButton'
+        }
+      },
+      handlers: {
+        open: function(evt) {
+          var directory, hash, volume, _ref;
+          hash = evt.data.cwd.hash;
+          _ref = hash.split('_').map(function(h) {
+            return Base64.decode(h);
+          }), volume = _ref[0], directory = _ref[1];
+          while (volume.charCodeAt(volume.length - 1) === 0) {
+            volume = volume.slice(0, volume.length - 1);
+          }
+          while (directory.charCodeAt(directory.length - 1) === 0) {
+            directory = directory.slice(0, directory.length - 1);
+          }
+          cwd = [volume, directory].join(':');
+
+          $( "#uploader" ).dialog( "option", "title", "Upload files to " + cwd );
+        }
+      },
       url : '/finder/api'
     });
   });
 </script>
 
 <div id="elfinder"></div>
+
+<%= render 'uploader' %>

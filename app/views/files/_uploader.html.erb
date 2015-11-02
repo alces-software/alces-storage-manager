@@ -5,7 +5,12 @@
 <script type="text/javascript">
 // Initialize the widget when the DOM is ready
 $(function() {
-    $("#uploader").plupload({
+    $("#uploader").dialog({
+      autoOpen: false,
+      draggable: false,
+      height: ($(window).height() - $('#elfinder').offset().top - 30) * 0.75,
+      width: $('#elfinder').width() * 0.5
+    }).plupload({
         // General settings
         runtimes : 'html5,flash,silverlight,html4',
         url : "/file-upload",
@@ -58,7 +63,7 @@ $(function() {
         init: {
           BeforeUpload: function(up, file) {
             up.settings.headers['X-File-Name'] = file.name;
-            up.settings.headers['X-Destination'] = "Home:/";
+            up.settings.headers['X-Destination'] = cwd;
             up.settings.headers['X-Finder-Key'] = "james";
           }
         }
