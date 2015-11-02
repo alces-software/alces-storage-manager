@@ -25,20 +25,6 @@ $(function() {
  
         chunk_size: '1mb',
  
-        // Resize images on clientside if we can
-        resize : {
-            width : 200,
-            height : 200,
-            quality : 90,
-            crop: true // crop to exact dimensions
-        },
- 
-        // Specify what files to browse for
-        filters : [
-            {title : "Image files", extensions : "jpg,gif,png"},
-            {title : "Zip files", extensions : "zip,avi"}
-        ],
- 
         // Rename files by clicking on their titles
         rename: true,
          
@@ -51,15 +37,15 @@ $(function() {
         // Views to activate
         views: {
             list: true,
-            thumbs: true, // Show thumbs
-            active: 'thumbs'
+            thumbs: false,
+            active: 'list'
         },
  
         // Flash settings
         flash_swf_url : '<%= asset_path 'plupload/Moxie.swf' %>',
      
         // Silverlight settings
-        silverlight_xap_url : '<%= asset_path 'plupload/Moxie.swf' %>',
+        silverlight_xap_url : '<%= asset_path 'plupload/Moxie.xap' %>',
         
         init: {
           BeforeUpload: function(up, file) {
