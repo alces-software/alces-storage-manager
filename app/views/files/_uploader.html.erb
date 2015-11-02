@@ -51,7 +51,6 @@ $(function() {
           BeforeUpload: function(up, file) {
             up.settings.headers['X-File-Name'] = file.name;
             up.settings.headers['X-Destination'] = cwd;
-            up.settings.headers['X-Finder-Key'] = "james";
           }
         }
     });
