@@ -21,4 +21,5 @@
 #==============================================================================
 //= require elfinder.min
 //= require jquery-ui
-
+//= require plupload/plupload.full.min
+//= require plupload/jquery.ui.plupload/jquery.ui.plupload

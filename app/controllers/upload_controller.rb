@@ -19,9 +19,9 @@
 # For more information on the Alces Storage Manager, please visit:
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
-class FilesController < ApplicationController
-  def index
-  end
-  def uploader
+class UploadController < ApplicationController
+  protect_from_forgery with: :null_session # TODO include CSRF token in form
+  def handle
+    render plain: params
   end
 end
