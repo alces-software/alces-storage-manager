@@ -14,6 +14,7 @@ $(function() {
         // General settings
         runtimes : 'html5,flash,silverlight,html4',
         url : "/file-upload",
+        multipart: false, // Alces::UploadMiddleware doesn't support multipart
         
         headers : {
           "X-File-Upload": true
