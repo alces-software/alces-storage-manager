@@ -47,7 +47,7 @@
           $( "#uploader" ).dialog( "option", "title", "Upload files to " + cwd );
         }
       },
-      url : '/finder/api'
+      url : '<%= url_for :controller => 'finder', :action => 'api' %>'
     });
   });
 </script>
