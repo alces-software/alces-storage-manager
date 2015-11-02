@@ -9,6 +9,10 @@ $(function() {
         // General settings
         runtimes : 'html5,flash,silverlight,html4',
         url : "/file-upload",
+        
+        headers : {
+          "X-File-Upload": true
+        },
  
         // Maximum file size
         max_file_size : '2mb',
@@ -49,7 +53,15 @@ $(function() {
         flash_swf_url : '<%= asset_path 'plupload/Moxie.swf' %>',
      
         // Silverlight settings
-        silverlight_xap_url : '<%= asset_path 'plupload/Moxie.swf' %>'
+        silverlight_xap_url : '<%= asset_path 'plupload/Moxie.swf' %>',
+        
+        init: {
+          BeforeUpload: function(up, file) {
+            up.settings.headers['X-File-Name'] = file.name;
+            up.settings.headers['X-Destination'] = "Home:/";
+            up.settings.headers['X-Finder-Key'] = "james";
+          }
+        }
     });
 });
 </script>
