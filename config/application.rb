@@ -25,8 +25,3 @@ module AlcesStorageManager
   end
 end
 
-elfinder = ElfinderRailsConnector::Server.run(
-  origins: '*',
-  environment: {},
-  config_file: File.join(Rails.root, 'config', 'volumes.rb')
-)
