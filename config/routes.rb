@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
   get 'files', to: 'files#index'
   get 'finder/api'
+  post 'finder/api'
   post 'file-upload', to: 'upload#handle'
 
 end
