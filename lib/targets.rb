@@ -90,7 +90,7 @@ module Alces
             @my_ssl ||= Class.new do
               include Alces::Tools::SSLConfigurator
               def ssl
-                ssl_opts = YAML.load_file(Rails.root.join("config", "ssl.yml")).dup
+                ssl_opts = AlcesStorageManager::config[:ssl].dup
                 Alces::Tools::SSLConfigurator::Configuration.new(
                   root: ssl_opts[:root],
                   certificate: ssl_opts[:certificate],
@@ -105,7 +105,7 @@ module Alces
       end
 
       def data
-        YAML.load_file(Rails.root.join("config", "targets.yml"))[:targets]
+        AlcesStorageManager::config[:targets]
       end
     end
   end

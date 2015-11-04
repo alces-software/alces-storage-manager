@@ -30,7 +30,8 @@ class LoginController < ApplicationController
   end
 
   def authenticate
-    emohawk = PolymorphClient::Connection.new({:timeout => 5})
+    auth_config = AlcesStorageManager::config[:auth]
+    emohawk = PolymorphClient::Connection.new(connection_opts)
     auth_response = emohawk.authenticate?(params[:username], params[:password])
     if auth_response
       reset_session
@@ -47,6 +48,31 @@ class LoginController < ApplicationController
     reset_session
     flash[:notice] = "You have successfully logged out."
     redirect_to action: :index
+  end
+
+  private
+
+  def connection_opts
+    auth_config = AlcesStorageManager::config[:auth].dup
+    {
+      timeout: 5,
+      ssl_config: auth_config.delete(:ssl) ? ssl_config : nil
+    }.merge(auth_config)
+  end
+
+  def ssl_config
+    @my_ssl ||= Class.new do
+      include Alces::Tools::SSLConfigurator
+      def ssl
+        ssl_opts = AlcesStorageManager::config[:ssl].dup
+        Alces::Tools::SSLConfigurator::Configuration.new(
+          root: ssl_opts[:root],
+          certificate: ssl_opts[:certificate],
+          key: ssl_opts[:key],
+          ca: ssl_opts[:ca]
+        )
+      end
+    end.new().ssl_config
   end
 
 end
