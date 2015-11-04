@@ -1,4 +1,17 @@
 <script type="text/javascript" charset="utf-8">
+  var resizeFinder = function() {
+    if (elfinder) {
+     // For some reason elfinder.resize() triggers $(window).resize() so we need to jump through
+     // some hoops here to avoid unfortunate recursion
+      $(window).off("resize", null, resizeFinder);
+      var shouldBeHeight = $(window).height() - $('#elfinder').offset().top - 30;
+      elfinder.resize('auto', shouldBeHeight);
+      $(window).on("resize", null, resizeFinder);
+    }
+  }
+
+  $(window).on("resize", resizeFinder);
+
   var cwd = "";
   var elfinder = null;
   $(document).ready(function() {
