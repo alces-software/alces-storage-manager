@@ -21,10 +21,15 @@ Alces Storage Manager is a Ruby on Rails application. You must have Ruby install
 
 3. Ensure Alces Polymorph is configured and running on the node(s) with access to the storage. The Storage Manager requires Polymorph version XXX or greater.
 
-4. Configure the Storage Manager. Configuration consists of two files stored in the `config`
-directory. Sample configuration files are provided with `.ex` extensions.
+4. Configure the Storage Manager by editing the `config/storagemanager.yml`
+directory. A sample configuration file is provided at `config/storagemanager.yml.ex`. The three sections of this file are as follows:
 
-   ### targets.yml
+   ### :auth
+Specifies options for connecting to the Polymorph daemon used for authentication.
+   * `:address` - the IP address and port of the Polymorph daemon to connect to. This should be the (or one of the) Polymorph(s) configured in step 3. Required.
+   * `:ssl` - set to `true` to use an SSL connection. Recommended.
+
+   ### :targets
 
    Specifies which directories should be made available to each user. The options
 for each entry are:
@@ -44,7 +49,7 @@ for each entry are:
    * `:address` - the IP address and port of the Polymorph daemon to connect to. This should be the (or one of the) Polymorph(s) configured in step 3. Required.
    * `:ssl` - set to `true` to use an SSL connection. Recommended.
 
-   ### ssl.yml
+   ### :ssl
 
    Specifies SSL configuration options. Only used if there are connections with
 `:ssl: true` set.
