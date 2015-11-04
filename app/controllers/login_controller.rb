@@ -42,7 +42,9 @@ class LoginController < ApplicationController
         handle_error "Incorrect user name or password."
       end
     rescue PolymorphClient::ConnError
-        handle_error "Unable to communicate with the Polymorph daemon. Check that it is running and that Alces Storage Manager is configured correctly."
+      logger.error $!
+      logger.error $!.backtrace
+      handle_error "Unable to communicate with the Polymorph daemon. Check that it is running and that Alces Storage Manager is configured correctly."
     end
   end
 
