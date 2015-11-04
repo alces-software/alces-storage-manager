@@ -21,6 +21,6 @@
 #==============================================================================
 class UploadController < ApplicationController
   def handle
-    render plain: params
+    render plain: "", :status => 201
   end
 end
