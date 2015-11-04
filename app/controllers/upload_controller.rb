@@ -20,7 +20,6 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 class UploadController < ApplicationController
-  protect_from_forgery with: :null_session # TODO include CSRF token in form
   def handle
     render plain: params
   end

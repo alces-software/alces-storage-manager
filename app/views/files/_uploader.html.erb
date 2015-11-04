@@ -17,7 +17,8 @@ $(function() {
         multipart: false, // Alces::UploadMiddleware doesn't support multipart
         
         headers : {
-          "X-File-Upload": true
+          "X-File-Upload": true,
+          "X-CSRF-Token": $('meta[name="csrf-token"]').attr("content")
         },
         // Rename files by clicking on their titles
         rename: true,
