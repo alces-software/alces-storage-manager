@@ -27,3 +27,7 @@ module AlcesStorageManager
     end
   end
 end
+
+# Assert at startup that the config file exists, and bug out with a large stack
+# trace if not.
+AlcesStorageManager.config
