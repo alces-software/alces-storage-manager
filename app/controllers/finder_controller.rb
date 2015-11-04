@@ -19,24 +19,10 @@
 # For more information on the Alces Storage Manager, please visit:
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
-class FinderController < ::ActionController::Base
+class FinderController < ElfinderController
   def api
     # Munge the request parameters since ElfinderRailsConnector expects a username there
     params[:username] = session[:authenticated_username]
-    ctx = ElfinderRailsConnector::Context.new(request.env, params)
-    data = Arriba.execute(ElfinderRailsConnector.volumes(ctx),params)
-    case data
-    when Hash
-      render :json => data
-    when Arriba::FileResponse
-      ElfinderRailsConnector.file_headers(data,request.env).each do |k,v|
-        headers[k] = v
-      end
-      render :text => data.io.read, :content_type => data.mimetype
-    else
-      render :json => {:error => "Unsupported data type: #{data.class.name}"}
-    end
-  rescue
-    render :json => {:error => $!.message}
+    super
   end
 end

@@ -63,7 +63,7 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     debug_inspector (0.0.2)
-    elfinder-rails-connector (0.2.0)
+    elfinder-rails-connector (0.3.0)
       actionpack
       activesupport
       arriba
@@ -173,7 +173,7 @@ DEPENDENCIES
   bootstrap-sass (~> 3.2.0)
   byebug
   coffee-rails (~> 4.1.0)
-  elfinder-rails-connector (~> 0.2.0.a)!
+  elfinder-rails-connector (~> 0.3.0)!
   jbuilder (~> 2.0)
   jquery-rails
   jquery-ui-rails
