@@ -3,11 +3,11 @@
     <% flash.each do |type, msg| %>
       <% case type %>
         <% when "notice" %>
-          <p class="bg-success flash"><span class="glyphicon glyphicon-ok text-success"></span> <%= msg %></p>
+          <div class="bg-success flash"><span class="glyphicon glyphicon-ok text-success"></span> <p><%= msg %></p></div>
         <% when "alert" %>
-          <p class="bg-danger flash"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> <%= msg %></p>
+          <div class="bg-danger flash"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> <p><%= msg %></p></div>
         <% else %>
-          <p class="bg-info flash"><span class="glyphicon glyphicon-info-sign text-info"></span> <%= msg %></p>
+          <div class="bg-info flash"><span class="glyphicon glyphicon-info-sign text-info"></span> <p><%= msg %></p></div>
       <% end %>
     <% end %>
   </div>

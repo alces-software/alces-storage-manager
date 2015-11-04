@@ -48,6 +48,12 @@ nav {
   border-radius: $border-radius-base;
 }
 
+.flash>span.glyphicon {
+  float: left;
+  font-size: xx-large;
+  margin-right: 15px;
+}
+
 .plupload_wrapper, .plupload_container {
   height: 100%;
 }

@@ -30,17 +30,19 @@ class LoginController < ApplicationController
   end
 
   def authenticate
-    auth_config = AlcesStorageManager::config[:auth]
-    emohawk = PolymorphClient::Connection.new(connection_opts)
-    auth_response = emohawk.authenticate?(params[:username], params[:password])
-    if auth_response
-      reset_session
-      session[:authenticated_username] = params[:username]
-      redirect_to files_url
-    else
-      flash[:alert] = "Incorrect user name or password."
-      @user = params[:username]
-      render :index
+    begin
+      auth_config = AlcesStorageManager::config[:auth]
+      emohawk = PolymorphClient::Connection.new(connection_opts)
+      auth_response = emohawk.authenticate?(params[:username], params[:password])
+      if auth_response
+        reset_session
+        session[:authenticated_username] = params[:username]
+        redirect_to files_url
+      else
+        handle_error "Incorrect user name or password."
+      end
+    rescue PolymorphClient::ConnError
+        handle_error "Unable to communicate with the Polymorph daemon. Check that it is running and that Alces Storage Manager is configured correctly."
     end
   end
 
@@ -51,6 +53,12 @@ class LoginController < ApplicationController
   end
 
   private
+  
+  def handle_error(message)
+    flash[:alert] = message
+    @user = params[:username]
+    render :index
+  end
 
   def connection_opts
     auth_config = AlcesStorageManager::config[:auth].dup
