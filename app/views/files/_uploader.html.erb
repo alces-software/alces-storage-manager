@@ -46,6 +46,11 @@ $(function() {
           BeforeUpload: function(up, file) {
             up.settings.headers['X-File-Name'] = file.name;
             up.settings.headers['X-Destination'] = cwd;
+          },
+          UploadComplete: function(up, files) {
+            if (elfinder) {
+              elfinder.exec('reload');
+            }
           }
         }
     });
