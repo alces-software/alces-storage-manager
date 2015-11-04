@@ -22,6 +22,4 @@
 class FilesController < ApplicationController
   def index
   end
-  def uploader
-  end
 end
