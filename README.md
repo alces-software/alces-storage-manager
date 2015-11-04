@@ -71,7 +71,7 @@ for each entry are:
    
    ```$ ./bin/rails server -e production -b * -p 8080```
    
-   For production environments it may be more suitable to run ASM under nginx or Apache.
+   For production environments it may be more suitable to run ASM under nginx or Apache. You will also need to specify a secret key for the server in production mode.
  
  ## Usage
  1. Load the Storage Manager in your web browser. If running as in the above example, this may be at http://storagemanagerhost:8080.
