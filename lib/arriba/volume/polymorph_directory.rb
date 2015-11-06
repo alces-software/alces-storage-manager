@@ -29,7 +29,7 @@ module Arriba
 
       server_opts = target.user_identifier.merge(
         :timeout => target.polymorph_opts[:timeout] + 1,
-        :handler => 'Alces::Polymorph::ArribaHandler',
+        :handler => 'Alces::StorageManagerDaemon::ArribaHandler',
         :handler_args => [target.dir, name]
       )
       @polymorph = PolymorphClient::Wrapper.new(target.polymorph, server_opts)
