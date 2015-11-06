@@ -19,6 +19,10 @@
 # For more information on the Alces Storage Manager, please visit:
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
+
+require 'arriba/target/polymorph'
+require 'arriba/volume/polymorph_directory'
+
 class FilesController < ApplicationController
   def index
   end
