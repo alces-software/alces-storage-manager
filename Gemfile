@@ -46,10 +46,13 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  # Needed for polymorph-client
+  gem 'net-ping'
 end
 
 source 'http://gems.alces-software.com' do
-  gem         'polymorph_client', '~> 0.4.0.a'
+#  gem         'polymorph_client', '~> 0.4.0.a'
   gem 'elfinder-rails-connector', '~> 0.3.0'
   gem                   'arriba', '~> 0.5.0.a'
 #  gem         'arriba-polymorph', '~> 0.4.1.a'
