@@ -9,7 +9,8 @@ uploading, downloading and manipulating files in their cluster storage via
 their web browser.
 
 ## Configuration
-Alces Storage Manager is a Ruby on Rails application. You must have Ruby installed before installing Alces Storage Manager.
+Alces Storage Manager is a Ruby on Rails application. You must have Ruby 
+installed before installing Alces Storage Manager.
 
 1. Clone the git repository:
 
