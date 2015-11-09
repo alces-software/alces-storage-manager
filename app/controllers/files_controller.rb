@@ -20,7 +20,7 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 
-require 'arriba/target/polymorph'
+require 'arriba/target/remote'
 require 'arriba/volume/polymorph_directory'
 
 class FilesController < ApplicationController

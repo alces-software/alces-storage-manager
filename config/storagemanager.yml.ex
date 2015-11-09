@@ -1,17 +1,17 @@
 --- 
 :auth:
-  # The Polymorph daemon used for authentication.
+  # The ASM daemon used for authentication.
   :address: "127.0.0.1:25268"
   :ssl: true
 :targets:
   # The list of directories presented to the user.
   Home: 
-    :type: :polymorph
+    :type: :remote
     :dir_spec: :home
     :address: "127.0.0.1:25268"
     :ssl: true
   Root:
-    :type: :polymorph
+    :type: :remote
     :dir:   "/"
     :address: "127.0.0.1:25268"
     :ssl: true

@@ -24,7 +24,7 @@ require 'socket'
 
 module Arriba
   module Target
-    class Polymorph < Arriba::Target::Base
+    class Remote < Arriba::Target::Base
       # convenience s.t. we can still refer to File resolving to
       # ::File rather than Arriba::File.
       File = ::File
@@ -53,7 +53,7 @@ module Arriba
 
       def file_for(path)
         dir = to_volume.cwd('/').volume.root
-        PolymorphFile.new(host, polymorph, File.join(dir,path), user_identifier, @ssl)
+        RemoteFile.new(host, polymorph, File.join(dir,path), user_identifier, @ssl)
       end
 
       def to_volume
@@ -76,7 +76,7 @@ module Arriba
         end
       end
 
-      class PolymorphFile < Struct.new(:host, :polymorph, :path, :user_identifier, :ssl)
+      class RemoteFile < Struct.new(:host, :polymorph, :path, :user_identifier, :ssl)
         def read_open
           socket_io(ChunkedSocket.new(host, port_for(:download))) do |io|
             io.close_write
