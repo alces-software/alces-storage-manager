@@ -21,7 +21,6 @@
 #==============================================================================
 
 require 'arriba/target/remote'
-require 'arriba/volume/polymorph_directory'
 
 class FilesController < ApplicationController
   def index

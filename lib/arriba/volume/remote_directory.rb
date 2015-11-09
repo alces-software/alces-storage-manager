@@ -20,7 +20,7 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 module Arriba
-  class Volume::PolymorphDirectory < Volume
+  class Volume::RemoteDirectory < Volume
     attr_accessor :target, :name
     def initialize(target, name, id = nil)
       self.name = name
@@ -39,7 +39,7 @@ module Arriba
     # we can shortcut if we're dealing with another polymorph
     # directory on the same target host
     def shortcut?(dest_vol)
-      dest_vol.is_a?(Arriba::Volume::PolymorphDirectory) &&
+      dest_vol.is_a?(Arriba::Volume::RemoteDirectory) &&
         target.address == dest_vol.target.address
     end
 

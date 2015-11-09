@@ -19,6 +19,7 @@
 # For more information on the Alces Storage Manager, please visit:
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
+require 'arriba/volume/remote_directory'
 require 'polymorph_client'
 require 'socket'
 
@@ -57,7 +58,7 @@ module Arriba
       end
 
       def to_volume
-        Arriba::Volume::PolymorphDirectory.new(self, name)
+        Arriba::Volume::RemoteDirectory.new(self, name)
       end
 
       def polymorph
