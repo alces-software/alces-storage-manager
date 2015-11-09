@@ -20,7 +20,7 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 
-require 'polymorph_client'
+require 'remote_client'
 
 class LoginController < ApplicationController
   def index
@@ -32,7 +32,7 @@ class LoginController < ApplicationController
   def authenticate
     begin
       auth_config = AlcesStorageManager::config[:auth]
-      emohawk = PolymorphClient::Connection.new(connection_opts)
+      emohawk = DaemonClient::Connection.new(connection_opts)
       auth_response = emohawk.authenticate?(params[:username], params[:password])
       if auth_response
         reset_session
@@ -41,10 +41,10 @@ class LoginController < ApplicationController
       else
         handle_error "Incorrect user name or password."
       end
-    rescue PolymorphClient::ConnError
+    rescue DaemonClient::ConnError
       logger.error $!
       logger.error $!.backtrace
-      handle_error "Unable to communicate with the Polymorph daemon. Check that it is running and that Alces Storage Manager is configured correctly."
+      handle_error "Unable to communicate with the ASD daemon. Check that it is running and that Alces Storage Manager is configured correctly."
     end
   end
 

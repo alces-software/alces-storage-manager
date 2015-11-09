@@ -20,9 +20,9 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 require 'net/ping/tcp'
-require 'polymorph_client/errors'
+require 'daemon_client/errors'
 
-module PolymorphClient
+module DaemonClient
   class Connection < BlankSlate
     class << self
       def normalize_address(address)
@@ -45,23 +45,23 @@ module PolymorphClient
 
     def initialize(options)
       options = options.dup
-      addresses = ::PolymorphClient::Connection.normalize_address(options.delete(:address))
+      addresses = ::DaemonClient::Connection.normalize_address(options.delete(:address))
       address = addresses.find do |a|
         ::Net::Ping::TCP.new(*a.split(':'), options[:timeout]||2).ping
       end
-      ::Kernel.raise ::PolymorphClient::ConnError, "Could not communicate with any polymorph daemons: #{addresses.inspect}" if address.nil?
-      @executor = ::PolymorphClient::Executor.new(address, options)
+      ::Kernel.raise ::DaemonClient::ConnError, "Could not communicate with any ASM daemons: #{addresses.inspect}" if address.nil?
+      @executor = ::DaemonClient::Executor.new(address, options)
     end
 
     # Prevent inspect from being passed over the wire
     def inspect
-      "<PolymorphClient::Connection address=#{@executor.address.inspect}>"
+      "<DaemonClient::Connection address=#{@executor.address.inspect}>"
     end
 
     # Allow some limited form of introspection without going via DRb and
     # risking `ArgumentError: wrong number of arguments exceptions`.
     def __class__
-      ::PolymorphClient::Connection
+      ::DaemonClient::Connection
     end
 
     def method_missing(s, *a, &b)

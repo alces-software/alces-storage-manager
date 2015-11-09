@@ -19,24 +19,7 @@
 # For more information on the Alces Storage Manager, please visit:
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
-module PolymorphClient
-  class Wrapper < BlankSlate
-    attr_accessor :connection, :options
-    def initialize(connection, options)
-      self.connection = connection
-      self.options = options
-    end
-
-    def method_missing(s, *a, &b)
-      connection.__send__(s, *a, options, &b)
-    end
-
-    # Don't send inspect to connection via method_missing.
-    #
-    # It will break due to being called with an empty array of options. Even
-    # if it didn't, it wouldn't return the correct inspection for this object.
-    def inspect
-      "#<PolymorphClient::Wrapper @connection=#{@connection.inspect} @options=#{@options.inspect}>"
-    end
-  end
+module DaemonClient
+  class ConnError < RuntimeError; end
+  class RemoteError < RuntimeError; end
 end

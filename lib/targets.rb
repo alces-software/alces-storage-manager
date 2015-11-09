@@ -23,6 +23,7 @@
 require 'digest/md5'
 require 'alces/tools/ssl_configurator'
 require 'arriba'
+require 'arriba/target/remote'
 
 module Alces
   class Targets < Struct.new(:username)
@@ -61,7 +62,7 @@ module Alces
       def directory
         if d = opts[:dir_spec]
           # Delegate the handling of special directories, such as home and
-          # tmp dir, to Polymorph.
+          # tmp dir, to ASMD.
           d.to_sym
         elsif d = opts[:dir]
           d

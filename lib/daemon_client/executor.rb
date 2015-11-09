@@ -22,7 +22,7 @@
 require 'drb'
 require 'timeout'
 require 'active_support/core_ext/array/extract_options'
-require 'polymorph_client/errors'
+require 'daemon_client/errors'
 
 module DRb
   class << self
@@ -42,12 +42,12 @@ end
 # alces-polymorph can both use -- perhaps alces-tools as
 # Alces::Tools::RemoteServiceError?
 module Alces
-  module Polymorph
+  module StorageManagerDaemon
     class HandlerError < RuntimeError; end
   end
 end
 
-module PolymorphClient
+module DaemonClient
   class Executor
     attr_accessor :address
     def initialize(address, options)
@@ -82,13 +82,13 @@ module PolymorphClient
         block.call(@remote)
       end
     rescue TimeoutError
-      raise PolymorphClient::ConnError, "Could not communicate with polymorph daemon: #{$!.message}"
+      raise DaemonClient::ConnError, "Could not communicate with polymorph daemon: #{$!.message}"
     rescue DRb::DRbConnError, Errno::ECONNREFUSED
-      raise PolymorphClient::ConnError, "Could not communicate with polymorph daemon: #{$!.message}"
-    rescue Alces::Polymorph::HandlerError
-      raise PolymorphClient::RemoteError, "An error occurred during polymorph handler execution: #{$!.message}"
+      raise DaemonClient::ConnError, "Could not communicate with polymorph daemon: #{$!.message}"
+    rescue Alces::StorageManagerDaemon::HandlerError
+      raise DaemonClient::RemoteError, "An error occurred during polymorph handler execution: #{$!.message}"
     rescue
-      STDERR.puts '===== UNCAUGHT POLYMORPH EXCEPTION DETECTED ====='
+      STDERR.puts '===== UNCAUGHT DAEMON EXCEPTION DETECTED ====='
       STDERR.puts "(Logged @#{__FILE__}:#{__LINE__})"
       STDERR.puts "#{$!.class}: #{$!.message}"
       STDERR.puts $!.backtrace.join("\n")

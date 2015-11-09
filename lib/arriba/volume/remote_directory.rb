@@ -32,7 +32,7 @@ module Arriba
         :handler => 'Alces::StorageManagerDaemon::ArribaHandler',
         :handler_args => [target.dir, name]
       )
-      @polymorph = PolymorphClient::Wrapper.new(target.polymorph, server_opts)
+      @polymorph = DaemonClient::Wrapper.new(target.polymorph, server_opts)
       self.target = target
     end
 
@@ -51,7 +51,7 @@ module Arriba
 
     def files(*args)
       polymorph.files(*args)
-    rescue PolymorphClient::ConnError
+    rescue DaemonClient::ConnError
       [UnresponsiveRoot.new(self)]
     rescue SystemCallError
       [UnresponsiveRoot.new(self, $!.message)]
@@ -59,7 +59,7 @@ module Arriba
 
     def cwd(*args)
       polymorph.cwd(*args)
-    rescue PolymorphClient::ConnError
+    rescue DaemonClient::ConnError
       UnresponsiveRoot.new(self)
     rescue SystemCallError
       UnresponsiveRoot.new(self, $!.message)

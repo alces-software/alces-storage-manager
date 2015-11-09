@@ -20,7 +20,7 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 require 'arriba/volume/remote_directory'
-require 'polymorph_client'
+require 'daemon_client'
 require 'socket'
 
 module Arriba
@@ -37,7 +37,7 @@ module Arriba
           raise ArgumentError, "static_uid, uid or username must be provided"
         end
 
-        self.address = PolymorphClient::Connection.normalize_address(args_hash[:address])[0]
+        self.address = DaemonClient::Connection.normalize_address(args_hash[:address])[0]
         @uid = args_hash[:static_uid] || args_hash[:uid]
         @username = args_hash[:username]
         self.polymorph_opts = {
@@ -62,7 +62,7 @@ module Arriba
       end
 
       def polymorph
-        @polymorph ||= PolymorphClient::Connection.new(polymorph_opts)
+        @polymorph ||= DaemonClient::Connection.new(polymorph_opts)
       end
 
       def host
