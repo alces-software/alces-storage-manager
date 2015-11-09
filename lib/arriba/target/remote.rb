@@ -30,7 +30,7 @@ module Arriba
       # ::File rather than Arriba::File.
       File = ::File
 
-      attr_accessor :address, :user_identifier, :polymorph_opts
+      attr_accessor :address, :user_identifier, :daemon_opts
       def initialize(args_hash)
         super
         unless args_hash.key?(:static_uid) || args_hash.key?(:uid) || args_hash.key?(:username)
@@ -40,13 +40,13 @@ module Arriba
         self.address = DaemonClient::Connection.normalize_address(args_hash[:address])[0]
         @uid = args_hash[:static_uid] || args_hash[:uid]
         @username = args_hash[:username]
-        self.polymorph_opts = {
+        self.daemon_opts = {
           :address => self.address,
           :timeout => args_hash[:timeout] || 5
         }
         if args_hash.key?(:ssl)
           @ssl = args_hash[:ssl]
-          self.polymorph_opts[:ssl_config] = @ssl.ssl_config
+          self.daemon_opts[:ssl_config] = @ssl.ssl_config
         else
           @ssl = nil
         end
@@ -54,15 +54,15 @@ module Arriba
 
       def file_for(path)
         dir = to_volume.cwd('/').volume.root
-        RemoteFile.new(host, polymorph, File.join(dir,path), user_identifier, @ssl)
+        RemoteFile.new(host, daemon, File.join(dir,path), user_identifier, @ssl)
       end
 
       def to_volume
         Arriba::Volume::RemoteDirectory.new(self, name)
       end
 
-      def polymorph
-        @polymorph ||= DaemonClient::Connection.new(polymorph_opts)
+      def daemon
+        @daemon ||= DaemonClient::Connection.new(daemon_opts)
       end
 
       def host
@@ -77,7 +77,7 @@ module Arriba
         end
       end
 
-      class RemoteFile < Struct.new(:host, :polymorph, :path, :user_identifier, :ssl)
+      class RemoteFile < Struct.new(:host, :daemon, :path, :user_identifier, :ssl)
         def read_open
           socket_io(ChunkedSocket.new(host, port_for(:download))) do |io|
             io.close_write
@@ -92,7 +92,7 @@ module Arriba
 
         private
         def port_for(direction)
-          polymorph.forked_io(user_identifier, path, direction)
+          daemon.forked_io(user_identifier, path, direction)
         end
 
         def socket_io(sock, &block)

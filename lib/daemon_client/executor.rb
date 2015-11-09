@@ -38,8 +38,8 @@ end
 # that is to be caught and reraised for handling by the caller.
 #
 # Ideally we would collaboratively define the exception class to be
-# used here somewhere that both the polymorph_client and
-# alces-polymorph can both use -- perhaps alces-tools as
+# used here somewhere that both daemon_client and
+# ASMD can both use -- perhaps alces-tools as
 # Alces::Tools::RemoteServiceError?
 module Alces
   module StorageManagerDaemon
@@ -82,11 +82,11 @@ module DaemonClient
         block.call(@remote)
       end
     rescue TimeoutError
-      raise DaemonClient::ConnError, "Could not communicate with polymorph daemon: #{$!.message}"
+      raise DaemonClient::ConnError, "Could not communicate with ASM daemon: #{$!.message}"
     rescue DRb::DRbConnError, Errno::ECONNREFUSED
-      raise DaemonClient::ConnError, "Could not communicate with polymorph daemon: #{$!.message}"
+      raise DaemonClient::ConnError, "Could not communicate with ASM daemon: #{$!.message}"
     rescue Alces::StorageManagerDaemon::HandlerError
-      raise DaemonClient::RemoteError, "An error occurred during polymorph handler execution: #{$!.message}"
+      raise DaemonClient::RemoteError, "An error occurred during ASM handler execution: #{$!.message}"
     rescue
       STDERR.puts '===== UNCAUGHT DAEMON EXCEPTION DETECTED ====='
       STDERR.puts "(Logged @#{__FILE__}:#{__LINE__})"

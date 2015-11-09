@@ -20,7 +20,7 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 
-require 'remote_client'
+require 'daemon_client'
 
 class LoginController < ApplicationController
   def index
@@ -32,8 +32,8 @@ class LoginController < ApplicationController
   def authenticate
     begin
       auth_config = AlcesStorageManager::config[:auth]
-      emohawk = DaemonClient::Connection.new(connection_opts)
-      auth_response = emohawk.authenticate?(params[:username], params[:password])
+      daemon = DaemonClient::Connection.new(connection_opts)
+      auth_response = daemon.authenticate?(params[:username], params[:password])
       if auth_response
         reset_session
         session[:authenticated_username] = params[:username]
@@ -44,7 +44,7 @@ class LoginController < ApplicationController
     rescue DaemonClient::ConnError
       logger.error $!
       logger.error $!.backtrace
-      handle_error "Unable to communicate with the ASD daemon. Check that it is running and that Alces Storage Manager is configured correctly."
+      handle_error "Unable to communicate with the ASM daemon. Check that it is running and that Alces Storage Manager is configured correctly."
     end
   end
 

@@ -28,29 +28,29 @@ module Arriba
       super(id)
 
       server_opts = target.user_identifier.merge(
-        :timeout => target.polymorph_opts[:timeout] + 1,
+        :timeout => target.daemon_opts[:timeout] + 1,
         :handler => 'Alces::StorageManagerDaemon::ArribaHandler',
         :handler_args => [target.dir, name]
       )
-      @polymorph = DaemonClient::Wrapper.new(target.polymorph, server_opts)
+      @daemon = DaemonClient::Wrapper.new(target.daemon, server_opts)
       self.target = target
     end
 
-    # we can shortcut if we're dealing with another polymorph
-    # directory on the same target host
+    # we can shortcut if we're dealing with another remote directory on the
+    # same target host
     def shortcut?(dest_vol)
       dest_vol.is_a?(Arriba::Volume::RemoteDirectory) &&
         target.address == dest_vol.target.address
     end
 
-    delegate *Arriba::Operations::File.instance_methods, :to => :polymorph
+    delegate *Arriba::Operations::File.instance_methods, :to => :daemon
 
-    def polymorph
-      @polymorph
+    def daemon
+      @daemon
     end
 
     def files(*args)
-      polymorph.files(*args)
+      daemon.files(*args)
     rescue DaemonClient::ConnError
       [UnresponsiveRoot.new(self)]
     rescue SystemCallError
@@ -58,7 +58,7 @@ module Arriba
     end
 
     def cwd(*args)
-      polymorph.cwd(*args)
+      daemon.cwd(*args)
     rescue DaemonClient::ConnError
       UnresponsiveRoot.new(self)
     rescue SystemCallError
