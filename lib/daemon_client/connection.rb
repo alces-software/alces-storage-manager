@@ -43,6 +43,14 @@ module DaemonClient
       end
     end
 
+    # options: {
+    #  :address: "ip_of_daemon:port", -- defaults to 127.0.0.1:25268
+    #  :ssl_config: -- these things can be easily populated via Alces::Tools::SSLConfigurator
+    #    -- the presence of the ssl_config parameter invokes an SSL connection
+    #    SSLCertificate: ssl_cert,
+    #    SSLPrivateKey: ssl_key,
+    #    SSLCACertificateFile: ssl_ca_file
+    #  :timeout: 2 (default)
     def initialize(options)
       options = options.dup
       addresses = ::DaemonClient::Connection.normalize_address(options.delete(:address))
