@@ -33,6 +33,16 @@
 @import "elfinder.min";
 @import "plupload/jquery.ui.plupload/jquery.ui.plupload";
 
+body {
+  background-image: image-url("debut_light.png");
+}
+
+.content {
+  background-color: white;
+  padding: $padding-base-vertical $padding-base-horizontal;
+  border-radius: $border-radius-base;
+}
+
 .navbar-brand {
   font-family: $heading-font;
   background: image-url("stamp50.png") top left no-repeat;
@@ -46,6 +56,7 @@ nav {
 .flash {
   padding: 15px;
   border-radius: $border-radius-base;
+  margin-bottom: $line-height-computed;
 }
 
 .flash>span.glyphicon {

@@ -11,7 +11,11 @@
     <div class="container-fluid">
      <%= render "flashbar" if !flash.empty? %>
      <div class="row">
-      <div class="col-xs-12"><%= yield %></div>
+      <div class="col-xs-12">
+        <div class="content">
+        <%= yield %>
+        </div>
+      </div>
      </div>
     </div>
   </body>
