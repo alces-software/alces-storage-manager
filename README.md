@@ -25,32 +25,10 @@ installed before installing Alces Storage Manager.
 
 4. Configure the Storage Manager by editing the `config/storagemanager.yml`
 directory. A sample configuration file is provided at 
-`config/storagemanager.yml.ex`. The three sections of this file are as follows:
+`config/storagemanager.yml.ex`. The two sections of this file are as follows:
 
    ### :auth
    Specifies options for connecting to the ASM daemon used for authentication.
-   * `:address` - the IP address and port of the ASM daemon to connect to. This
-   should be the (or one of the) ASMD(s) configured in step 3. Required.
-   * `:ssl` - set to `true` to use an SSL connection. Recommended.
-
-   ### :targets
-
-   Specifies which directories should be made available to each user. The 
-   options for each entry are:
-
-   * `:dir` - string specifying the directory. Mutually exclusive with 
-  `:dir_spec`.
-   * `:dir_spec` - symbol specifying a special directory. Mutually exclusive with
-  `:dir`.
-     * `:home` for the user's home directory
-     * `:tmpdir` for the operating system's temporary file path (as per Ruby's
-    `Dir#tmpdir()`)
-   * `:type` - should be `:remote` for directories served by the Alces Storage
-     Manager Daemon. May also be `:local` for filesystems mounted on the same
-     node as this web service.
-
-   For remote targets, further options are:
-
    * `:address` - the IP address and port of the ASM daemon to connect to. This
    should be the (or one of the) ASMD(s) configured in step 3. Required.
    * `:ssl` - set to `true` to use an SSL connection. Recommended.

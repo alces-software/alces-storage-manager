@@ -74,7 +74,7 @@ module Alces
       
     class << self
       def targets
-        @targets ||=
+        @targets =
           begin
             d = data.stringify_keys
             d.merge(d) do |k,meta|
@@ -106,7 +106,7 @@ module Alces
       end
 
       def data
-        AlcesStorageManager::config[:targets]
+        AlcesStorageManager::authentication_daemon.targets_for(self[:username])
       end
     end
   end
