@@ -34,11 +34,11 @@ module Alces
     end
       
     def all
-      targets.keys.map { |name| get(name) }
+      targets(username).keys.map { |name| get(name) }
     end
       
     def get(name)
-      data = targets[name].merge(
+      data = targets(username)[name].merge(
         :name => name,
         :username => username,
         :directory_finder => DirectoryFinder
@@ -73,10 +73,10 @@ module Alces
     end
       
     class << self
-      def targets
+      def targets(username)
         @targets =
           begin
-            d = data.stringify_keys
+            d = data(username).stringify_keys
             d.merge(d) do |k,meta|
               if ssl_key = meta.delete(:ssl)
                 meta[:ssl] = ssl_for(ssl_key) 
@@ -105,8 +105,8 @@ module Alces
         end
       end
 
-      def data
-        AlcesStorageManager::authentication_daemon.targets_for(self[:username])
+      def data(username)
+        AlcesStorageManager::authentication_daemon.targets_for(username)
       end
     end
   end
