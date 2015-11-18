@@ -20,8 +20,6 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 
-require 'daemon_client'
-
 class LoginController < ApplicationController
   def index
     if session.has_key?(:authenticated_username)
@@ -31,9 +29,7 @@ class LoginController < ApplicationController
 
   def authenticate
     begin
-      auth_config = AlcesStorageManager::config[:auth]
-      daemon = DaemonClient::Connection.new(connection_opts)
-      auth_response = daemon.authenticate?(params[:username], params[:password])
+      auth_response = AlcesStorageManager::authentication_daemon.authenticate?(params[:username], params[:password])
       if auth_response
         reset_session
         session[:authenticated_username] = params[:username]
@@ -60,29 +56,6 @@ class LoginController < ApplicationController
     flash[:alert] = message
     @user = params[:username]
     render :index
-  end
-
-  def connection_opts
-    auth_config = AlcesStorageManager::config[:auth].dup
-    {
-      timeout: 5,
-      ssl_config: auth_config.delete(:ssl) ? ssl_config : nil
-    }.merge(auth_config)
-  end
-
-  def ssl_config
-    @my_ssl ||= Class.new do
-      include Alces::Tools::SSLConfigurator
-      def ssl
-        ssl_opts = AlcesStorageManager::config[:ssl].dup
-        Alces::Tools::SSLConfigurator::Configuration.new(
-          root: ssl_opts[:root],
-          certificate: ssl_opts[:certificate],
-          key: ssl_opts[:key],
-          ca: ssl_opts[:ca]
-        )
-      end
-    end.new().ssl_config
   end
 
 end
