@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>AlcesStorageManager</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+ <head>
+  <title><%= yield :title %>Alces Storage Manager</title>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track'=> true %> 
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
-</head>
-<body>
-
-<%= yield %>
-
-</body>
+  </head>
+  <body>
+    <%= render "navbar" %>
+    <div class="container-fluid">
+     <%= render "flashbar" if !flash.empty? %>
+     <div class="row">
+      <div class="col-xs-12">
+        <div class="content">
+        <%= yield %>
+        </div>
+      </div>
+     </div>
+    </div>
+  </body>
 </html>

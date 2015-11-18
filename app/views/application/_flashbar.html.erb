@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+    <% flash.each do |type, msg| %>
+      <% case type %>
+        <% when "notice" %>
+          <div class="bg-success flash"><span class="glyphicon glyphicon-ok text-success"></span> <p><%= msg %></p></div>
+        <% when "alert" %>
+          <div class="bg-danger flash"><span class="glyphicon glyphicon-exclamation-sign text-danger"></span> <p><%= msg %></p></div>
+        <% else %>
+          <div class="bg-info flash"><span class="glyphicon glyphicon-info-sign text-info"></span> <p><%= msg %></p></div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

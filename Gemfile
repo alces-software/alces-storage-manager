@@ -7,6 +7,8 @@ gem 'rails', '4.2.4'
 gem 'sqlite3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
+gem 'bootstrap-sass', '~> 3.2.0'
+gem 'autoprefixer-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -16,6 +18,7 @@ gem 'coffee-rails', '~> 4.1.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -43,5 +46,11 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem 'net-ping'
 end
 
+gem 'elfinder-rails-connector', :github => 'alces-software/elfinder-rails-connector', :tag => '0.3.0'
+gem                   'arriba', :github => 'alces-software/arriba', :tag => '0.5.0'
+gem              'alces-tools', :github => 'alces-software/alces-tools', :tag => '0.13.0'
+gem  'alces-upload-middleware', :github => 'alces-software/alces-upload-middleware', :tag => '0.2.0'
