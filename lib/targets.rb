@@ -106,7 +106,12 @@ module Alces
       end
 
       def data(username)
-        AlcesStorageManager::authentication_daemon.targets_for(username)
+        opts = {
+          :handler => 'Alces::StorageManagerDaemon::TargetsHandler',
+          :username => username
+        }
+        wrapper = DaemonClient::Wrapper.new(AlcesStorageManager::authentication_daemon, opts)
+        wrapper.targets_for(username)
       end
     end
   end
