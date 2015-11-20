@@ -24,6 +24,7 @@ require 'daemon_client/errors'
 
 module DaemonClient
   class Connection < BlankSlate
+    attr_accessor :address
     class << self
       def normalize_address(address)
         return ['127.0.0.1:25268'] if address.nil?
@@ -54,11 +55,11 @@ module DaemonClient
     def initialize(options)
       options = options.dup
       addresses = ::DaemonClient::Connection.normalize_address(options.delete(:address))
-      address = addresses.find do |a|
+      @address = addresses.find do |a|
         ::Net::Ping::TCP.new(*a.split(':'), options[:timeout]||2).ping
       end
-      ::Kernel.raise ::DaemonClient::ConnError, "Could not communicate with any ASM daemons: #{addresses.inspect}" if address.nil?
-      @executor = ::DaemonClient::Executor.new(address, options)
+      ::Kernel.raise ::DaemonClient::ConnError, "Could not communicate with any ASM daemons: #{addresses.inspect}" if @address.nil?
+      @executor = ::DaemonClient::Executor.new(@address, options)
     end
 
     # Prevent inspect from being passed over the wire
