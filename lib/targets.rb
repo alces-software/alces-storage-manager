@@ -24,6 +24,7 @@ require 'digest/md5'
 require 'alces/tools/ssl_configurator'
 require 'arriba'
 require 'arriba/target/remote'
+require 'arriba/target/s3'
 
 module Alces
   class Targets < Struct.new(:username)
@@ -41,14 +42,9 @@ module Alces
       data = targets(username)[name].merge(
         :address => AlcesStorageManager::authentication_daemon.address, # TODO this should only apply to 'remote'/'posix' targets
         :name => name,
-        :username => username,
-        :directory_finder => DirectoryFinder
+        :username => username
       )
       Arriba::Target.new(data)
-    end
-
-    def directory_for(name)
-      DirectoryFinder.new(targets[name].merge(username: username)).directory
     end
 
     def valid?
@@ -59,20 +55,6 @@ module Alces
 
     private
 
-    class DirectoryFinder < Struct.new(:opts)
-      def directory
-        if d = opts[:dir_spec]
-          # Delegate the handling of special directories, such as home and
-          # tmp dir, to ASMD.
-          d.to_sym
-        elsif d = opts[:dir]
-          d
-        else
-          raise "Unable to determine directory from: #{opts.inspect}"
-        end
-      end
-    end
-      
     class << self
       def targets(username)
         @targets =

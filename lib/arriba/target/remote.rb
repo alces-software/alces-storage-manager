@@ -26,6 +26,7 @@ require 'socket'
 module Arriba
   module Target
     class Remote < Arriba::Target::Base
+
       # convenience s.t. we can still refer to File resolving to
       # ::File rather than Arriba::File.
       File = ::File
@@ -49,6 +50,24 @@ module Arriba
           self.daemon_opts[:ssl_config] = @ssl.ssl_config
         else
           @ssl = nil
+        end
+      end
+
+      def directory_for(args_hash)
+        DirectoryFinder.new(args_hash).directory
+      end
+
+      class DirectoryFinder < Struct.new(:opts)
+        def directory
+          if d = opts[:dir_spec]
+            # Delegate the handling of special directories, such as home and
+            # tmp dir, to ASMD.
+            d.to_sym
+          elsif d = opts[:dir]
+            d
+          else
+            raise "Unable to determine directory from: #{opts.inspect}"
+          end
         end
       end
 
