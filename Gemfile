@@ -48,6 +48,9 @@ group :development do
   gem 'spring'
 
   gem 'net-ping'
+  
+  # fog for S3 support
+  gem 'fog'
 end
 
 gem 'elfinder-rails-connector', :github => 'alces-software/elfinder-rails-connector', :tag => '0.3.0'

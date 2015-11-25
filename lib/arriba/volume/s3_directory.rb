@@ -1,3 +1,5 @@
+require 'fog'
+
 module Arriba
   class Volume::S3Directory < Volume
 
@@ -18,7 +20,7 @@ module Arriba
     end
 
     def files(*args)
-      [base]
+      [base] + target.storage.directories.map { |f| represent(f.key) }
     end
 
     def symlink?(path)
@@ -50,7 +52,7 @@ module Arriba
     end
 
     def children?(path)
-      false
+      target.storage.directories.length > 0
     end
 
     def locked?(path)
@@ -81,6 +83,10 @@ module Arriba
 
     def base
       Arriba::Root.new(volume, name)
+    end
+
+    def represent(path)
+      Arriba::File.new(volume, path)
     end
 
   end
