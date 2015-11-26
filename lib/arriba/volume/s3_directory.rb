@@ -17,13 +17,13 @@ module Arriba
     def tree(path)
       # path is a directory
       # find directory children
-      p "Tree called with path: " + path
+      #p "Tree called with path: " + path
       [cwd(path)] + objects(path).select { | key | key.end_with?("/") }
     end
 
     # Fulfilling Arriba::Operations::Base contract
     def entries(path)
-      p "Entries called with path " + path
+      #p "Entries called with path " + path
       if path == "/"
         target.storage.directories.map {|bucket| bucket.key + "/" }
       else
@@ -38,14 +38,14 @@ module Arriba
 
     # Deduces a bucket and object key prefix, and returns an array of objects.
     def objects(path)
-      p "Listing objects for path " + path
+      #p "Listing objects for path " + path
       parts = path.match(/^\/([^\/]+)\/((.+))?/)
       bucketKey = parts[1]
       keyPrefix = parts[3]
-      p "Looking in bucket " + bucketKey
+      #p "Looking in bucket " + bucketKey
       bucket = target.storage.directories.get(bucketKey)
       bucket.files.select { |file|
-        p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
+        #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
         (keyPrefix == nil && (file.key.count("/") == 0 or file.key.end_with?("/"))) or 
         (keyPrefix != nil &&
           file.key.start_with?(keyPrefix) &&
