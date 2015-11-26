@@ -39,11 +39,10 @@ module Arriba
     # Deduces a bucket and object key prefix, and returns an array of objects.
     def objects(path)
       #p "Listing objects for path " + path
-      parts = path.match(/^\/([^\/]+)\/(.+)?/)
-      bucketKey = parts[1]
-      keyPrefix = parts[2]
+      s3p = S3Path.new(path)
       #p "Looking in bucket " + bucketKey
-      bucket = target.storage.directories.get(bucketKey)
+      bucket = target.storage.directories.get(s3p.bucket)
+      keyPrefix = s3p.key
       bucket.files.select { |file|
         #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
         (keyPrefix == nil && (file.key.count("/") == 0 or file.key.end_with?("/"))) or 
@@ -128,6 +127,13 @@ module Arriba
       Arriba::S3ObjectFile.new(volume, path)
     end
 
+    class S3Path
+      attr_accessor :bucket, :key
+      def initialize(path)
+        parts = path.match(/^\/([^\/]+)\/(.+)?/)
+        @bucket = parts[1]
+        @key = parts[2]
+      end
+    end
   end
-
 end
