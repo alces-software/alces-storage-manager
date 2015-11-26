@@ -39,9 +39,9 @@ module Arriba
     # Deduces a bucket and object key prefix, and returns an array of objects.
     def objects(path)
       #p "Listing objects for path " + path
-      parts = path.match(/^\/([^\/]+)\/((.+))?/)
+      parts = path.match(/^\/([^\/]+)\/(.+)?/)
       bucketKey = parts[1]
-      keyPrefix = parts[3]
+      keyPrefix = parts[2]
       #p "Looking in bucket " + bucketKey
       bucket = target.storage.directories.get(bucketKey)
       bucket.files.select { |file|
