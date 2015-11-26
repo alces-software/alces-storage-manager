@@ -50,7 +50,7 @@ module Arriba
           file.key.start_with?(keyPrefix) &&
           file.key != keyPrefix && 
           file.key.count("/") == keyPrefix.count("/"))
-      }.map { |file| file.key[(keyPrefix ? keyPrefix.length : 0)..-1] }.tap {|l| p l.to_s }
+      }.map { |file| file.key[(keyPrefix ? keyPrefix.length : 0)..-1] }#.tap {|l| p l.to_s }
     end
 # Stub implementations follow...
 
