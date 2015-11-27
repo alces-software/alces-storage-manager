@@ -11,6 +11,7 @@ module Arriba
       id ||= Arriba::Routing::encode(name)
       super(id)
       self.target = target
+      @files_cache = FilesCache.new(target.storage)
     end
 
     # Fulfilling Arriba::Operations::Base contract
@@ -50,6 +51,8 @@ module Arriba
           file.key.start_with?(keyPrefix) &&
           file.key != keyPrefix && 
           file.key.count("/") == keyPrefix.count("/"))
+      }.tap{
+        |files| files.each { |file| @files_cache.store(s3p.bucket, file) }
       }.map { |file| file.key[(keyPrefix ? keyPrefix.length : 0)..-1] }#.tap {|l| p l.to_s }
     end
 # Stub implementations follow...
@@ -85,6 +88,11 @@ module Arriba
   end
 
     def size(path)
+      s3p = S3Path.new(path)
+      if s3p.key
+        file = @files_cache.retrieve(s3p.bucket, s3p.key)
+        return file ? file.content_length : 0
+      end
       0
     end
 
@@ -131,8 +139,31 @@ module Arriba
       attr_accessor :bucket, :key
       def initialize(path)
         parts = path.match(/^\/([^\/]+)\/(.+)?/)
-        @bucket = parts[1]
-        @key = parts[2]
+        if parts
+          @bucket = parts[1]
+          @key = parts[2]
+        end
+      end
+    end
+
+    class FilesCache
+      def initialize(storage)
+        @cache = {}
+        @storage = storage
+      end
+      def store(bucket, file)
+        if !@cache.has_key?(bucket)
+          @cache[bucket] = {}
+        end
+        @cache[bucket][file.key] = file
+      end
+      def retrieve(bucketKey, fileKey)
+        if @cache.has_key?(bucketKey)
+          if @cache[bucketKey].has_key?(fileKey)
+            return @cache[bucketKey][fileKey]
+          end
+        end
+        nil
       end
     end
   end
