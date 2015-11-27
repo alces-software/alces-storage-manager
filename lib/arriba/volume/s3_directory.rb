@@ -62,9 +62,15 @@ module Arriba
     end
 
     def mtime(path)
+      s3p = S3Path.new(path)
+      if s3p.key
+        file = @files_cache.retrieve(s3p.bucket, s3p.key)
+        return file ? file.last_modified : 0
+      end
       0
     end
 
+    # Access and creation time not supported by S3
     def atime(path)
       0
     end
