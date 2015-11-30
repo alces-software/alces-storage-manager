@@ -28,11 +28,7 @@ module Arriba
     # Fulfilling Arriba::Operations::Base contract
     def entries(path)
       #p "Entries called with path " + path
-      if path == "/"
-        target.storage.directories.map {|bucket| bucket.key + "/" }
-      else
-        objects(path)
-      end
+      objects(path)
     end
     
     def directory?(path)
@@ -42,18 +38,24 @@ module Arriba
 
     # Deduces a bucket and object key prefix, and returns an array of objects.
     def objects(path)
-      #p "Listing objects for path " + path
-      s3p = S3Path.new(path)
-      #p "Looking in bucket " + s3p.bucket
-      bucket = target.storage.directories.get(s3p.bucket)
-      @files_index.storeAll(bucket)
-      keyPrefix = s3p.key
-      bucket.files.select { |file|
-        #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
-        file_in_path?(file, keyPrefix)
-      }.map { |file|
-        file.key[(keyPrefix ? keyPrefix.length : 0)..-1]
-      }#.tap {|l| p l.to_s }
+      if path == "/"
+        target.storage.directories.map {|bucket| bucket.key + "/" }
+      else
+        #p "Listing objects for path " + path
+        s3p = S3Path.new(path)
+        #p "Looking in #{s3p}"
+        if s3p.bucket != nil
+          bucket = target.storage.directories.get(s3p.bucket)
+          @files_index.storeAll(bucket)
+          keyPrefix = s3p.key
+          bucket.files.select { |file|
+            #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
+            file_in_path?(file, keyPrefix)
+          }.map { |file|
+            file.key[(keyPrefix ? keyPrefix.length : 0)..-1]
+          }#.tap {|l| p l.to_s }
+        end
+      end
     end
 
     def file_in_path?(file, pathPrefix)
@@ -113,12 +115,23 @@ module Arriba
       S3Path.new(path).key
     end
 
+    def dirname(path)
+      path[0..path.rindex("/")]
+    end
+
     # Filesystem operations
     def copy(src_path, dest_path, shortcut=false)
       src = S3Path.new(src_path)
       dest = S3Path.new(dest_path)
       src_object = @files_index.retrieve(src.bucket, src.key)
       src_object.copy(dest.bucket, dest.key + src_path[src_path.rindex("/") + 1..-1])
+    end
+
+    def rename(path, newname)
+      src = S3Path.new(path)
+      src_object = @files_index.retrieve(src.bucket, src.key)
+      src_object.copy(src.bucket, dirname(src.key) + newname)
+      src_object.destroy
     end
 
     # Stub implementations follow...
@@ -173,7 +186,7 @@ module Arriba
     class S3Path
       attr_accessor :bucket, :key
       def initialize(path)
-        parts = path.match(/^\/([^\/]+)\/(.+)?/)
+        parts = path.match(/^\/([^\/]+)(?:(?:\/)(.+))?/)
         if parts
           @bucket = parts[1]
           @key = parts[2]
