@@ -134,6 +134,19 @@ module Arriba
       src_object.destroy
     end
 
+    def rm(path)
+      src = S3Path.new(path)
+      if directory?(path)
+        target.storage.directories.get(src.bucket, prefix: src.key).files.each { |object|
+          # This list of objects will also include the folder we're trying to delete
+          object.destroy
+        }
+      else
+        src_object = @files_index.retrieve(src.bucket, src.key)
+        src_object.destroy
+      end
+    end
+
     # Stub implementations follow...
 
     def symlink?(path)
@@ -220,7 +233,7 @@ module Arriba
 
       def retrieve(bucketKey, fileKey)
         if !@index.has_key?(bucketKey)
-          p "Not got bucket #{bucketKey}, fetching..."
+          #p "Not got bucket #{bucketKey}, fetching..."
           bb = @storage.directories.get(bucketKey)
           storeAll(bb)
         end
