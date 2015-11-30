@@ -18,8 +18,11 @@ module Arriba
     def tree(path)
       # path is a directory
       # find directory children
-      #p "Tree called with path: " + path
-      [cwd(path)] + objects(path).select { | key | key.end_with?("/") }
+      objects(path).select {| key |
+        key.end_with?("/") 
+      }.map { |node|
+        file(path, node)
+      }
     end
 
     # Fulfilling Arriba::Operations::Base contract
@@ -41,7 +44,7 @@ module Arriba
     def objects(path)
       #p "Listing objects for path " + path
       s3p = S3Path.new(path)
-      #p "Looking in bucket " + bucketKey
+      #p "Looking in bucket " + s3p.bucket
       bucket = target.storage.directories.get(s3p.bucket)
       keyPrefix = s3p.key
       bucket.tap{ |bucket|
@@ -205,6 +208,7 @@ module Arriba
 
       def retrieve(bucketKey, fileKey)
         if !@index.has_key?(bucketKey)
+          p "Not got bucket #{bucketKey}, fetching..."
           bb = @storage.directories.get(bucketKey)
           storeAll(bb)
         end
