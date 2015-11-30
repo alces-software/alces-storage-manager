@@ -48,7 +48,7 @@ module Arriba
         files.each { |file| @files_index.store(s3p.bucket, file) }
       }.select { |file|
         #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
-        file_in_path?(file, keyPrefix).tap { |answer| p "Is file #{file.key} in path #{keyPrefix}? #{answer}" }
+        file_in_path?(file, keyPrefix)
       }.map { |file|
         file.key[(keyPrefix ? keyPrefix.length : 0)..-1]
       }#.tap {|l| p l.to_s }
