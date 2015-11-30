@@ -146,6 +146,12 @@ module Arriba
         src_object.destroy
       end
     end
+    
+    def mkdir(path, newdir) 
+      s3p = S3Path.new(path)
+      d = target.storage.directories.get(s3p.bucket, prefix: s3p.key)
+      d.files.create(key: s3p.key + newdir + "/", body: "")
+    end
 
     # Stub implementations follow...
 
