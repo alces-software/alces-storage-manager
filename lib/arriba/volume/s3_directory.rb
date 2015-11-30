@@ -11,7 +11,7 @@ module Arriba
       id ||= Arriba::Routing::encode(name)
       super(id)
       self.target = target
-      @files_cache = FilesCache.new(target.storage)
+      @files_index = FilesIndex.new(target.storage)
     end
 
     # Fulfilling Arriba::Operations::Base contract
@@ -45,7 +45,7 @@ module Arriba
       bucket = target.storage.directories.get(s3p.bucket)
       keyPrefix = s3p.key
       bucket.files.tap{ |files|
-        files.each { |file| @files_cache.store(s3p.bucket, file) }
+        files.each { |file| @files_index.store(s3p.bucket, file) }
       }.select { |file|
         #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
         file_in_path?(file, keyPrefix).tap { |answer| p "Is file #{file.key} in path #{keyPrefix}? #{answer}" }
@@ -79,7 +79,7 @@ module Arriba
     def mtime(path)
       s3p = S3Path.new(path)
       if s3p.key
-        file = @files_cache.retrieve(s3p.bucket, s3p.key)
+        file = @files_index.retrieve(s3p.bucket, s3p.key)
         return file ? file.last_modified : 0
       end
       0
@@ -111,7 +111,7 @@ module Arriba
     def size(path)
       s3p = S3Path.new(path)
       if s3p.key
-        file = @files_cache.retrieve(s3p.bucket, s3p.key)
+        file = @files_index.retrieve(s3p.bucket, s3p.key)
         return file ? file.content_length : 0
       end
       0
@@ -167,21 +167,21 @@ module Arriba
       end
     end
 
-    class FilesCache
+    class FilesIndex
       def initialize(storage)
-        @cache = {}
+        @index = {}
         @storage = storage
       end
       def store(bucket, file)
-        if !@cache.has_key?(bucket)
-          @cache[bucket] = {}
+        if !@index.has_key?(bucket)
+          @index[bucket] = {}
         end
-        @cache[bucket][file.key] = file
+        @index[bucket][file.key] = file
       end
       def retrieve(bucketKey, fileKey)
-        if @cache.has_key?(bucketKey)
-          if @cache[bucketKey].has_key?(fileKey)
-            return @cache[bucketKey][fileKey]
+        if @index.has_key?(bucketKey)
+          if @index[bucketKey].has_key?(fileKey)
+            return @index[bucketKey][fileKey]
           end
         end
         nil
