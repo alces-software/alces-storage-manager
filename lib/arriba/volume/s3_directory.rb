@@ -44,9 +44,9 @@ module Arriba
       #p "Looking in bucket " + bucketKey
       bucket = target.storage.directories.get(s3p.bucket)
       keyPrefix = s3p.key
-      bucket.files.tap{ |files|
-        files.each { |file| @files_index.store(s3p.bucket, file) }
-      }.select { |file|
+      bucket.tap{ |bucket|
+        @files_index.storeAll(bucket)
+      }.files.select { |file|
         #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
         file_in_path?(file, keyPrefix)
       }.map { |file|
@@ -107,6 +107,18 @@ module Arriba
       0
     end
 
+    def name_for(path)
+      S3Path.new(path).key
+    end
+
+    # Filesystem operations
+    def copy(src_path, dest_path, shortcut=false)
+      src = S3Path.new(src_path)
+      dest = S3Path.new(dest_path)
+      src_object = @files_index.retrieve(src.bucket, src.key)
+      src_object.copy(dest.bucket, dest.key + src_path[src_path.rindex("/") + 1..-1])
+    end
+
     # Stub implementations follow...
 
     def symlink?(path)
@@ -165,6 +177,9 @@ module Arriba
           @key = parts[2]
         end
       end
+      def to_s
+        "<S3Path bucket=#{@bucket} key=#{@key}>"
+      end
     end
 
     class FilesIndex
@@ -172,17 +187,29 @@ module Arriba
         @index = {}
         @storage = storage
       end
+      def index
+        @index
+      end
+      def storeAll(bucket)
+        bucket.files.each { |file|
+          store(bucket.key, file)
+        }
+      end
+
       def store(bucket, file)
         if !@index.has_key?(bucket)
           @index[bucket] = {}
         end
         @index[bucket][file.key] = file
       end
+
       def retrieve(bucketKey, fileKey)
-        if @index.has_key?(bucketKey)
-          if @index[bucketKey].has_key?(fileKey)
-            return @index[bucketKey][fileKey]
-          end
+        if !@index.has_key?(bucketKey)
+          bb = @storage.directories.get(bucketKey)
+          storeAll(bb)
+        end
+        if @index[bucketKey].has_key?(fileKey)
+          return @index[bucketKey][fileKey]
         end
         nil
       end
