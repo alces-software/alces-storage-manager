@@ -70,12 +70,6 @@ module Arriba
       )
     end
 
-# Stub implementations follow...
-
-    def symlink?(path)
-      false
-    end
-
     def mtime(path)
       s3p = S3Path.new(path)
       if s3p.key
@@ -94,19 +88,15 @@ module Arriba
       0
     end
 
-    def mode(path)
-      100444
+    def mimetype(path)
+      if directory?(path)
+        'directory'
+      else
+        # gsub to prune leading '.' character
+        ext = ::File.extname(path).gsub(/^\./,'')
+        Arriba::MimeType::for(ext) || 'unknown' # TODO read content type from S3 (possibly costly operation though)
+      end
     end
-    
-  def mimetype(path)
-    if directory?(path)
-      'directory'
-    else
-      # gsub to prune leading '.' character
-      ext = ::File.extname(path).gsub(/^\./,'')
-      Arriba::MimeType::for(ext) || 'unknown' # TODO read content type from S3 (possibly costly operation though)
-    end
-  end
 
     def size(path)
       s3p = S3Path.new(path)
@@ -115,6 +105,16 @@ module Arriba
         return file ? file.content_length : 0
       end
       0
+    end
+
+    # Stub implementations follow...
+
+    def symlink?(path)
+      false
+    end
+
+    def mode(path)
+      100444
     end
 
     # TODO Should return true if path points to a directory which contains subdirectories
@@ -131,7 +131,7 @@ module Arriba
     end
 
     def writable?(path)
-      false
+      true
     end
 
     def user(path)
