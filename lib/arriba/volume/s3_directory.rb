@@ -46,10 +46,9 @@ module Arriba
       s3p = S3Path.new(path)
       #p "Looking in bucket " + s3p.bucket
       bucket = target.storage.directories.get(s3p.bucket)
+      @files_index.storeAll(bucket)
       keyPrefix = s3p.key
-      bucket.tap{ |bucket|
-        @files_index.storeAll(bucket)
-      }.files.select { |file|
+      bucket.files.select { |file|
         #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
         file_in_path?(file, keyPrefix)
       }.map { |file|
