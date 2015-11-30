@@ -44,17 +44,32 @@ module Arriba
       #p "Looking in bucket " + bucketKey
       bucket = target.storage.directories.get(s3p.bucket)
       keyPrefix = s3p.key
-      bucket.files.select { |file|
+      bucket.files.tap{ |files|
+        files.each { |file| @files_cache.store(s3p.bucket, file) }
+      }.select { |file|
         #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
-        (keyPrefix == nil && (file.key.count("/") == 0 or file.key.end_with?("/"))) or 
-        (keyPrefix != nil &&
-          file.key.start_with?(keyPrefix) &&
-          file.key != keyPrefix && 
-          file.key.count("/") == keyPrefix.count("/"))
-      }.tap{
-        |files| files.each { |file| @files_cache.store(s3p.bucket, file) }
-      }.map { |file| file.key[(keyPrefix ? keyPrefix.length : 0)..-1] }#.tap {|l| p l.to_s }
+        file_in_path?(file, keyPrefix).tap { |answer| p "Is file #{file.key} in path #{keyPrefix}? #{answer}" }
+      }.map { |file|
+        file.key[(keyPrefix ? keyPrefix.length : 0)..-1]
+      }#.tap {|l| p l.to_s }
     end
+
+    def file_in_path?(file, pathPrefix)
+      ( # Things in bucket root: no slash, or the only slash is at the end e.g. top-level dir
+        pathPrefix == nil &&
+        (file.key.count("/") == 0 or file.key.index("/") == file.key.length - 1)
+      ) or (
+        # Things in subdirectories (but not sub-subdirectories)
+        pathPrefix != nil &&
+        file.key.start_with?(pathPrefix) &&
+        file.key != pathPrefix &&
+        (
+          file.key.index("/", pathPrefix.length) == file.key.length - 1 or
+          file.key.index("/", pathPrefix.length) == nil
+        )
+      )
+    end
+
 # Stub implementations follow...
 
     def symlink?(path)
