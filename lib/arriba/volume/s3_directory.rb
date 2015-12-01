@@ -120,6 +120,16 @@ module Arriba
     end
 
     # Filesystem operations
+    def move(src_path, dest_path,shortcut=false)
+      if !directory?(src_path)
+        copy(src_path, dest_path, shortcut)
+        rm(src_path)
+        true
+      else
+        raise "Unable to move directories (yet)"
+      end
+    end
+
     def copy(src_path, dest_path, shortcut=false)
       src = S3Path.new(src_path)
       dest = S3Path.new(dest_path)
