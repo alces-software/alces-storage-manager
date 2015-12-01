@@ -132,6 +132,9 @@ module Arriba
 
     def copy(src_path, dest_path, shortcut=false)
       src = S3Path.new(src_path)
+      if directory?(src)
+        raise "Unable to copy directories (yet)"
+      end
       dest = S3Path.new(dest_path)
       src_object = @files_index.retrieve(src.bucket, src.key)
       src_object.copy(dest.bucket, dest.key + src_path[src_path.rindex("/") + 1..-1])
