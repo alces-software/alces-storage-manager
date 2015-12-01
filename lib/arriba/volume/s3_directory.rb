@@ -132,12 +132,17 @@ module Arriba
 
     def copy(src_path, dest_path, shortcut=false)
       src = S3Path.new(src_path)
-      if directory?(src)
-        raise "Unable to copy directories (yet)"
-      end
       dest = S3Path.new(dest_path)
-      src_object = @files_index.retrieve(src.bucket, src.key)
-      src_object.copy(dest.bucket, dest.key + src_path[src_path.rindex("/") + 1..-1])
+      if directory?(src_path)
+        target.storage.directories.get(src.bucket(), prefix: src.key).files.each { |object|
+          if object.key != src.key
+            copy(S3Path::to_path(src.bucket, object.key), S3Path::to_path(dest.bucket, dest.key + src.key[src.key.index("/") + 1..src.key.rindex("/")]))
+          end
+        }
+      end
+        src_object = @files_index.retrieve(src.bucket, src.key)
+        src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
+        src_object.copy(dest.bucket, dest.key + src_filename)
     end
 
     def rename(path, newname)
