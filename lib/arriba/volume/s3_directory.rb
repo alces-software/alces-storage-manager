@@ -121,13 +121,8 @@ module Arriba
 
     # Filesystem operations
     def move(src_path, dest_path,shortcut=false)
-      if !directory?(src_path)
-        copy(src_path, dest_path, shortcut)
-        rm(src_path)
-        true
-      else
-        raise "Unable to move directories (yet)"
-      end
+      copy(src_path, dest_path, shortcut)
+      rm(src_path)
     end
 
     def copy(src_path, dest_path, shortcut=false)
