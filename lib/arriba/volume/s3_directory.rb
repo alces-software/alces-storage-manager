@@ -152,12 +152,13 @@ module Arriba
       if directory?(path)
         target.storage.directories.get(src.bucket, prefix: src.key).files.each { |object|
           # This list of objects will also include the folder we're trying to delete
-          object.destroy
+          if object.key != src.key
+            rm(S3Path::to_path(src.bucket, object.key)) # Recursively delete
+          end
         }
-      else
-        src_object = @files_index.retrieve(src.bucket, src.key)
-        src_object.destroy
       end
+      src_object = @files_index.retrieve(src.bucket, src.key)
+      src_object.destroy
     end
     
     def mkdir(path, newdir) 
@@ -226,6 +227,9 @@ module Arriba
       end
       def to_s
         "<S3Path bucket=#{@bucket} key=#{@key}>"
+      end
+      def self.to_path(bucket, key)
+        "/#{bucket}/#{key}"
       end
     end
 
