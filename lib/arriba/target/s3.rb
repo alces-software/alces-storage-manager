@@ -16,6 +16,10 @@ module Arriba
         @storages = {}
         @auth = args_hash[:auth]
         @secret = args_hash[:secret]
+        @bucket_region_map = {}
+        storage.directories.each { |bucket|
+          @bucket_region_map[bucket.key] = bucket.location
+        }
       end
 
       def storage(region=DEFAULT_REGION)
@@ -25,6 +29,11 @@ module Arriba
           aws_secret_access_key: @secret,
           region: region
         })
+      end
+
+      def get_bucket(bucketKey, prefix="")
+        region = @bucket_region_map[bucketKey]
+        storage(region).directories.get(bucketKey, prefix: prefix)
       end
 
       def to_volume

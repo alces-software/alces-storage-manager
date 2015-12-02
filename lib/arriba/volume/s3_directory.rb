@@ -45,7 +45,7 @@ module Arriba
         s3p = S3Path.new(path)
         #p "Looking in #{s3p}"
         if s3p.bucket != nil
-          bucket = target.storage.directories.get(s3p.bucket)
+          bucket = target.get_bucket(s3p.bucket)
           @files_index.storeAll(bucket)
           keyPrefix = s3p.key
           bucket.files.select { |file|
@@ -129,7 +129,7 @@ module Arriba
       src = S3Path.new(src_path)
       dest = S3Path.new(dest_path)
       if directory?(src_path)
-        target.storage.directories.get(src.bucket(), prefix: src.key).files.each { |object|
+        target.get_bucket(src.bucket(), prefix: src.key).files.each { |object|
           if object.key != src.key
             copy(S3Path::to_path(src.bucket, object.key), S3Path::to_path(dest.bucket, dest.key + src.key[src.key.index("/") + 1..src.key.rindex("/")]))
           end
@@ -150,7 +150,7 @@ module Arriba
     def rm(path)
       src = S3Path.new(path)
       if directory?(path)
-        target.storage.directories.get(src.bucket, prefix: src.key).files.each { |object|
+        target.get_bucket(src.bucket, prefix: src.key).files.each { |object|
           # This list of objects will also include the folder we're trying to delete
           if object.key != src.key
             rm(S3Path::to_path(src.bucket, object.key)) # Recursively delete
@@ -163,7 +163,7 @@ module Arriba
     
     def mkdir(path, newdir) 
       s3p = S3Path.new(path)
-      d = target.storage.directories.get(s3p.bucket, prefix: s3p.key)
+      d = target.get_bucket(s3p.bucket, prefix: s3p.key)
       d.files.create(key: s3p.key + newdir + "/", body: "")
     end
 
@@ -257,7 +257,7 @@ module Arriba
       def retrieve(bucketKey, fileKey)
         if !@index.has_key?(bucketKey)
           #p "Not got bucket #{bucketKey}, fetching..."
-          bb = @storage.directories.get(bucketKey)
+          bb = @storage.get_bucket(bucketKey)
           storeAll(bb)
         end
         if @index[bucketKey].has_key?(fileKey)
