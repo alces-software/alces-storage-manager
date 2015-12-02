@@ -6,17 +6,24 @@ module Arriba
 
     class S3 < Arriba::Target::Base
 
-      attr_accessor :storage
-      
+      DEFAULT_REGION = "us-east-1" # = Fog::Storage::AWS.DEFAULT_REGION
+
       def initialize(args_hash)
         super
         unless args_hash.key?(:auth) && args_hash.key?(:secret)
           raise ArgumentError, "auth and secret must be provided"
         end
-        @storage = Fog::Storage.new({
+        @storages = {}
+        @auth = args_hash[:auth]
+        @secret = args_hash[:secret]
+      end
+
+      def storage(region=DEFAULT_REGION)
+        @storages[region] ||= Fog::Storage.new({
           provider: "AWS",
-          aws_access_key_id: args_hash[:auth],
-          aws_secret_access_key: args_hash[:secret]
+          aws_access_key_id: @auth,
+          aws_secret_access_key: @secret,
+          region: region
         })
       end
 
