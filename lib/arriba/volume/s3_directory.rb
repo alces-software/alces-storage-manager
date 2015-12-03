@@ -47,12 +47,28 @@ module Arriba
         if s3p.bucket != nil
           bucket = target.get_bucket(s3p.bucket, prefix=s3p.key)
           @files_index.storeAll(bucket)
-          keyPrefix = s3p.key
-          bucket.files.map { |file|
-            file.key[(keyPrefix ? keyPrefix.length : 0)..-1]
-          }#.tap {|l| p l.to_s }
+          return infer_folder_keys(bucket.files, s3p.key)
         end
       end
+    end
+
+    def infer_folder_keys(files, keyPrefix)
+      actualObjects = files.map { |file|
+        file.key[(keyPrefix ? keyPrefix.length : 0)..-1]
+      }
+      inferredKeys = []
+      actualObjects.each { |key|
+        firstSlash = key.index("/")
+        if firstSlash != nil && firstSlash < (key.length - 1)
+          firstFolder = key[0..firstSlash]  # Include trailing slash
+          if !actualObjects.include?(firstFolder) && !inferredKeys.include?(firstFolder)
+            #p "Inferred presence of #{firstFolder}"
+            inferredKeys.push(firstFolder)
+          end
+        end 
+      }
+      #p "Folder contains #{actualObjects} plus inferred #{inferredKeys}"
+      return inferredKeys + actualObjects
     end
 
     def mtime(path)
