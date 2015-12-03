@@ -45,33 +45,14 @@ module Arriba
         s3p = S3Path.new(path)
         #p "Looking in #{s3p}"
         if s3p.bucket != nil
-          bucket = target.get_bucket(s3p.bucket)
+          bucket = target.get_bucket(s3p.bucket, prefix=s3p.key)
           @files_index.storeAll(bucket)
           keyPrefix = s3p.key
-          bucket.files.select { |file|
-            #p "Considering " + file.key + " and looking for prefix " + keyPrefix.to_s
-            file_in_path?(file, keyPrefix)
-          }.map { |file|
+          bucket.files.map { |file|
             file.key[(keyPrefix ? keyPrefix.length : 0)..-1]
           }#.tap {|l| p l.to_s }
         end
       end
-    end
-
-    def file_in_path?(file, pathPrefix)
-      ( # Things in bucket root: no slash, or the only slash is at the end e.g. top-level dir
-        pathPrefix == nil &&
-        (file.key.count("/") == 0 or file.key.index("/") == file.key.length - 1)
-      ) or (
-        # Things in subdirectories (but not sub-subdirectories)
-        pathPrefix != nil &&
-        file.key.start_with?(pathPrefix) &&
-        file.key != pathPrefix &&
-        (
-          file.key.index("/", pathPrefix.length) == file.key.length - 1 or
-          file.key.index("/", pathPrefix.length) == nil
-        )
-      )
     end
 
     def mtime(path)
