@@ -11,7 +11,7 @@ module Arriba
       id ||= Arriba::Routing::encode(name)
       super(id)
       self.target = target
-      @files_index = FilesIndex.new(target.storage)
+      @files_index = FilesIndex.new(target)
     end
 
     # Fulfilling Arriba::Operations::Base contract
