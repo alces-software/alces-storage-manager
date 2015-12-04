@@ -113,7 +113,7 @@ module Arriba
     end
 
     def dirname(path)
-      path[0..path.rindex("/")]
+      path[0..path.rindex("/", -2)]
     end
 
     # Filesystem operations
@@ -122,19 +122,28 @@ module Arriba
       rm(src_path)
     end
 
+    # Note: dest_path is the container to which the object at src_path is being copied,
+    # NOT the full path of the object at its final destination; hence the need to add
+    # src_filename to the end of dest_path.
     def copy(src_path, dest_path, shortcut=false)
       src = S3Path.new(src_path)
       dest = S3Path.new(dest_path)
+      src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
+      #p "Copying #{src} to #{dest}"
       if directory?(src_path)
-        target.get_bucket(src.bucket(), prefix: src.key).files.each { |object|
+        #p "...which is a directory"
+        target.get_bucket(src.bucket(), src.key).files.tap{ |t| p t }.each { |object|
+          #p "... which had #{object.key} in it"
           if object.key != src.key
-            copy(S3Path::to_path(src.bucket, object.key), S3Path::to_path(dest.bucket, dest.key + src.key[src.key.index("/") + 1..src.key.rindex("/")]))
+            copy(S3Path::to_path(src.bucket, object.key), S3Path::to_path(dest.bucket, object.key[0..object.key.rindex("/", -2)]).gsub(src.key, dest.key) + src_filename)
           end
         }
+        #p "...with everything in it now copied"
       end
-        src_object = @files_index.retrieve(src.bucket, src.key)
-        src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
+      src_object = @files_index.retrieve(src.bucket, src.key)
+      if src_object # If not, it might have been an inferred folder
         src_object.copy(dest.bucket, dest.key + src_filename)
+      end
     end
 
     def rename(path, newname)
@@ -147,7 +156,7 @@ module Arriba
     def rm(path)
       src = S3Path.new(path)
       if directory?(path)
-        target.get_bucket(src.bucket, prefix: src.key).files.each { |object|
+        target.get_bucket(src.bucket, src.key).files.each { |object|
           # This list of objects will also include the folder we're trying to delete
           if object.key != src.key
             rm(S3Path::to_path(src.bucket, object.key)) # Recursively delete
@@ -155,12 +164,14 @@ module Arriba
         }
       end
       src_object = @files_index.retrieve(src.bucket, src.key)
-      src_object.destroy
+      if src_object
+        src_object.destroy
+      end
     end
     
     def mkdir(path, newdir) 
       s3p = S3Path.new(path)
-      d = target.get_bucket(s3p.bucket, prefix: s3p.key)
+      d = target.get_bucket(s3p.bucket, s3p.key)
       d.files.create(key: s3p.key + newdir + "/", body: "")
     end
 
@@ -259,6 +270,8 @@ module Arriba
         end
         if @index[bucketKey].has_key?(fileKey)
           return @index[bucketKey][fileKey]
+        #else
+          #p "#{fileKey} not found in bucket #{bucketKey} which had #{@index[bucketKey].keys}"
         end
         nil
       end
