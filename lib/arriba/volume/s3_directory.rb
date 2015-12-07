@@ -118,55 +118,61 @@ module Arriba
 
     # Filesystem operations
     def move(src_path, dest_path,shortcut=false)
-      copy(src_path, dest_path, shortcut)
-      rm(src_path)
+      src = S3Path.new(src_path)
+      src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
+      path_end_index = src.key.rindex("/", -2)
+      path_to_sub = path_end_index != nil ? src.key[0..src.key.rindex("/", -2)] : src.key
+      #p "Filename is #{src_filename}, path to sub is #{path_to_sub}, destination path is #{dest_path}"
+      target.get_bucket(src.bucket, src.key).files.each { |thing|
+        # Note that having a single each loop to copy and destroy is more efficient
+        # (since it doesn't have to index the bucket twice), so we don't just call
+        # copy then rm - though that is functionally identical.
+        dest = S3Path.new(thing.key.gsub(path_to_sub, dest_path))
+        #p "mv #{thing.key} -> #{dest}"
+        thing.copy(dest.bucket, dest.key)
+        thing.destroy
+      }
     end
 
     # Note: dest_path is the container to which the object at src_path is being copied,
-    # NOT the full path of the object at its final destination; hence the need to add
-    # src_filename to the end of dest_path.
-    def copy(src_path, dest_path, shortcut=false)
+    # NOT the full path of the object at its final destination
+    def copy(src_path, dest_path, shortcut=false, newname=nil)
       src = S3Path.new(src_path)
-      dest = S3Path.new(dest_path)
       src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
-      #p "Copying #{src} to #{dest}"
-      if directory?(src_path)
-        #p "...which is a directory"
-        target.get_bucket(src.bucket(), src.key).files.tap{ |t| p t }.each { |object|
-          #p "... which had #{object.key} in it"
-          if object.key != src.key
-            copy(S3Path::to_path(src.bucket, object.key), S3Path::to_path(dest.bucket, object.key[0..object.key.rindex("/", -2)]).gsub(src.key, dest.key) + src_filename)
-          end
-        }
-        #p "...with everything in it now copied"
-      end
-      src_object = @files_index.retrieve(src.bucket, src.key)
-      if src_object # If not, it might have been an inferred folder
-        src_object.copy(dest.bucket, dest.key + src_filename)
-      end
+      path_end_index = src.key.rindex("/", -2)
+      path_to_sub = path_end_index != nil ? src.key[0..src.key.rindex("/", -2)] : /^/
+      #p "Filename is #{src_filename}, path to sub is #{path_to_sub}, destination path is #{dest_path}"
+      target.get_bucket(src.bucket, src.key).files.each { |thing|
+        dest = S3Path.new(thing.key.gsub(path_to_sub, dest_path))
+        #p "copy #{thing.key} -> #{dest}"
+        thing.copy(dest.bucket, dest.key)
+      }
     end
 
     def rename(path, newname)
+      #p "Rename to #{newname}"
+      if (directory?(path) && newname[-1] != "/")
+        newname += "/"
+      end
       src = S3Path.new(path)
-      src_object = @files_index.retrieve(src.bucket, src.key)
-      src_object.copy(src.bucket, dirname(src.key) + newname)
-      src_object.destroy
+      path_end_index = src.key.rindex("/", -2)
+      path_to_sub = path_end_index != nil ? src.key[path_end_index + 1 .. -1] : src.key
+      #p "src is #{src}, path to sub is #{path_to_sub}, newname is #{newname}"
+      target.get_bucket(src.bucket, src.key).files.each { |thing|
+        dest = S3Path.new("/" + src.bucket + "/" + thing.key.gsub(path_to_sub, newname))
+        #p "#{thing.key} -> #{dest}"
+        thing.copy(dest.bucket, dest.key)
+        thing.destroy
+      }
     end
 
     def rm(path)
       src = S3Path.new(path)
-      if directory?(path)
         target.get_bucket(src.bucket, src.key).files.each { |object|
-          # This list of objects will also include the folder we're trying to delete
-          if object.key != src.key
-            rm(S3Path::to_path(src.bucket, object.key)) # Recursively delete
-          end
+          # This list of objects will include the item we're trying to delete and all children
+          object.destroy
         }
-      end
-      src_object = @files_index.retrieve(src.bucket, src.key)
-      if src_object
-        src_object.destroy
-      end
+
     end
     
     def mkdir(path, newdir) 
