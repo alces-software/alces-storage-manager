@@ -175,10 +175,15 @@ module Arriba
 
     end
     
-    def mkdir(path, newdir) 
-      s3p = S3Path.new(path)
-      d = target.get_bucket(s3p.bucket, s3p.key)
-      d.files.create(key: s3p.key + newdir + "/", body: "")
+    def mkdir(path, newdir)
+      if path == "/"
+        # Create a new bucket
+        target.storage.directories.create(key: newdir)
+      else
+        s3p = S3Path.new(path)
+        d = target.get_bucket(s3p.bucket, s3p.key)
+        d.files.create(key: s3p.key + newdir + "/", body: "")
+      end
     end
 
     # Stub implementations follow...
