@@ -164,7 +164,7 @@ module Arriba
         newname += "/"
       end
       src = S3Path.new(path)
-      if src.key = nil
+      if src.key != nil
         path_end_index = src.key.rindex("/", -2)
         path_to_sub = path_end_index != nil ? src.key[path_end_index + 1 .. -1] : src.key
         #p "src is #{src}, path to sub is #{path_to_sub}, newname is #{newname}"
