@@ -148,8 +148,12 @@ module Arriba
       end
       src = S3Path.new(src_path)
       src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
-      path_end_index = src.key.rindex("/", -2)
-      path_to_sub = path_end_index != nil ? src.key[0..src.key.rindex("/", -2)] : /^/
+      if src.key == nil
+        # We're trying to copy an entire bucket - add the source bucket's name to the end of the destination path
+        dest_path += src.bucket + "/"
+      end
+      path_end_index = src.key != nil ? src.key.rindex("/", -2) : nil
+      path_to_sub = path_end_index != nil ? src.key[0..path_end_index] : /^/
       #p "Filename is #{src_filename}, path to sub is #{path_to_sub}, destination path is #{dest_path}"
       target.get_bucket(src.bucket, src.key).files.each { |thing|
         dest = S3Path.new(thing.key.gsub(path_to_sub, dest_path))
