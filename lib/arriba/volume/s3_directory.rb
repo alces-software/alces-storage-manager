@@ -155,15 +155,18 @@ module Arriba
         newname += "/"
       end
       src = S3Path.new(path)
-      path_end_index = src.key.rindex("/", -2)
-      path_to_sub = path_end_index != nil ? src.key[path_end_index + 1 .. -1] : src.key
-      #p "src is #{src}, path to sub is #{path_to_sub}, newname is #{newname}"
-      target.get_bucket(src.bucket, src.key).files.each { |thing|
-        dest = S3Path.new("/" + src.bucket + "/" + thing.key.gsub(path_to_sub, newname))
-        #p "#{thing.key} -> #{dest}"
-        thing.copy(dest.bucket, dest.key)
-        thing.destroy
-      }
+      if src.key = nil
+        path_end_index = src.key.rindex("/", -2)
+        path_to_sub = path_end_index != nil ? src.key[path_end_index + 1 .. -1] : src.key
+        #p "src is #{src}, path to sub is #{path_to_sub}, newname is #{newname}"
+        target.get_bucket(src.bucket, src.key).files.each { |thing|
+          dest = S3Path.new("/" + src.bucket + "/" + thing.key.gsub(path_to_sub, newname))
+          #p "#{thing.key} -> #{dest}"
+          thing.copy(dest.bucket, dest.key)
+          thing.destroy
+        }
+      end
+      raise "It is not possible to rename S3 buckets."
     end
 
     def rm(path)
