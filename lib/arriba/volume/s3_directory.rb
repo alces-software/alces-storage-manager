@@ -122,6 +122,9 @@ module Arriba
         raise "It is not possible to move files to outside of a bucket. Create a new bucket and move files into it instead."
       end
       src = S3Path.new(src_path)
+      if src.key == nil
+        raise "It is not possible to move buckets. Create a new bucket and move files into it instead."
+      end
       src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
       path_end_index = src.key.rindex("/", -2)
       path_to_sub = path_end_index != nil ? src.key[0..src.key.rindex("/", -2)] : src.key
