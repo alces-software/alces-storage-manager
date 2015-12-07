@@ -118,6 +118,9 @@ module Arriba
 
     # Filesystem operations
     def move(src_path, dest_path,shortcut=false)
+      if dest_path == "/"
+        raise "It is not possible to move files to outside of a bucket. Create a new bucket and move files into it instead."
+      end
       src = S3Path.new(src_path)
       src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
       path_end_index = src.key.rindex("/", -2)
@@ -137,6 +140,9 @@ module Arriba
     # Note: dest_path is the container to which the object at src_path is being copied,
     # NOT the full path of the object at its final destination
     def copy(src_path, dest_path, shortcut=false, newname=nil)
+      if dest_path == "/"
+        raise "It is not possible to copy files to outside of a bucket. Create a new bucket and copy into it instead."
+      end
       src = S3Path.new(src_path)
       src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
       path_end_index = src.key.rindex("/", -2)
