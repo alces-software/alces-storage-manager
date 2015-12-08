@@ -122,6 +122,12 @@ module Arriba
       StringIO.new(obj.body)
     end
 
+    def read(path)
+      objPath = S3Path.new(path)
+      obj = target.get_bucket(objPath.bucket).files.get(objPath.key)
+      return obj.body
+    end
+
     # Filesystem operations
     def move(src_path, dest_path,shortcut=false)
       if dest_path == "/"
