@@ -109,11 +109,17 @@ module Arriba
     end
 
     def name_for(path)
-      S3Path.new(path).key
+      path
     end
 
     def dirname(path)
       path[0..path.rindex("/", -2)]
+    end
+
+    def io(path)
+      objPath = S3Path.new(path)
+      obj = target.get_bucket(objPath.bucket).files.get(objPath.key)
+      StringIO.new(obj.body)
     end
 
     # Filesystem operations
