@@ -6,7 +6,7 @@ module Arriba
 
     class S3 < Arriba::Target::Base
 
-      DEFAULT_REGION = "us-east-1" # = Fog::Storage::AWS.DEFAULT_REGION
+      DEFAULT_REGION = "eu-west-1" # = Fog::Storage::AWS.DEFAULT_REGION
 
       def initialize(args_hash)
         super
