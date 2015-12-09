@@ -6,7 +6,8 @@ module Arriba
 
     class S3 < Arriba::Target::Base
 
-      DEFAULT_REGION = "eu-west-1" # = Fog::Storage::AWS.DEFAULT_REGION
+      DEFAULT_REGION = "us-east-1" # = Fog::Storage::AWS.DEFAULT_REGION
+      # TODO why does using eu-west-1 here cause AWS/fog to lie about bucket locations?
 
       def initialize(args_hash)
         super
@@ -38,6 +39,10 @@ module Arriba
 
       def to_volume
         Arriba::Volume::S3Directory.new(self, name)
+      end
+
+      def file_for(path)
+        to_volume.represent(path)
       end
 
     end

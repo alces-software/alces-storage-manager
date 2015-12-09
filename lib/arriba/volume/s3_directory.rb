@@ -218,6 +218,17 @@ module Arriba
       end
     end
 
+    def represent(path)
+      Arriba::S3ObjectFile.new(volume, path)
+    end
+
+    def touch(path)
+      p "Touch #{path}"
+      s3p = S3Path.new(path)
+      d = target.get_bucket(s3p.bucket)
+      d.files.new(key: s3p.key)
+    end
+
     # Stub implementations follow...
 
     def symlink?(path)
@@ -261,10 +272,6 @@ module Arriba
 
     def base
       Arriba::Root.new(volume, name)
-    end
-
-    def represent(path)
-      Arriba::S3ObjectFile.new(volume, path)
     end
 
     class S3Path
