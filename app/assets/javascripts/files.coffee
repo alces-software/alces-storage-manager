@@ -19,8 +19,8 @@
 # For more information on the Alces Storage Manager, please visit:
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
-//= require elfinder.min
 //= require jquery-ui
+//= require elfinder.min
 //= require plupload/plupload.full.min
 //= require plupload/jquery.ui.plupload/jquery.ui.plupload
 //= require base64
