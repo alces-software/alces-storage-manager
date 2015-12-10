@@ -41,8 +41,6 @@ module Arriba
         to_volume.represent(path)
       end
 
-      private
-
       def region_for_bucket(bucket)
         if !@bucket_region_map.has_key?(bucket)
           locConstraint = storage.get_bucket_location(bucket).data[:body]["LocationConstraint"]

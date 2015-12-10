@@ -159,6 +159,9 @@ module Arriba
         raise "It is not possible to copy files to outside of a bucket. Create a new bucket and copy into it instead."
       end
       src = S3Path.new(src_path)
+      if target.region_for_bucket(src.bucket) != target.region_for_bucket(S3Path.new(dest_path).bucket)
+        raise "It is not possible to copy files between buckets in different locations."
+      end
       src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
       if src.key == nil
         # We're trying to copy an entire bucket - add the source bucket's name to the end of the destination path
