@@ -196,14 +196,13 @@ module Arriba
 
     def rm(path)
       src = S3Path.new(path)
-      if src.key == ""
-        # delete the bucket
+      target.get_bucket(src.bucket, src.key).files.each { |object|
+        # This list of objects will include the item we're trying to delete and all children
+        object.destroy
+      }
+      if src.key == nil
+        # delete the bucket now it's empty
         target.get_bucket(src.bucket).destroy
-      else
-        target.get_bucket(src.bucket, src.key).files.each { |object|
-          # This list of objects will include the item we're trying to delete and all children
-          object.destroy
-        }
       end
     end
     
