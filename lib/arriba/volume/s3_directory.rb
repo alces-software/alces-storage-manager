@@ -220,6 +220,30 @@ module Arriba
       end
     end
 
+    def duplicate_name_for(path)
+      "Copy of #{::File.basename(path)}" + (directory?(path) ? "/" : "")
+    end
+
+    def duplicate(path)
+      source = represent(path)
+      srcDir = source.dirname
+      newname = duplicate_name_for(path)
+      src = S3Path.new(path)
+      if src.key != nil
+        path_end_index = src.key.rindex("/", -2)
+        path_to_sub = path_end_index != nil ? src.key[path_end_index + 1 .. -1] : src.key
+        #p "src is #{src}, path to sub is #{path_to_sub}, newname is #{newname}"
+        target.get_bucket(src.bucket, src.key).files.each { |thing|
+          dest = S3Path.new("/" + src.bucket + "/" + thing.key.gsub(path_to_sub, newname))
+          #p "#{thing.key} -> #{dest}"
+          thing.copy(dest.bucket, dest.key)
+        }
+      else
+        raise "It is not possible to duplicate S3 buckets. Create a new bucket and copy files into it instead."
+      end
+      
+    end
+
     def represent(path)
       Arriba::S3ObjectFile.new(volume, path)
     end
