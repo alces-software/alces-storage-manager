@@ -61,7 +61,7 @@ module Alces
           begin
             d = data(username).stringify_keys
             d.merge(d) do |k,meta|
-              if ssl_key = meta.delete(:ssl)
+              if (ssl_key = meta.delete(:ssl)) != false
                 meta[:ssl] = ssl_for(ssl_key) 
               end
               meta
@@ -70,7 +70,7 @@ module Alces
       end
 
       def ssl_for(ssl_key)
-        if ssl_key == true
+        if ssl_key != false
             @my_ssl ||= Class.new do
               include Alces::Tools::SSLConfigurator
               def ssl
