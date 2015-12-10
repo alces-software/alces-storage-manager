@@ -25,7 +25,7 @@ require 'socket'
 
 module Arriba
   module Target
-    class Remote < Arriba::Target::Base
+    class Posix < Arriba::Target::Base
 
       # convenience s.t. we can still refer to File resolving to
       # ::File rather than Arriba::File.

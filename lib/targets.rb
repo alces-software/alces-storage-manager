@@ -23,7 +23,7 @@
 require 'digest/md5'
 require 'alces/tools/ssl_configurator'
 require 'arriba'
-require 'arriba/target/remote'
+require 'arriba/target/posix'
 require 'arriba/target/s3'
 
 module Alces

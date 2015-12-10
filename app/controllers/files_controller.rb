@@ -20,8 +20,6 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 
-require 'arriba/target/remote'
-
 class FilesController < ApplicationController
   def index
   end
