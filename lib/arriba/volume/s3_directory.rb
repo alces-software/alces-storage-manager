@@ -94,7 +94,7 @@ module Arriba
         'directory'
       else
         # gsub to prune leading '.' character
-        ext = ::File.extname(path).gsub(/^\./,'')
+        ext = ::File.extname(path).gsub(/^\./,'').downcase
         Arriba::MimeType::for(ext) || 'unknown' # TODO read content type from S3 (possibly costly operation though)
       end
     end
