@@ -18,8 +18,7 @@ module Arriba
         @secret = args_hash[:secret]
         @bucket_region_map = {}
         storage.get_service.body["Buckets"].map { |b| b["Name"] }.each { |bucket|
-          locConstraint = storage.get_bucket_location(bucket).data[:body]["LocationConstraint"]
-          @bucket_region_map[bucket] = locConstraint ? locConstraint : "us-east-1"
+          @bucket_region_map[bucket] = region_for_bucket(bucket)
         }
       end
 
@@ -45,6 +44,12 @@ module Arriba
         to_volume.represent(path)
       end
 
+      private
+
+      def region_for_bucket(bucket)
+        locConstraint = storage.get_bucket_location(bucket).data[:body]["LocationConstraint"]
+        locConstraint ? locConstraint : "us-east-1"
+      end
     end
 
   end
