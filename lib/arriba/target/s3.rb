@@ -6,8 +6,7 @@ module Arriba
 
     class S3 < Arriba::Target::Base
 
-      DEFAULT_REGION = "us-east-1" # = Fog::Storage::AWS.DEFAULT_REGION
-      # TODO why does using eu-west-1 here cause AWS/fog to lie about bucket locations?
+      DEFAULT_REGION = "eu-west-1" # != Fog::Storage::AWS.DEFAULT_REGION
 
       def initialize(args_hash)
         super
@@ -18,8 +17,9 @@ module Arriba
         @auth = args_hash[:auth]
         @secret = args_hash[:secret]
         @bucket_region_map = {}
-        storage.directories.each { |bucket|
-          @bucket_region_map[bucket.key] = bucket.location
+        storage.get_service.body["Buckets"].map { |b| b["Name"] }.each { |bucket|
+          locConstraint = storage.get_bucket_location(bucket).data[:body]["LocationConstraint"]
+          @bucket_region_map[bucket] = locConstraint ? locConstraint : "us-east-1"
         }
       end
 
