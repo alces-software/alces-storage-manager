@@ -23,19 +23,16 @@ module Arriba
         @temp.write(arg)
       end
       def close
-        p "Close got called, hooray!"
         @temp.rewind
         @temp.close
         
         s3p = Arriba::Volume::S3Directory::S3Path.new(@path)
         dir = @dir.target.get_bucket(s3p.bucket)
-        byebug
         obj = dir.files.create({
           key: s3p.key,
         })
         obj.body = ::File.open(@temp.path)
         obj.save
-        p "Saved..."
         @temp.unlink
       end
     end
