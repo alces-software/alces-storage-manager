@@ -18,6 +18,7 @@ module Arriba
         @secret = args_hash[:secret]
         @bucket_region_map = {}
         @host = args_hash[:address]
+        storage.directories.all # Test connection at init time
       end
 
       def storage(region=DEFAULT_REGION)
