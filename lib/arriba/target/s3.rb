@@ -1,5 +1,6 @@
 require 'arriba/volume/s3_directory'
 require 'fog'
+require 'fog/aws/models/storage/files'
 
 module Arriba
   module Target
@@ -18,6 +19,7 @@ module Arriba
         @secret = args_hash[:secret_key]
         @bucket_region_map = {}
         @host = args_hash[:address]
+        @extra_buckets = args_hash[:buckets]
         storage.directories.all # Test connection at init time
       end
 
@@ -31,9 +33,18 @@ module Arriba
         })
       end
 
+      def extra_buckets
+        @extra_buckets.map { |b| b.start_with?("s3://") ? b[5..-1] : b}
+      end
+
       def get_bucket(bucketKey, prefix="")
-        region = region_for_bucket(bucketKey)
-        storage(region).directories.get(bucketKey, prefix: prefix)
+        if extra_buckets.include?(bucketKey)
+          body = storage.get_bucket(bucketKey)
+          return FakeBucket.new({service: storage}, bucketKey, body.data[:body]["Contents"], prefix)
+        else
+          region = region_for_bucket(bucketKey)
+          storage(region).directories.get(bucketKey, prefix: prefix)
+        end
       end
 
       def to_volume
@@ -53,5 +64,21 @@ module Arriba
       end
     end
 
+    class FakeBucket < ::Fog::Collection
+      attr_accessor :key
+      def initialize(attrs, key, contents, prefix="")
+        super(attrs)
+        @key = key
+        @prefix = prefix ? prefix : "" # Eliminate nil
+        @contents = load(contents)
+      end
+      def model
+        ::Fog::Storage::AWS::File
+      end
+      def files
+        @contents.select { |f| f.key.start_with?(@prefix) }
+      end
+    end
+    
   end
 end

@@ -39,7 +39,7 @@ module Arriba
     # Deduces a bucket and object key prefix, and returns an array of objects.
     def objects(path)
       if path == "/"
-        target.storage.directories.map {|bucket| bucket.key + "/" }
+        target.storage.directories.map {|bucket| bucket.key + "/" } + target.extra_buckets.map {|bucket| bucket + "/" }
       else
         #p "Listing objects for path " + path
         s3p = S3Path.new(path)
