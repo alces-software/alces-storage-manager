@@ -154,7 +154,7 @@ module Arriba
 
     # Note: dest_path is the container to which the object at src_path is being copied,
     # NOT the full path of the object at its final destination
-    def copy(src_path, dest_path, shortcut=false, newname=nil)
+    def copy(src_path, dest_path, shortcut=false)
       if dest_path == "/"
         raise "It is not possible to copy files to outside of a bucket. Create a new bucket and copy into it instead."
       end
@@ -225,8 +225,6 @@ module Arriba
     end
 
     def duplicate(path)
-      source = represent(path)
-      srcDir = source.dirname
       newname = duplicate_name_for(path)
       src = S3Path.new(path)
       if src.key != nil
