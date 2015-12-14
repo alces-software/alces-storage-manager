@@ -10,12 +10,12 @@ module Arriba
 
       def initialize(args_hash)
         super
-        unless args_hash.key?(:auth) && args_hash.key?(:secret)
-          raise ArgumentError, "auth and secret must be provided"
+        unless args_hash.key?(:access_key) && args_hash.key?(:secret_key)
+          raise ArgumentError, "access_key and secret_key must be provided"
         end
         @storages = {}
-        @auth = args_hash[:auth]
-        @secret = args_hash[:secret]
+        @auth = args_hash[:access_key]
+        @secret = args_hash[:secret_key]
         @bucket_region_map = {}
         @host = args_hash[:address]
         storage.directories.all # Test connection at init time
