@@ -35,15 +35,20 @@ module Alces
     end
       
     def all
-      targets(username).keys.map { |name| get(name) }
+      targets(username).keys.map { |name| get(name) }.compact
     end
       
     def get(name)
+      begin
       data = targets(username)[name].merge(
         :name => name,
         :username => username
       )
-      Arriba::Target.new(data)
+        Arriba::Target.new(data)
+      rescue => e
+        STDERR.puts("WARNING: error in target #{name} for user #{username}, ignoring definition (#{e})")
+        nil
+      end
     end
 
     def valid?
