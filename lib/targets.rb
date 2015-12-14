@@ -40,7 +40,6 @@ module Alces
       
     def get(name)
       data = targets(username)[name].merge(
-        :address => AlcesStorageManager::authentication_daemon.address, # TODO this should only apply to 'remote'/'posix' targets
         :name => name,
         :username => username
       )

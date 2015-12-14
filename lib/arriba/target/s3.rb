@@ -17,6 +17,7 @@ module Arriba
         @auth = args_hash[:auth]
         @secret = args_hash[:secret]
         @bucket_region_map = {}
+        @host = args_hash[:address]
       end
 
       def storage(region=DEFAULT_REGION)
@@ -24,6 +25,7 @@ module Arriba
           provider: "AWS",
           aws_access_key_id: @auth,
           aws_secret_access_key: @secret,
+          host: @host,
           region: region
         })
       end
