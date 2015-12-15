@@ -15,6 +15,7 @@ module Arriba
           raise ArgumentError, "access_key and secret_key must be provided"
         end
         @storages = {}
+        @public_storages = {}
         @auth = args_hash[:access_key]
         @secret = args_hash[:secret_key]
         @bucket_region_map = {}
@@ -34,6 +35,9 @@ module Arriba
       end
 
       def get_public_bucket(bucketKey) # Horrible hack around Fog's lack of support for regions and public buckets
+        if @public_storages.has_key?(bucketKey)
+          return @public_storages[bucketKey]
+        end
         begin
           Fog::Storage.new({
             provider: "AWS",
@@ -41,10 +45,10 @@ module Arriba
             aws_secret_access_key: @secret,
             region: "us-east-1",
             host: "s3.amazonaws.com",
-          }).get_bucket(bucketKey)
+          }).tap {|c| @public_storages[bucketKey] = c}.get_bucket(bucketKey)
         rescue Excon::Errors::BadRequest => e
           neededRegion = e.response.data[:body].match(/(?:Region>)(.*)(?:<\/Region)/)[1]
-          storage(neededRegion).get_bucket(bucketKey)
+          storage(neededRegion).tap {|c| @public_storages[bucketKey] = c}.get_bucket(bucketKey)
         end
       end
 
