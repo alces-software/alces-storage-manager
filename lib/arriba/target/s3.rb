@@ -36,7 +36,7 @@ module Arriba
 
       def get_public_bucket(bucketKey) # Horrible hack around Fog's lack of support for regions and public buckets
         if @public_storages.has_key?(bucketKey)
-          return @public_storages[bucketKey]
+          return @public_storages[bucketKey].get_bucket(bucketKey)
         end
         begin
           Fog::Storage.new({
@@ -60,7 +60,7 @@ module Arriba
       def get_bucket(bucketKey, prefix="")
         if extra_buckets.include?(bucketKey)
           body = get_public_bucket(bucketKey)
-          return FakeBucket.new({service: storage}, bucketKey, body.data[:body]["Contents"], prefix)
+          return FakeBucket.new({service: @public_storages[bucketKey]}, bucketKey, body.data[:body]["Contents"], prefix)
         else
           region = region_for_bucket(bucketKey)
           storage(region).directories.get(bucketKey, prefix: prefix)
@@ -97,6 +97,9 @@ module Arriba
       end
       def files
         @contents.select { |f| f.key.start_with?(@prefix) }
+      end
+      def get(objkey)
+        service.get_object(@key, objkey)
       end
     end
     
