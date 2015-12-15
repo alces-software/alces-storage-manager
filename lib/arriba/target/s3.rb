@@ -33,13 +33,29 @@ module Arriba
         })
       end
 
+      def get_public_bucket(bucketKey) # Horrible hack around Fog's lack of support for regions and public buckets
+        begin
+          Fog::Storage.new({
+            provider: "AWS",
+            aws_access_key_id: @auth,
+            aws_secret_access_key: @secret,
+            region: "us-east-1",
+            host: "s3.amazonaws.com",
+          }).get_bucket(bucketKey)
+        rescue Excon::Errors::BadRequest => e
+          neededRegion = e.response.data[:body].match(/(?:Region>)(.*)(?:<\/Region)/)[1]
+          storage(neededRegion).get_bucket(bucketKey)
+        end
+      end
+
       def extra_buckets
-        @extra_buckets.map { |b| b.start_with?("s3://") ? b[5..-1] : b}
+        s3_prefix = "s3://"
+        @extra_buckets.map { |b| b.start_with?(s3_prefix) ? b[s3_prefix.length..-1] : b}
       end
 
       def get_bucket(bucketKey, prefix="")
         if extra_buckets.include?(bucketKey)
-          body = storage.get_bucket(bucketKey)
+          body = get_public_bucket(bucketKey)
           return FakeBucket.new({service: storage}, bucketKey, body.data[:body]["Contents"], prefix)
         else
           region = region_for_bucket(bucketKey)
