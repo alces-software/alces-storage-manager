@@ -305,6 +305,10 @@ module Arriba
       nil
     end
 
+    def rel_path_to(path)
+      nil
+    end
+
     private
 
     def volume
