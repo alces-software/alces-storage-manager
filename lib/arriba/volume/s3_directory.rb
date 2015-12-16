@@ -266,11 +266,13 @@ module Arriba
       s3p = S3Path.new(path)
       if s3p.key == nil # Buckets
         # We can only get a bucket owner from its acl
-        true # TODO return a more useful value
+        # but we can assume that extra buckets are read-only
+        !target.extra_buckets.include?(s3p.bucket)
       else # Objects
         file = get_from_cache(path)
         if file == nil
-          return true
+          # this is inferred - so just return permission of parent bucket
+          return !target.extra_buckets.include?(s3p.bucket)
         end
         file.owner[:display_name] == @me
       end
