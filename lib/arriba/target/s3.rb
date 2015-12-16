@@ -82,6 +82,10 @@ module Arriba
         end
         @bucket_region_map[bucket]
       end
+
+      def current_user
+        storage.get_service[:body]["Owner"]["DisplayName"]
+      end
     end
 
     class FakeBucket < ::Fog::Collection

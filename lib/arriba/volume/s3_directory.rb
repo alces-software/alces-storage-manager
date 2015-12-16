@@ -11,6 +11,7 @@ module Arriba
       id ||= Arriba::Routing::encode(name)
       super(id)
       self.target = target
+      @me = target.current_user
       @files_index = FilesIndex.new(target)
     end
 
@@ -253,6 +254,28 @@ module Arriba
       d.files.new(key: s3p.key)
     end
 
+    def user(path)
+      file = get_from_cache(path)
+      return file ? file.owner[:display_name] : nil
+    end
+
+    def writable?(path)
+      if path == "/"
+        return true # We can create buckets (in most scenarios)
+      end
+      s3p = S3Path.new(path)
+      if s3p.key == nil # Buckets
+        # We can only get a bucket owner from its acl
+        true # TODO return a more useful value
+      else # Objects
+        file = get_from_cache(path)
+        if file == nil
+          return true
+        end
+        file.owner[:display_name] == @me
+      end
+    end
+
     # Stub implementations follow...
 
     def symlink?(path)
@@ -276,14 +299,6 @@ module Arriba
       true
     end
 
-    def writable?(path)
-      true
-    end
-
-    def user(path)
-      nil
-    end
-
     def group(path)
       nil
     end
@@ -296,6 +311,15 @@ module Arriba
 
     def base
       Arriba::Root.new(volume, name)
+    end
+
+    def get_from_cache(path)
+      s3p = S3Path.new(path)
+      if s3p.key
+        file = @files_index.retrieve(s3p.bucket, s3p.key)
+        return file
+      end
+      nil
     end
 
     class S3Path
