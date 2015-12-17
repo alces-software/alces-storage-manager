@@ -15,6 +15,14 @@ module Arriba
       @files_index = FilesIndex.new(target)
     end
 
+    def options
+      # Overrides Arriba default volume options
+      {
+        'disabled' => ['archive'],
+        'archivers' => {}
+      }
+    end
+
     # Fulfilling Arriba::Operations::Base contract
     def tree(path)
       # path is a directory
