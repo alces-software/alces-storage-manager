@@ -129,6 +129,13 @@ module Arriba
       return obj.body
     end
 
+    def write(path, content)
+      objPath = S3Path.new(path)
+      obj = target.get_bucket(objPath.bucket).files.get(objPath.key)
+      obj.body = content
+      obj.save
+    end
+
     # Filesystem operations
     def move(src_path, dest_path,shortcut=false)
       if dest_path == "/"
