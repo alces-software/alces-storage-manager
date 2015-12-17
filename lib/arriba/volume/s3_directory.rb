@@ -1,5 +1,6 @@
-require 'fog'
 require 'arriba/s3_object_file'
+require 'fog'
+require 'tempfile'
 
 module Arriba
   class Volume::S3Directory < Volume
@@ -194,7 +195,22 @@ module Arriba
     end
 
     def inter_region_copy(src_path, dest_path)
-      raise "It is not possible to copy files between buckets in different locations."
+      src = S3Path.new(src_path)
+      dest_bucket = target.get_bucket(S3Path.new(dest_path).bucket)
+      src_filename = src_path[src_path.rindex("/", -2) + 1..-1]
+      if src.key == nil
+        # We're trying to copy an entire bucket - add the source bucket's name to the end of the destination path
+        dest_path += src.bucket + "/"
+      end
+      path_end_index = src.key != nil ? src.key.rindex("/", -2) : nil
+      path_to_sub = path_end_index != nil ? src.key[0..path_end_index] : /^/
+      target.get_bucket(src.bucket, src.key).files.each { |thing|
+        dest = S3Path.new(thing.key.gsub(path_to_sub, dest_path))
+        
+        newfile = S3ObjectFile.new(self, dest.as_path).open
+        newfile.write(thing.body)
+        newfile.close
+      }
     end
 
     def rename(path, newname)
@@ -358,6 +374,9 @@ module Arriba
       end
       def to_s
         "<S3Path bucket=#{@bucket} key=#{@key}>"
+      end
+      def as_path
+        S3Path.to_path(@bucket, @key)
       end
       def self.to_path(bucket, key)
         "/#{bucket}/#{key}"
