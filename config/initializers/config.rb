@@ -36,9 +36,10 @@ module AlcesStorageManager
     
     def connection_opts
       auth_config = AlcesStorageManager::config[:auth].dup
+      do_ssl = auth_config.delete(:ssl) != false
       {
         timeout: 5,
-        ssl_config: auth_config.delete(:ssl) ? ssl_config : nil
+        ssl_config: do_ssl ? ssl_config : nil
       }.merge(auth_config)
     end
   
