@@ -20,7 +20,7 @@ module Arriba
         @secret = args_hash[:secret_key]
         @bucket_region_map = {}
         @host = args_hash[:address]
-        @extra_buckets = args_hash[:buckets]
+        @extra_buckets = args_hash[:buckets] || []
         storage.directories.all # Test connection at init time
       end
 
@@ -30,7 +30,8 @@ module Arriba
           aws_access_key_id: @auth,
           aws_secret_access_key: @secret,
           host: @host,
-          region: region
+          region: @host == nil ? region : nil, # Assume non-AWS services use a default region if any
+          aws_signature_version: @host == nil ? 4 : 2 # Ceph/radosgw and Google Cloud Storage need v2 sig
         })
       end
 
