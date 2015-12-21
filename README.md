@@ -79,11 +79,14 @@ directory. A sample configuration file is provided at
  privileges so you will still need to ensure that they have suitable
  permissions on the relevant filesystem(s).
  
+ Changes to system-wide targets require a restart of the ASM application.
+ 
 ### Defining user-specific targets
  
  Users may create target configuration files in their 
  `~/.config/clusterware/storage/` directories (on the system running the ASM
- daemon).
+ daemon). Changes to these files take effect without needing a restart; users
+ may have to refresh the page in their browser.
  
 ### Target file format
  
