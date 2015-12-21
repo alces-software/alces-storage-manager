@@ -127,3 +127,9 @@ true.
 example, `['1000genomes']` will include read-only access to the 1000 Genomes
 project bucket, one of several data sets made available by Amazon. See 
 https://aws.amazon.com/datasets/ for more details.
+
+#### Errors in targets
+
+Any errors in target configuration files are reported to the ASM log, but not
+(currently) the user. Such files are skipped and will not appear in the browser
+interface.
