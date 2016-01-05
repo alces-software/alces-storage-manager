@@ -252,7 +252,7 @@ module Arriba
       else
         s3p = S3Path.new(path)
         d = target.get_bucket(s3p.bucket, s3p.key)
-        d.files.create(key: s3p.key + newdir + "/", body: "")
+        d.files.create(key: "#{s3p.key}#{newdir}/", body: "")
       end
     end
 
