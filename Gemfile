@@ -54,6 +54,6 @@ group :development do
 end
 
 gem 'elfinder-rails-connector', :github => 'alces-software/elfinder-rails-connector', :tag => '0.3.0'
-gem                   'arriba', :github => 'alces-software/arriba', :tag => '0.5.0'
+gem                   'arriba', :github => 'alces-software/arriba', :tag => '0.6.0'
 gem              'alces-tools', :github => 'alces-software/alces-tools', :tag => '0.13.0'
 gem  'alces-upload-middleware', :github => 'alces-software/alces-upload-middleware', :tag => '0.2.0'
