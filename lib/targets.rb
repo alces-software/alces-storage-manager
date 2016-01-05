@@ -23,7 +23,8 @@
 require 'digest/md5'
 require 'alces/tools/ssl_configurator'
 require 'arriba'
-require 'arriba/target/remote'
+require 'arriba/target/posix'
+require 'arriba/target/s3'
 
 module Alces
   class Targets < Struct.new(:username)
@@ -34,20 +35,20 @@ module Alces
     end
       
     def all
-      targets.keys.map { |name| get(name) }
+      targets(username).keys.map { |name| get(name) }.compact
     end
       
     def get(name)
-      data = targets[name].merge(
+      begin
+      data = targets(username)[name].merge(
         :name => name,
-        :username => username,
-        :directory_finder => DirectoryFinder
+        :username => username
       )
-      Arriba::Target.new(data)
-    end
-
-    def directory_for(name)
-      DirectoryFinder.new(targets[name].merge(username: username)).directory
+        Arriba::Target.new(data)
+      rescue => e
+        STDERR.puts("WARNING: error in target #{name} for user #{username}, ignoring definition (#{e})")
+        nil
+      end
     end
 
     def valid?
@@ -58,27 +59,13 @@ module Alces
 
     private
 
-    class DirectoryFinder < Struct.new(:opts)
-      def directory
-        if d = opts[:dir_spec]
-          # Delegate the handling of special directories, such as home and
-          # tmp dir, to ASMD.
-          d.to_sym
-        elsif d = opts[:dir]
-          d
-        else
-          raise "Unable to determine directory from: #{opts.inspect}"
-        end
-      end
-    end
-      
     class << self
-      def targets
-        @targets ||=
+      def targets(username)
+        @targets =
           begin
-            d = data.stringify_keys
+            d = data(username).stringify_keys
             d.merge(d) do |k,meta|
-              if ssl_key = meta.delete(:ssl)
+              if (ssl_key = meta.delete(:ssl)) != false
                 meta[:ssl] = ssl_for(ssl_key) 
               end
               meta
@@ -87,7 +74,7 @@ module Alces
       end
 
       def ssl_for(ssl_key)
-        if ssl_key == true
+        if ssl_key != false
             @my_ssl ||= Class.new do
               include Alces::Tools::SSLConfigurator
               def ssl
@@ -105,8 +92,13 @@ module Alces
         end
       end
 
-      def data
-        AlcesStorageManager::config[:targets]
+      def data(username)
+        opts = {
+          :handler => 'Alces::StorageManagerDaemon::TargetsHandler',
+          :username => username
+        }
+        wrapper = DaemonClient::Wrapper.new(AlcesStorageManager::authentication_daemon, opts)
+        wrapper.targets_for(username)
       end
     end
   end

@@ -25,7 +25,8 @@ require 'socket'
 
 module Arriba
   module Target
-    class Remote < Arriba::Target::Base
+    class Posix < Arriba::Target::Base
+
       # convenience s.t. we can still refer to File resolving to
       # ::File rather than Arriba::File.
       File = ::File
@@ -37,7 +38,7 @@ module Arriba
           raise ArgumentError, "static_uid, uid or username must be provided"
         end
 
-        self.address = DaemonClient::Connection.normalize_address(args_hash[:address])[0]
+        self.address = DaemonClient::Connection.normalize_address(args_hash[:address] || default_address)[0]
         @uid = args_hash[:static_uid] || args_hash[:uid]
         @username = args_hash[:username]
         self.daemon_opts = {
@@ -49,6 +50,28 @@ module Arriba
           self.daemon_opts[:ssl_config] = @ssl.ssl_config
         else
           @ssl = nil
+        end
+      end
+
+      def default_address
+        AlcesStorageManager::authentication_daemon.address
+      end
+
+      def directory_for(args_hash)
+        DirectoryFinder.new(args_hash).directory
+      end
+
+      class DirectoryFinder < Struct.new(:opts)
+        def directory
+          if d = opts[:dir_spec]
+            # Delegate the handling of special directories, such as home and
+            # tmp dir, to ASMD.
+            d.to_sym
+          elsif d = opts[:dir]
+            d
+          else
+            raise "Unable to determine directory from: #{opts.inspect}"
+          end
         end
       end
 

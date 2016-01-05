@@ -4,9 +4,9 @@ Copyright (C) 2015 Stephen F. Norledge and Alces Software Ltd. See LICENSE.txt.
 
 ## Description
 Alces Storage Manager is a web-based file manager designed to serve filesystems
-via the Alces Storage Manager Daemon. It provides users with a means to manage
-uploading, downloading and manipulating files in their cluster storage via
-their web browser.
+via the Alces Storage Manager Daemon or Amazon's S3 service (or compatible). It
+provides users with a means to manage uploading, downloading and manipulating
+files in their cluster storage via their web browser.
 
 ## Configuration
 Alces Storage Manager is a Ruby on Rails application. You must have Ruby 
@@ -25,32 +25,10 @@ installed before installing Alces Storage Manager.
 
 4. Configure the Storage Manager by editing the `config/storagemanager.yml`
 directory. A sample configuration file is provided at 
-`config/storagemanager.yml.ex`. The three sections of this file are as follows:
+`config/storagemanager.yml.ex`. The two sections of this file are as follows:
 
    ### :auth
    Specifies options for connecting to the ASM daemon used for authentication.
-   * `:address` - the IP address and port of the ASM daemon to connect to. This
-   should be the (or one of the) ASMD(s) configured in step 3. Required.
-   * `:ssl` - set to `true` to use an SSL connection. Recommended.
-
-   ### :targets
-
-   Specifies which directories should be made available to each user. The 
-   options for each entry are:
-
-   * `:dir` - string specifying the directory. Mutually exclusive with 
-  `:dir_spec`.
-   * `:dir_spec` - symbol specifying a special directory. Mutually exclusive with
-  `:dir`.
-     * `:home` for the user's home directory
-     * `:tmpdir` for the operating system's temporary file path (as per Ruby's
-    `Dir#tmpdir()`)
-   * `:type` - should be `:remote` for directories served by the Alces Storage
-     Manager Daemon. May also be `:local` for filesystems mounted on the same
-     node as this web service.
-
-   For remote targets, further options are:
-
    * `:address` - the IP address and port of the ASM daemon to connect to. This
    should be the (or one of the) ASMD(s) configured in step 3. Required.
    * `:ssl` - set to `true` to use an SSL connection. Recommended.
@@ -84,7 +62,77 @@ directory. A sample configuration file is provided at
    or Apache. You will also need to specify a secret key for the server in 
    production mode.
  
- ## Usage
+## Usage
  1. Load the Storage Manager in your web browser. If running as in the above
  example, this may be at http://storagemanagerhost:8080.
  2. Log in using your cluster username and password.
+
+## Defining storage targets
+ 
+ There are two ways of defining storage 'targets' - that is, storage volumes
+ that appear in the file manager - system-wide and user-specifically.
+ 
+### Defining system-wide targets
+ 
+ The ASM Daemon looks in the `/etc/xdg/clusterware/storage/` directory for
+ configuration files that apply to all users. Users will keep their user
+ privileges so you will still need to ensure that they have suitable
+ permissions on the relevant filesystem(s).
+ 
+ Changes to system-wide targets require a restart of the ASM application.
+ 
+### Defining user-specific targets
+ 
+ Users may create target configuration files in their 
+ `~/.config/clusterware/storage/` directories (on the system running the ASM
+ daemon). Changes to these files take effect without needing a restart; users
+ may have to refresh the page in their browser.
+ 
+### Target file format
+ 
+ The target specification files are YAML and each describe a single storage
+ volume. They should be called `<name>.target.yml`.
+ 
+ Example:
+ 
+ ```
+ ---
+name: "Home"
+type: posix
+dir: "%#{dir}/"
+address: "127.0.0.2:25268"
+```
+
+#### Options common to all types
+
+* `name` - **Required**. Unique identifying string for this target.
+* `type` - **Required**. Type of connection. Must be one of `posix` or `s3`.
+* `address` - for `posix` targets, the IP address and port of the running ASM
+daemon providing this volume, and defaults to the daemon configured for
+authentication. For `s3` targets, the address of the S3-compatible gateway;
+defaults to Amazon's AWS S3 service.
+
+#### Options specific to 'posix' targets
+
+* `dir` - **Required**. Directory that is the root of this target. May either be a literal
+path such as `/opt/somefolder/` or use a Ruby-style hash string replacement
+to include variables such as the user's name, home directory or the system temp
+directory; for example `%#{dir}/` for their home directory, or 
+`%/scratch/#{name}/` to represent a user's named directory under `/scratch`.
+* `ssl` - Boolean flag for whether or not to use an SSL connection. Defaults to
+true.
+
+#### Options specific to 's3' targets
+
+* `access_key` - **Required**. The access key from the AWS credentials to be used.
+* `secret_key` - **Required**. The secret key from the AWS credentials to be used.
+* `buckets` - List of additional public buckets to include in the volume. For
+example, `['1000genomes']` will include read-only access to the 1000 Genomes
+project bucket, one of several data sets made available by Amazon. See 
+https://aws.amazon.com/datasets/ for more details.
+
+#### Errors in targets
+
+Any errors in target configuration files are reported to the ASM log, but not
+(currently) the user. Such files are skipped and will not appear in the browser
+interface.
