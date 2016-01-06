@@ -119,7 +119,7 @@ module Arriba
     end
 
     def name_for(path)
-      path
+      ::File.basename(path)
     end
 
     def dirname(path)
