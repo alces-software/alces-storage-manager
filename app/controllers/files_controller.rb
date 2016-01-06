@@ -20,7 +20,15 @@
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
 
+require 'targets'
+
 class FilesController < ApplicationController
   def index
+    username = session[:authenticated_username]
+    if Alces::Targets.new(username).all.empty?
+      render :empty
+    end
+  end
+  def empty
   end
 end
