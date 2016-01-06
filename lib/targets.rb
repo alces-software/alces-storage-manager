@@ -33,11 +33,16 @@ module Alces
     def each(&block)
       all.each(&block)
     end
-      
+
     def all
+      @errors = []
       targets(username).keys.map { |name| get(name) }.compact
     end
-      
+
+    def errors
+      @errors
+    end
+
     def get(name)
       begin
       data = targets(username)[name].merge(
@@ -47,6 +52,7 @@ module Alces
         Arriba::Target.new(data)
       rescue => e
         STDERR.puts("WARNING: error in target #{name} for user #{username}, ignoring definition (#{e})")
+        @errors.push([name, data[:file] || "unknown", e])
         nil
       end
     end

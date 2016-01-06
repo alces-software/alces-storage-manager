@@ -25,7 +25,14 @@ require 'targets'
 class FilesController < ApplicationController
   def index
     username = session[:authenticated_username]
-    if Alces::Targets.new(username).all.empty?
+    targets = Alces::Targets.new(username)
+    allTargets = targets.all
+    targets.errors.each { |name, file, error|
+      # TODO handle multiple errors - this currently just prints the last one!
+      flash[:alert] = "Invalid target definition for '#{name}' defined in #{file}: #{error}"
+    }
+
+    if allTargets.empty?
       render :empty
     end
   end

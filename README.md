@@ -133,6 +133,6 @@ https://aws.amazon.com/datasets/ for more details.
 
 #### Errors in targets
 
-Any errors in target configuration files are reported to the ASM log, but not
-(currently) the user. Such files are skipped and will not appear in the browser
-interface.
+Any errors in target configuration files are reported to the ASM log, and will
+also be shown to the user in an error box at the top of the page. Invalid
+targets are skipped and will not appear in the file browser interface.
