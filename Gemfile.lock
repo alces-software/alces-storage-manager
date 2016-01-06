@@ -15,10 +15,10 @@ GIT
 
 GIT
   remote: git://github.com/alces-software/arriba.git
-  revision: 526a48a8c6a3336a5c48c8630cdf241384b398f2
-  tag: 0.6.0
+  revision: 343b1410e46db5c8c98119945f7a25e4e98386a2
+  branch: 0.6-stable
   specs:
-    arriba (0.6.0)
+    arriba (0.6.1)
       activesupport
 
 GIT
