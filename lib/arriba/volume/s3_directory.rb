@@ -4,6 +4,10 @@ require 'tempfile'
 
 module Arriba
   class Volume::S3Directory < Volume
+
+    MAX_DOWNLOAD_SIZE_MB = 50
+    MAX_DOWNLOAD_SIZE_B = MAX_DOWNLOAD_SIZE_MB * 1024 * 1024
+
     include Arriba::Operations::Base
     attr_accessor :target, :name
 
@@ -127,12 +131,18 @@ module Arriba
     end
 
     def io(path)
+      if size(path) > MAX_DOWNLOAD_SIZE_B
+        raise "File is too big to be downloaded using the Storage Manager."
+      end
       objPath = S3Path.new(path)
       obj = target.get_bucket(objPath.bucket).files.get(objPath.key)
       StringIO.new(obj.body)
     end
 
     def read(path)
+      if size(path) > MAX_DOWNLOAD_SIZE_B
+        raise "File is too big to be downloaded using the Storage Manager."
+      end
       objPath = S3Path.new(path)
       obj = target.get_bucket(objPath.bucket).files.get(objPath.key)
       return obj.body
