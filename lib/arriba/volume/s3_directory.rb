@@ -21,7 +21,8 @@ module Arriba
       # Overrides Arriba default volume options
       {
         'disabled' => ['archive'],
-        'archivers' => {}
+        'archivers' => {},
+        'download_limit' => AlcesStorageManager::download_size_limit
       }
     end
 

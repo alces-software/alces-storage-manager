@@ -39,7 +39,4 @@ class FilesController < ApplicationController
   end
   def empty
   end
-  def limit
-    render js: "alces_download_limit=#{AlcesStorageManager::download_size_limit};"
-  end
 end

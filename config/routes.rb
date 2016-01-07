@@ -28,7 +28,6 @@ Rails.application.routes.draw do
   get 'logout', to: 'login#logout'
 
   get 'files', to: 'files#index'
-  get 'files/limit', to: 'files#limit'
   get 'finder/api'
   post 'finder/api'
   post 'file-upload', to: 'upload#handle'
