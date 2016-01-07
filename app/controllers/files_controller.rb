@@ -23,6 +23,7 @@
 require 'targets'
 
 class FilesController < ApplicationController
+  skip_before_filter :verify_authenticity_token, :only => [:limit]
   def index
     username = session[:authenticated_username]
     targets = Alces::Targets.new(username)
@@ -37,5 +38,8 @@ class FilesController < ApplicationController
     end
   end
   def empty
+  end
+  def limit
+    render js: "alces_download_limit=#{AlcesStorageManager::download_size_limit};"
   end
 end
