@@ -83,7 +83,6 @@ elFinder.prototype.commands.open = function() {
         return dfrd.reject(['errOpen', file.name, 'errPerm']);
       }
 
-      alert("Ping!")
       var limit = fm.option("download_limit");
       if (limit > 0 && file.size > limit ) {
         fm.error("File " + file.name + " exceeds the configured download size limit and cannot be opened.");
