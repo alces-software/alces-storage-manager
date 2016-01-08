@@ -43,6 +43,13 @@ directory. A sample configuration file is provided at
    * `:key` - Client SSL keyfile, relative to `:root`.
    * `:ca` - CA certificate, relative to `:root`.
 
+   ### :downloadSizeLimit
+   Limits the maximum size (in MB) of files able to be downloaded or previewed
+   from S3 volumes. Currently files on S3 volumes must be proxied with a 
+   temporary file on the ASM host before they can be downloaded by users. This
+   setting prevents users from downloading files too large, which may
+   potentially cause disk space issues. Default value is 50MB.
+
 5. Start Alces Storage Manager by running 
 
    ```$ ./bin/rails server```

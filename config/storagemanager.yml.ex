@@ -9,3 +9,4 @@
   :certificate: daemon-client_crt.pem
   :key: daemon-client_key.pem
   :ca: alces-ca_crt.pem
+:downloadSizeLimit: 50
