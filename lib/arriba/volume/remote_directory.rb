@@ -35,6 +35,13 @@ module Arriba
       @daemon = DaemonClient::Wrapper.new(target.daemon, server_opts)
       self.target = target
     end
+    
+
+    def options
+      {
+        'download_limit' => -1
+      }
+    end
 
     # we can shortcut if we're dealing with another remote directory on the
     # same target host
