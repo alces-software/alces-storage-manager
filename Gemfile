@@ -50,9 +50,9 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
-  gem 'net-ping'
 end
 
+gem 'net-ping'
 gem 'elfinder-rails-connector', :github => 'alces-software/elfinder-rails-connector', :tag => '0.3.0'
 gem                   'arriba', :github => 'alces-software/arriba', :branch => '0.6-stable'
 gem              'alces-tools', :github => 'alces-software/alces-tools', :tag => '0.13.0'
