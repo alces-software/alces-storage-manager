@@ -46,6 +46,13 @@ module AlcesStorageManager
     def ssl_config
       @my_ssl ||= Class.new do
         include Alces::Tools::SSLConfigurator
+        def ssl_verify_mode
+          if AlcesStorageManager.config[:ssl][:verify] == false
+            OpenSSL::SSL::VERIFY_NONE
+          else
+            OpenSSL::SSL::VERIFY_PEER | OpenSSL::SSL::VERIFY_FAIL_IF_NO_PEER_CERT
+          end
+        end
         def ssl
           ssl_opts = AlcesStorageManager::config[:ssl].dup
           Alces::Tools::SSLConfigurator::Configuration.new(
