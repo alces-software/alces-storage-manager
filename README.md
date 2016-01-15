@@ -41,6 +41,7 @@ directory. A sample configuration file is provided at
    * `:root` - Path to directory containing required SSL artefacts.
    * `:certificate` - Client SSL certificate, relative to `:root`.
    * `:key` - Client SSL keyfile, relative to `:root`.
+   * `:verify` - Enable/disable certificate verification against CA.
    * `:ca` - CA certificate, relative to `:root`.
 
    ### :downloadSizeLimit
