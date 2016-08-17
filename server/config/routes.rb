@@ -34,4 +34,8 @@ Rails.application.routes.draw do
   post 'finder/api'
   post 'file-upload', to: 'upload#handle'
 
+  # For all other GET requests render the index page to load the Storage Manager
+  # app; this will then show the requested page.
+  get '*path' => 'home#index'
+
 end

@@ -1,12 +1,19 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, browserHistory } from 'react-router';  // eslint-disable-line no-unused-vars
+import { Provider } from 'react-redux';
+import { ReduxRouter } from 'redux-router';
 
+import configureStore from 'store/configureStore';
 import routes from 'routes';
 
-require("styles/main.scss");
+const store = configureStore();
 
 ReactDOM.render(
-  <Router history={browserHistory}>{routes}</Router>,
+  <Provider store={store}>
+    <div>
+      <ReduxRouter>{routes}</ReduxRouter>
+    </div>
+  </Provider>,
   document.getElementById('root')
 );
