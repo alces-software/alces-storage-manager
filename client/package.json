@@ -7,7 +7,7 @@
     "clean": "rm -rf dist/*",
     "build": "NODE_ENV=production webpack --colors --progress",
     "build-dev": "NODE_ENV=development webpack --colors --progress",
-    "start": "webpack-dev-server"
+    "dev-server": "NODE_ENV=development node server.js"
   },
   "author": "Alces Software Limited",
   "license": "AGPL-3.0",
@@ -30,6 +30,7 @@
     "eslint": "^3.3.1",
     "eslint-loader": "^1.5.0",
     "eslint-plugin-react": "^6.1.1",
+    "express": "^4.14.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "node-sass": "^3.4.2",
@@ -37,6 +38,7 @@
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.13",
+    "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.12.2",
     "webpack-merge": "^0.12.0"
