@@ -22,7 +22,9 @@
 
 Rails.application.routes.draw do
 
-  root 'login#index'
+  root to: 'home#index'
+
+  # Legacy URLs
   get 'login/index'
   post 'login/authenticate'
   get 'logout', to: 'login#logout'
