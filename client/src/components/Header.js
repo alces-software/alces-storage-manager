@@ -58,7 +58,7 @@ class Header extends React.Component {
         <NavbarCollapse>
           <Nav>
             <NavItemLink to={homePageLink}>
-              Alces Access Manager
+              Alces Storage Manager
             </NavItemLink>
           </Nav>
           {navbarRight}
