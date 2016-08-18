@@ -4,9 +4,9 @@ import {createSelector} from 'reselect';
 
 const environmentState = (state) => state.environment;
 const clustersState = (state) => state.clusters;
-const novncState = (state) => state.novnc;
 const sessionsState = (state) => state.sessions;
 const uiState = (state) => state.ui;
+const storageState = (state) => state.storage;
 
 export const singleClusterModeSelector = createSelector(
   clustersState,
@@ -72,15 +72,6 @@ export function sessionFromRouteSelector(state) {
   return _.find(clusterSessions, (session) => session.uuid == sessionUuid);
 }
 
-export const vncSessionPageSelector = createSelector(
-  clusterFromRouteSelector,
-  sessionFromRouteSelector,
-  novncState,
-  (cluster, session, novnc) => {
-    return {cluster, session, novnc};
-  }
-);
-
 const notificationsSelector = createSelector(
   (state) => state.notifications,
 
@@ -90,6 +81,15 @@ const notificationsSelector = createSelector(
       currentModal: notifications.currentModal,
       exitingModal: notifications.exitingModal,
     };
+  }
+);
+
+export const storageCollectionsSelector = createSelector(
+  storageState,
+  (storage) => {
+    return {
+      storage,
+    }
   }
 );
 
