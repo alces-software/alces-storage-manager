@@ -34,6 +34,17 @@ Rails.application.routes.draw do
   post 'finder/api'
   post 'file-upload', to: 'upload#handle'
 
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v1 do
+
+      resources :storage, only: [:index] do
+        collection do
+          post :register
+        end
+      end
+    end
+  end
+
   # For all other GET requests render the index page to load the Storage Manager
   # app; this will then show the requested page.
   get '*path' => 'home#index'
