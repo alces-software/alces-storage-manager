@@ -10,7 +10,10 @@ export default class StorageSelectionPage extends React.Component {
   render() {
     const {
       storage: {hosts},
+      authenticate,
     } = this.props;
+
+    const clusterSelectionBoxProps = {authenticate};
 
     const storageAvailableMessage = _.isEmpty(hosts) ?
       (
@@ -35,7 +38,7 @@ export default class StorageSelectionPage extends React.Component {
         keyProp="address"
         header={header}
         selectionBoxComponent={StorageSelectionCard}
-        selectionBoxProps={null}
+        selectionBoxProps={clusterSelectionBoxProps}
         loggingOut={false}
       />
     );

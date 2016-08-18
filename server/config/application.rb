@@ -48,7 +48,7 @@ module AlcesStorageManager
     # This require statement must be within the scope of Application
     require 'targets'
     require 'upload_middleware_adapter'
-    config.middleware.use Alces::UploadMiddleware, targets_class: Alces::Targets
+    config.middleware.use Alces::UploadMiddleware, targets_class: Alces::Targets, paths: ['/file-upload']
     config.middleware.insert_before Alces::UploadMiddleware, Alces::UploadMiddlewareAdapter
   end
 end

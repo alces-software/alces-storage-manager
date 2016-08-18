@@ -6,6 +6,8 @@ import axios from 'axios';
 import { displayErrorModal } from 'notification/actions'
 import Console from "utils/console";
 
+import retrieveCsrfToken from 'utils/retrieveCsrfToken';
+
 const apiMimeType = 'application/x-vnd.alces-software.webapp.api+json;version=1'
 const jsonApiMimeType = "application/vnd.api+json";
 
@@ -15,14 +17,7 @@ axios.defaults.headers.common['Accept'] = [
   'application/json',
 ];
 
-// function addHeaders(config, csrfToken) {
-//   const headers = config.headers || {};
-//   headers['X-CSRF-Token'] = csrfToken;
-//   headers['Content-Type'] = headers['Content-Type'] || apiMimeType;
-//   config.headers = headers;
-
-//   return config;
-// }
+axios.defaults.headers.post['X-CSRF-Token'] = retrieveCsrfToken();
 
 // Return an object containing the action's meta without the apiRequest key.
 function metaWithoutApiRequest(action) {
@@ -91,7 +86,6 @@ function apiRequestMiddleware({dispatch}) {
     return function(action) {
       if (action.meta && action.meta.apiRequest) {
         const apiRequest = action.meta.apiRequest;
-        // addHeaders(apiRequest.config, getState().auth.csrfToken);
 
         const newAction = {
           type: action.type,

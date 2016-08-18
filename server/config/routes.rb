@@ -42,6 +42,14 @@ Rails.application.routes.draw do
           post :register
         end
       end
+
+      storage_route_params = {
+          constraints: {address: /[^\/]+/} # Allow address to have any chars except '/'.
+      }
+
+      post 'storage/:address/authenticate',
+           to: 'storage#authenticate',
+           **storage_route_params
     end
   end
 
