@@ -1,7 +1,6 @@
 
 import React from 'react';
 
-import AuthenticatedClusterSelectionBox from 'components/AuthenticatedClusterSelectionBox';
 import Icon from 'components/Icon';
 import UnauthenticatedClusterSelectionBox from 'components/UnauthenticatedClusterSelectionBox';
 import {selectionBoxPropTypes} from 'utils/propTypes';
@@ -40,15 +39,10 @@ const ClusterFilter = ({message, children}) => {
 
 class ClusterSelectionBox extends React.Component {
   render() {
-    const {authenticate, item, logout} = this.props;
+    const {authenticate, item} = this.props;
     const cluster = item;
 
-    const selectionBoxElement = cluster.authenticated_username ?
-      <AuthenticatedClusterSelectionBox
-        cluster={cluster}
-        logout={logout}
-      />
-    :
+    const selectionBoxElement =
       <UnauthenticatedClusterSelectionBox
         authenticate={authenticate}
         cluster={cluster}

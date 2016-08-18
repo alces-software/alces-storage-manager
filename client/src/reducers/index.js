@@ -9,6 +9,7 @@ import { routerStateReducer } from 'redux-router';
 import clusters from 'clusters/reducer';
 import ui from 'ui/reducer';
 import notifications from 'notification/reducer';
+import storage from 'storage/reducer';
 
 // import {CLEAN_SESSION} from 'auth/actionTypes';
 
@@ -19,6 +20,7 @@ const unpreservedStateReducers = {
   form,
   ui,
   notifications,
+  storage,
 };
 
 // Reducers for state to be preserved when clearing app state on sign out
