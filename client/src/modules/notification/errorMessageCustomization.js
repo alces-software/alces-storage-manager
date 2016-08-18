@@ -5,7 +5,6 @@ import React from 'react';
 import {ContactCustomerSupport} from 'components/CustomerSupport';
 
 import * as clusterActionTypes from 'clusters/actionTypes';
-import * as sessionActionTypes from 'sessions/actionTypes';
 import MessageGenerator from "./MessageGenerator";
 
 export const unexpectedErrorMessageGenerator = new MessageGenerator(
@@ -111,9 +110,6 @@ export function addActionTypeCustomizations(generatorsMap) {
     _.each(
       [
         clusterActionTypes.AUTHENTICATE,
-        sessionActionTypes.LOAD_SESSIONS,
-        sessionActionTypes.RELOAD_SESSIONS,
-        sessionActionTypes.LAUNCH,
     ],
       (action) => {
         generatorsMap.customizeMessage(
