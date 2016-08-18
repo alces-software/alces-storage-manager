@@ -1,0 +1,46 @@
+
+/* *************************************
+ *
+ *   Sticky Footer
+ *   -> 
+ *
+ * *************************************/
+/*
+Sticky Footer Solution
+by Steve Hatcher
+http://stever.ca
+http://www.cssstickyfooter.com
+*/
+
+/* Everything wrapping %stickyFooter-wrapper needs to have a 100% height for
+ * firefox to be happy.
+ */
+html, body, .stickyFooter-wrapper-wrapper {
+    height: 100%;
+}
+
+%stickyFooter-wrapper {
+    min-height: 100%;
+}
+
+%stickyFooter-wrapper-main {
+    overflow: auto;
+    padding-bottom: rem($l-footer-height);
+} /* padding-bottom must be same as height of footer */
+
+%stickyFooter-footer {
+    position: relative;
+    margin-top: rem(-$l-footer-height); /* negative value of footer height */
+    height: rem($l-footer-height);
+    clear: both;
+}
+
+/* Opera Fix */
+body:before { /* thanks to Maleika (Kohoutec)*/
+    content: "";
+    height: 100%;
+    float: left;
+    width: 0;
+    margin-top: -32767px; /* thank you Erik J - negate effect of float*/
+}
+

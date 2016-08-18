@@ -1,0 +1,28 @@
+
+/* *************************************
+ *
+ *   Bootstrap
+ *   -> Styles tweaking/overriding default bootstrap styles
+ *
+ * *************************************/
+
+.badge-danger {
+    background-color: $brand-danger;
+}
+
+.badge-success {
+    background-color: $brand-success;
+}
+
+.badge-info {
+    background-color: $brand-info;
+}
+
+.badge-warning {
+    background-color: $brand-warning;
+}
+
+.badge-primary {
+    background-color: $c-primary-color;
+    color: white;
+}

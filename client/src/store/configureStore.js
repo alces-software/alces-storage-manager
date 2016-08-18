@@ -26,6 +26,6 @@ export default function configureStore(initialState) {
       store.replaceReducer(nextRootReducer);
     });
   }
-  console.log(store); // eslint-disable-line no-console
+
   return store;
 }

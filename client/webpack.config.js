@@ -6,9 +6,9 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var env = process.env.NODE_ENV;
 
-var appName = "alces-storage-manager";
+var appName = "alces-access-manager";
 var entries, devServer, devtool, outputFile, pathinfo, plugins, publicPath,
-  loaders;
+    loaders;
 
 if (env === "production") {
   devtool = "source-map";
@@ -17,7 +17,7 @@ if (env === "production") {
   // XXX This needs to match the server address from which the built bundles
   // will be downloaded. If it doesn't, then the browser will attempt to
   // download the zxcvbn chunk from the wrong location.
-  publicPath = "/";
+  publicPath = "/"
 
   entries = [];
 

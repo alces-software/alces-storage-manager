@@ -3,17 +3,28 @@
 
 // Reducers:
 import { combineReducers } from 'redux';
-// import {reducer as form} from 'redux-form';
+import {reducer as form} from 'redux-form';
 import { routerStateReducer } from 'redux-router';
 
+import clusters from 'clusters/reducer';
+import environment from 'environment/reducer';
 import ui from 'ui/reducer';
+import notifications from 'notification/reducer';
+import novnc from 'novnc/reducer';
+import sessions from 'sessions/reducer';
 
 // import {CLEAN_SESSION} from 'auth/actionTypes';
 
 // Reducers for state to be reset to initial state when clearing app state
 // on sign out.
 const unpreservedStateReducers = {
+  clusters,
+  environment,
+  form,
   ui,
+  notifications,
+  novnc,
+  sessions,
 };
 
 // Reducers for state to be preserved when clearing app state on sign out
@@ -21,12 +32,12 @@ const unpreservedStateReducers = {
 // after sign out).
 const preservedStateReducers = {
   router: routerStateReducer,
-};
+}
 
 const combinedReducers = combineReducers({
   ...unpreservedStateReducers,
   ...preservedStateReducers,
-});
+})
 
 // function reduceWithJsonApiResourceInclusion(state, action) {
 //   const newState = combinedReducers(state, action);
@@ -47,8 +58,6 @@ export default function rootReducer(state, action) {
   // }
 
   // return reduceWithJsonApiResourceInclusion(inputState, action);
-
-  console.log(routerStateReducer); // eslint-disable-line no-console
 
   return combinedReducers(state, action);
 }

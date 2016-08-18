@@ -1,0 +1,23 @@
+
+.flight {
+    @extend %stickyFooter-wrapper;
+    background-image: url('~images/debut_light.png');
+    background-repeat: repeat;
+}
+
+.flight-livestamp {
+    font-size: 80%;
+    font-weight: bold;
+    margin-left: rem(5px);
+    white-space: nowrap;
+    background: transparentize($c-bg-color--lighter, 0.3);
+    padding: rem(5px);
+    border-radius: rem(5px);
+    color: $text-muted;
+    font-family: $c-plain-fontFamily;
+
+    &-tooltip {
+        font-size: 80%;
+        white-space: nowrap;
+    }
+}

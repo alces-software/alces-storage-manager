@@ -3,7 +3,7 @@ import axios from 'axios';
 // import _ from 'lodash';
 // import * as jsonApiTypes from "jsonApi/actionTypes";
 
-// import { displayErrorModal } from 'notification/actions'
+import { displayErrorModal } from 'notification/actions'
 import Console from "utils/console";
 
 const apiMimeType = 'application/x-vnd.alces-software.webapp.api+json;version=1'
@@ -101,7 +101,7 @@ function apiRequestMiddleware({dispatch}) {
               (response) => response.data,
               (response) => {
                 const error = errorFromResponse(response);
-                //dispatch(displayErrorModal(action, response));
+                dispatch(displayErrorModal(action, response));
                 throw error;
               }
             ),
