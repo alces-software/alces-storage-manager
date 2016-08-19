@@ -1,10 +1,12 @@
 
 import React from 'react';
 
+import FileManager from 'components/FileManager';
+
 export default class FileManagerPage extends React.Component {
   render() {
     return (
-      <p>File manager coming soon™</p>
+      <FileManager collection={this.props.params.address} />
     );
   }
 }
