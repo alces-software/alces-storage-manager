@@ -12,7 +12,14 @@ class Api::V1::StorageController < ApplicationController
     params.require(:username)
     params.require(:password)
 
-    handle_error 'invalid_credentials', :unauthorized
+    auth_response = AlcesStorageManager::authentication_daemon.authenticate?(params[:username], params[:password])
+    if auth_response
+      reset_session
+      session[:authenticated_username] = params[:username]
+      render json: {success: true}
+    else
+      handle_error 'invalid_credentials', :unauthorized
+    end
   end
 
   private
