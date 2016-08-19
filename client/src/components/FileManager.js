@@ -1,7 +1,7 @@
 import React from 'react';
 
 import $ from 'elfinder/elfinder';
-import Base64 from 'js-base64';
+const Base64 = require('js-base64').Base64;
 
 require('elfinder/style/elfinder.min.css');
 
