@@ -3,6 +3,7 @@ import $ from 'jquery';
 const jQuery = $;
 
 import 'jquery-ui/ui/keycode';
+import 'jquery-ui/ui/widgets/dialog';
 import 'jquery-ui/ui/widgets/draggable';
 import 'jquery-ui/ui/widgets/droppable';
 import 'jquery-ui/ui/widgets/selectable';
