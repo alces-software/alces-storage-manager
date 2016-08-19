@@ -3,6 +3,7 @@ import React from 'react';
 import $ from 'elfinder/elfinder';
 import Base64 from 'js-base64';
 
+require('elfinder/style/elfinder.min.css');
 
 export default class FileManager extends React.Component {
 
@@ -18,7 +19,7 @@ export default class FileManager extends React.Component {
       }
     };
 
-    const finderApiUrl = `/files/${this.props.collection}`;
+    const finderApiUrl = `/api/v1/storage/${this.props.collection}/files`;
 
     $(window).on("resize", resizeFinder);
 

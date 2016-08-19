@@ -50,6 +50,14 @@ Rails.application.routes.draw do
       post 'storage/:address/authenticate',
            to: 'storage#authenticate',
            **storage_route_params
+
+      get 'storage/:address/files',
+          to: 'finder#api',
+          **storage_route_params
+
+      post 'storage/:address/files',
+          to: 'finder#api',
+          **storage_route_params
     end
   end
 

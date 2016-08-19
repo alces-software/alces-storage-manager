@@ -135,6 +135,7 @@ module.exports = {
       { test: /\.eot(\?v=[0-9]\.[0-9]\.[0-9])?$/,    loader: "file-loader" },
       { test: /\.svg(\?v=[0-9]\.[0-9]\.[0-9])?$/,    loader: "file-loader" },
       { test: /\.png(\?v=[0-9]\.[0-9]\.[0-9])?$/,    loader: "url-loader?limit=100000" },
+      { test: /\.gif(\?v=[0-9]\.[0-9]\.[0-9])?$/,    loader: "url-loader?limit=100000" },
       { test: /\.ogg$/, loader: "file-loader" },
       { test: /\.md$/,     loaders: ["html", "markdown"]}
     ])
