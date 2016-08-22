@@ -9,6 +9,8 @@ require('elfinder/elfinder.open.mod');
 require('elfinder/elfinder.download.mod');
 require('elfinder/elfinder.quicklook.plugins.mod');
 
+require('plupload/button');
+
 export default class FileManager extends React.Component {
 
   componentWillMount() {
