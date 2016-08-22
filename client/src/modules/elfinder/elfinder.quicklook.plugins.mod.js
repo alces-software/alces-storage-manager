@@ -1,3 +1,5 @@
+import $ from 'jquery';
+/* eslint-disable */
 "use strict";
 /* ==============================================================================
  * Copyright (C) 2015 Stephen F. Norledge and Alces Software Ltd.
@@ -25,6 +27,7 @@
  * 
  *==============================================================================
  */
+
 elFinder.prototype.commands.quicklook.plugins = [
 
     /**
@@ -423,4 +426,4 @@ elFinder.prototype.commands.quicklook.plugins = [
 
     }
 
-]
+];

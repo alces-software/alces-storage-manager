@@ -7,6 +7,9 @@ import 'jquery-ui/ui/widgets/dialog';
 import 'jquery-ui/ui/widgets/draggable';
 import 'jquery-ui/ui/widgets/droppable';
 import 'jquery-ui/ui/widgets/selectable';
+
+import 'jquery-ui/themes/base/all.css';
+
 require('elfinder/jquery-ui-zindex');
 
 /*!

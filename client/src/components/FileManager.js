@@ -5,6 +5,10 @@ const Base64 = require('js-base64').Base64;
 
 require('elfinder/style/elfinder.min.css');
 
+require('elfinder/elfinder.open.mod');
+require('elfinder/elfinder.download.mod');
+require('elfinder/elfinder.quicklook.plugins.mod');
+
 export default class FileManager extends React.Component {
 
   componentWillMount() {
