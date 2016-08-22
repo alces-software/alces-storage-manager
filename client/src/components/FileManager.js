@@ -1,6 +1,7 @@
 import React from 'react';
 
 import $ from 'elfinder/elfinder';
+import Uploader from 'plupload/Uploader';
 const Base64 = require('js-base64').Base64;
 
 require('elfinder/style/elfinder.min.css');
@@ -12,6 +13,11 @@ require('elfinder/elfinder.quicklook.plugins.mod');
 require('plupload/Button');
 
 export default class FileManager extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {cwd: '/'}
+  }
 
   componentWillMount() {
     const resizeFinder = function() {
@@ -29,8 +35,8 @@ export default class FileManager extends React.Component {
 
     $(window).on("resize", resizeFinder);
 
-    var cwd = "";
     var elfinder = null;
+    const setCwd = this.setCwd.bind(this);
     $(document).ready(function() {
       elfinder = $('#elfinder').elfinder({
         contextmenu: {
@@ -74,7 +80,8 @@ export default class FileManager extends React.Component {
             while (directory.charCodeAt(directory.length - 1) === 0) {
               directory = directory.slice(0, directory.length - 1);
             }
-            cwd = [volume, directory].join(':');
+            const cwd = [volume, directory].join(':');
+            setCwd(cwd);
 
             $( "#uploader" ).dialog( "option", "title", "Upload files to " + cwd );
           },
@@ -84,10 +91,20 @@ export default class FileManager extends React.Component {
     });
   }
 
+  setCwd(newCwd) {
+    this.setState({cwd: newCwd});
+  }
+
+  getElfinder() {
+    return this.refs.elfinder;
+  }
+
   render() {
+    const elfinder = this.refs.elfinder;
     return (
       <div>
-        <div id="elfinder"></div>
+        <div id="elfinder" ref="elfinder"></div>
+        <Uploader elfinder={this.getElfinder.bind(this)} cwd={this.state.cwd} />
       </div>
     );
   }
