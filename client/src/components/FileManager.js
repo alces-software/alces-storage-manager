@@ -100,7 +100,6 @@ export default class FileManager extends React.Component {
   }
 
   render() {
-    const elfinder = this.refs.elfinder;
     return (
       <div>
         <div id="elfinder" ref="elfinder"></div>
