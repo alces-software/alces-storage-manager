@@ -61,13 +61,12 @@ elFinder.prototype.commands.quicklook.plugins = [
                   if (limit > 0 && file.size > limit) {
                     return;
                   }
-
                   img = $('<img/>')
                       .hide()
                       .appendTo(preview)
-                      .load(
+                      .on( "load",
                           function() {
-                            // timeout - because of strange safari bug - 
+                            // timeout - because of strange safari bug -
                             // sometimes cant get image height 0_o
                             setTimeout(
                                 function() {
@@ -102,7 +101,6 @@ elFinder.prototype.commands.quicklook.plugins = [
                                 }, 1)
                           }).attr('src', ql.fm.url(file.hash));
                 }
-
               });
     },
 
