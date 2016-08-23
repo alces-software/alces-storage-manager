@@ -3,6 +3,8 @@ import $ from 'jquery';
 
 require('./plupload.dev');
 require('./jquery.ui.plupload/jquery.ui.plupload');
+require('./jquery.ui.plupload/css/jquery.ui.plupload.css');
+
 
 export default class Uploader extends React.Component {
   componentDidMount() {
