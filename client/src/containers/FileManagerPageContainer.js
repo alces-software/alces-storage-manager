@@ -2,8 +2,8 @@
 import { connect } from 'react-redux';
 
 import FileManagerPage from 'components/pages/FileManagerPage';
-import {fileManagerSelector} from 'selectors';
+import {storageHostFromRouteSelector} from 'selectors';
 
 export default connect(
-  fileManagerSelector
+  storageHostFromRouteSelector
 )(FileManagerPage);

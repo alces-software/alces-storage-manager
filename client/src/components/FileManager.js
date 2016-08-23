@@ -2,6 +2,7 @@ import React from 'react';
 
 import $ from 'elfinder/elfinder';
 import Uploader from 'plupload/Uploader';
+import { storageToHash } from 'storage/utils';
 const Base64 = require('js-base64').Base64;
 
 require('elfinder/style/elfinder.min.css');
@@ -31,7 +32,7 @@ export default class FileManager extends React.Component {
       }
     };
 
-    const finderApiUrl = `/api/v1/storage/${this.props.collection}/files`;
+    const finderApiUrl = `/api/v1/storage/${storageToHash(this.props.collection)}/files`;
 
     $(window).on("resize", resizeFinder);
 
