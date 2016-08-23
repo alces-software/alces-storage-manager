@@ -46,10 +46,10 @@ export default class Uploader extends React.Component {
           },
 
           // Flash settings
-          flash_swf_url : '', // eslint-disable-line camelcase
+          flash_swf_url : '/plupload/Moxie.swf', // eslint-disable-line camelcase
 
           // Silverlight settings
-          silverlight_xap_url : '', // eslint-disable-line camelcase
+          silverlight_xap_url : '/plupload/Moxie.xap', // eslint-disable-line camelcase
 
           init: {
           BeforeUpload: uploadSettings,

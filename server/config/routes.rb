@@ -34,6 +34,10 @@ Rails.application.routes.draw do
   post 'finder/api'
   post 'file-upload', to: 'upload#handle'
 
+  # Make these static assets available (else they get caught in the final catch-all redirect)
+  get 'plupload/Moxie.swf', to: redirect('plupload/Moxie.swf')
+  get 'plupload/Moxie.xap', to: redirect('plupload/Moxie.xxap')
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
 
