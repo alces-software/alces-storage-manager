@@ -7,15 +7,16 @@ require('./jquery.ui.plupload/jquery.ui.plupload');
 export default class Uploader extends React.Component {
   componentDidMount() {
     const uploader = $(this.refs.uploader);
-    const elfinder = $(this.props.elfinder());
+    const elfinderNode = $(this.props.elfinderNode());
     const uploadSettings = this.uploadSettings.bind(this);
+    const refreshElfinder = this.refreshElfinder.bind(this);
 
     $(function() {
       uploader.dialog({
         autoOpen: false,
         draggable: false,
-        height: ($(window).height() - elfinder.offset().top - 30) * 0.75,
-        width: elfinder.width() * 0.5,
+        height: ($(window).height() - elfinderNode.offset().top - 30) * 0.75,
+        width: elfinderNode.width() * 0.5,
       }).plupload({
           // General settings
           runtimes : 'html5,flash,silverlight,html4',
@@ -50,14 +51,16 @@ export default class Uploader extends React.Component {
 
           init: {
           BeforeUpload: uploadSettings,
-          UploadComplete: function() {
-            if (elfinder) {
-              elfinder.exec('reload');
-            }
-          },
+          UploadComplete: refreshElfinder,
         },
       })
     });
+  }
+
+  refreshElfinder() {
+    if (this.props.elfinder) {
+      this.props.elfinder.exec('reload');
+    }
   }
 
   uploadSettings(up, file) {

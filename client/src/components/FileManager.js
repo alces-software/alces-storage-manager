@@ -16,7 +16,7 @@ export default class FileManager extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {cwd: '/'}
+    this.state = {cwd: '/', elfinder: null}
   }
 
   componentWillMount() {
@@ -36,7 +36,9 @@ export default class FileManager extends React.Component {
     $(window).on("resize", resizeFinder);
 
     var elfinder = null;
-    const setCwd = this.setCwd.bind(this);
+
+    const setState = this.setState.bind(this);
+
     $(document).ready(function() {
       elfinder = $('#elfinder').elfinder({
         contextmenu: {
@@ -81,21 +83,18 @@ export default class FileManager extends React.Component {
               directory = directory.slice(0, directory.length - 1);
             }
             const cwd = [volume, directory].join(':');
-            setCwd(cwd);
+            setState({cwd: cwd});
 
             $( "#uploader" ).dialog( "option", "title", "Upload files to " + cwd );
           },
         },
         url : finderApiUrl,
       })[0].elfinder;
+      setState({elfinder: elfinder});
     });
   }
 
-  setCwd(newCwd) {
-    this.setState({cwd: newCwd});
-  }
-
-  getElfinder() {
+  getElfinderNode() {
     return this.refs.elfinder;
   }
 
@@ -103,7 +102,7 @@ export default class FileManager extends React.Component {
     return (
       <div>
         <div id="elfinder" ref="elfinder"></div>
-        <Uploader elfinder={this.getElfinder.bind(this)} cwd={this.state.cwd} />
+        <Uploader elfinder={this.state.elfinder} elfinderNode={this.getElfinderNode.bind(this)} cwd={this.state.cwd} />
       </div>
     );
   }
