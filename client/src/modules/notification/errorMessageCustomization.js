@@ -1,10 +1,8 @@
 
-import _ from 'lodash';
 import React from 'react';
 
 import {ContactCustomerSupport} from 'components/CustomerSupport';
 
-import * as clusterActionTypes from 'clusters/actionTypes';
 import MessageGenerator from "./MessageGenerator";
 
 export const unexpectedErrorMessageGenerator = new MessageGenerator(
@@ -71,53 +69,19 @@ export function setupDefaultErrorMessageGenerators(generatorsMap) {
 // customize as they see fit.
 //
 export function addActionTypeCustomizations(generatorsMap) {
-  generatorsMap.
+  generatorsMap
+  // generatorsMap.
+  //
+  //   customizeMessage(
+  //     401,
+  //     clusterActionTypes.AUTHENTICATE,
+  //     {
+  //       title: 'Authentication failure',
+  //       content: `The provided username and/or password are incorrect for the
+  //         selected cluster. Please correct these and try again.`,
+  //     }
+  //   );
 
-    customizeMessage(
-      401,
-      clusterActionTypes.AUTHENTICATE,
-      {
-        title: 'Authentication failure',
-        content: `The provided username and/or password are incorrect for the
-          selected cluster. Please correct these and try again.`,
-      }
-    );
-
-    const daemonUnavailableMessage = {
-      title: 'Daemon unavailable',
-      content: (message) => {
-        const {cluster} = message.action.payload;
-        return (
-          <div>
-            <p>
-              The Alces Access Manager Daemon for <em>{cluster.name}</em> did
-              not respond.
-            </p>
-            <p>
-              Please ensure the daemon is running at the correct address
-              (<em>{cluster.ip}:{cluster.auth_port}</em>), and is accessible to
-              the Alces Access Manager.
-            </p>
-            <p>
-              <ContactCustomerSupport/>
-            </p>
-          </div>
-        )
-      }
-      ,
-    }
-
-    _.each(
-      [
-        clusterActionTypes.AUTHENTICATE,
-    ],
-      (action) => {
-        generatorsMap.customizeMessage(
-          502, // bad gateway - i.e. daemon not running/reachable.
-          action,
-          daemonUnavailableMessage
-        );
-    });
 }
 
 

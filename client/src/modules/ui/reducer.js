@@ -2,7 +2,6 @@
 import {resolve} from 'redux-simple-promise';
 
 import * as actionTypes from './actionTypes';
-import * as clusterActionTypes from 'clusters/actionTypes';
 import * as storageActionTypes from 'storage/actionTypes';
 
 function setLoaded(state, value) {
@@ -15,10 +14,6 @@ function setReloadingSessions(state, value) {
 
 function setShowingLaunchFailedModal(state, value) {
   return {...state, showingLaunchFailedModal: value};
-}
-
-function setLoggingOutFlag(state, value) {
-  return {...state, loggingOut: value};
 }
 
 const DEFAULT_SESSION_REFRESH_PERIOD = 5;
@@ -42,18 +37,6 @@ export default function reducer(state=initialState, action) {
 
     case actionTypes.CLOSE_LAUNCH_FAILED_MODAL:
       return setShowingLaunchFailedModal(state, false);
-
-    case clusterActionTypes.LOGOUT:
-      return setLoggingOutFlag(state, true);
-
-    case clusterActionTypes.LOGOUT_COMPLETE:
-      return setLoggingOutFlag(state, false);
-
-    case resolve(clusterActionTypes.LOAD_CLUSTERS):
-      return {
-        ...state,
-        sessionRefreshPeriod: action.payload.session_refresh_period || DEFAULT_SESSION_REFRESH_PERIOD,
-      };
 
     default:
       return state;

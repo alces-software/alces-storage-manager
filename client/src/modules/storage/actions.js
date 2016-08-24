@@ -21,7 +21,7 @@ export function authenticate(storageHost, {username, password}) {
     type: actionTypes.AUTHENTICATE,
     payload: {
       storageHost,
-      username
+      username,
     },
     meta: {
       apiRequest: {

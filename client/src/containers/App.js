@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import * as clusterActions from 'clusters/actions';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
 import LoadingPage from 'components/LoadingPage';
@@ -96,6 +95,5 @@ export default connect(
   appSelector,
   {
     closeNotificationModal: notificationActions.closeModal,
-    logout: clusterActions.logout,
   }
 )(App);

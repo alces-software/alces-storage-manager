@@ -6,7 +6,6 @@ import { combineReducers } from 'redux';
 import {reducer as form} from 'redux-form';
 import { routerStateReducer } from 'redux-router';
 
-import clusters from 'clusters/reducer';
 import ui from 'ui/reducer';
 import notifications from 'notification/reducer';
 import storage from 'storage/reducer';
@@ -16,7 +15,6 @@ import storage from 'storage/reducer';
 // Reducers for state to be reset to initial state when clearing app state
 // on sign out.
 const unpreservedStateReducers = {
-  clusters,
   form,
   ui,
   notifications,
