@@ -1,9 +1,12 @@
 import React from 'react';
 
+import _ from 'lodash';
 import $ from 'elfinder/elfinder';
 import Uploader from 'plupload/Uploader';
 import NoTargetsMessage from 'storage/components/NoTargetsMessage';
+import { Panel } from 'react-bootstrap';
 import { storageToHash } from 'storage/utils';
+import Icon from 'components/Icon';
 const Base64 = require('js-base64').Base64;
 
 require('elfinder/style/elfinder.min.css');
@@ -106,15 +109,29 @@ export default class FileManager extends React.Component {
   }
 
   render() {
-    if (this.props.collection && !this.props.collection.hasTargets) {
+    const {collection} = this.props;
+    if (collection && !collection.hasTargets) {
       return <NoTargetsMessage />;
     }
+
+    const warningsBoxes = _(collection.warnings).map((warning, idx) => (<Warning key={idx} text={warning} />)).value();
+
     return (
       <div>
+        {warningsBoxes}
         <div id="elfinder" ref="elfinder"></div>
         <Uploader elfinder={this.state.elfinder} elfinderNode={this.getElfinderNode.bind(this)} cwd={this.state.cwd} />
       </div>
     );
   }
 
+}
+
+const Warning = ({text}) => {
+  return (
+    <Panel bsStyle="warning">
+      <Icon name="warning" />&nbsp;
+      {text}
+    </Panel>
+  );
 }

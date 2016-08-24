@@ -24,8 +24,9 @@ export default function reducer(state=initialState, action) {
           state.hosts,
         storageHostAddress,
         (s) => {
-          s.username = username,
-          s.hasTargets = action.meta.payload.hasTargets
+          s.username = username;
+          s.hasTargets = action.payload.hasTargets;
+          s.warnings = action.payload.warnings;
         }
       )};
 
