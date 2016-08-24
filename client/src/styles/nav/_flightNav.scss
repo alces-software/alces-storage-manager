@@ -1,0 +1,144 @@
+
+.flight-Navbar {
+    background: $c-primary-background;
+    border: rem(1px) solid $c-primary-color;
+    border-bottom-color: $c-sec2-color--muted;
+    border-radius: 0;
+    margin-bottom: 0;
+    border-width: 0 0 1px;
+}
+
+.flight-Navbar-brand {
+    background: url('~images/stamp50.png') no-repeat;
+    height: rem($l-nav-height);
+    width: rem(38px);
+    text-indent: -9999px;
+}
+
+.flight-Navbar-account-menu {
+    margin-left: rem(5px);
+}
+
+.flight-NavCounter {
+    float: right;
+    z-index: 1040;
+    color: $c-fg-color--light;
+    margin-right: rem(16px);
+
+    &:hover {
+        color: $c-fg-color--lighter;
+    }
+    @media (min-width: $screen-sm) {
+        margin-right: 0;
+        position: relative;
+        right: rem(-5px);
+        float: left;
+    }
+    .navbar-nav > & > a {
+        padding: 0;
+        padding-right: rem(2px);
+        .navbar-default &:hover, .navbar-default &:focus {
+            color: inherit;
+            background-color: inherit;
+        }
+    }
+}
+
+
+.flight-NavCounter-control {
+    font-size: rem(22px);
+    display: inline-block;
+    text-align: center;
+    line-height: rem($l-nav-height - 5px);
+    margin-top: rem(3px);
+    border-radius: rem(5px);
+    margin-left: rem(5px);
+    @media (min-width: $screen-sm) {
+        position: relative;
+    }
+    &.flight-NavCounter-control--withIcon {
+        background-color: $c-primary-color--dark;
+        &:hover {
+            background-color: lighten($c-primary-color--dark,10%);
+        }
+        box-shadow: 0 0 5px 0 #000;
+        padding: rem(5px);
+        line-height: 1.6;
+        margin-top: rem(7px);
+        .flight-icon {
+            margin-right: rem(5px);
+        }
+    }
+}
+
+.flight-NavCounter-control-counters {
+    @extend %transition-bezier-rapid;
+    @extend %transition--opacity;
+    cursor: pointer;
+    position: relative;
+    &--inactive {
+        opacity: 0.5;
+        transition-delay: 1s;
+    }
+   .flight-NavCounterBadge {
+       line-height: rem(15px);
+       padding: rem(5px);
+       margin-left: rem(3px);
+       min-width: rem(26px);
+       &.flight-NavCounterBadge--zero {
+           background-color: transparentize($c-bg-color--light, 0.7);
+           color: $c-fg-color--lighter;
+       }
+       /* Required for animation support */
+       position: relative;
+       overflow-y: hidden;
+   }
+}
+
+
+/* Animations for nav counter badges: number rolling up/down. */
+
+.flight-NavCounterBadge-animate-increment-enter,
+.flight-NavCounterBadge-animate-decrement-enter {
+    position: absolute;
+    right: 0;
+    left: 0;
+    transition: 1s linear all;
+}
+.flight-NavCounterBadge-animate-increment-enter {
+    top: 20px;
+}
+.flight-NavCounterBadge-animate-decrement-enter {
+    top: -20px;
+}
+
+
+.flight-NavCounterBadge-animate-increment-leave,
+.flight-NavCounterBadge-animate-decrement-leave {
+    position: relative;
+    top: 0;
+    transition: 1s linear all;
+}
+
+.flight-NavCounterBadge-animate-increment-enter.flight-NavCounterBadge-animate-increment-enter-active,
+.flight-NavCounterBadge-animate-decrement-enter.flight-NavCounterBadge-animate-decrement-enter-active {
+    top: 0px;
+}
+
+.flight-NavCounterBadge-animate-increment-leave.flight-NavCounterBadge-animate-increment-leave-active {
+    top: -20px;
+}
+
+.flight-NavCounterBadge-animate-decrement-leave.flight-NavCounterBadge-animate-decrement-leave-active {
+    top: 20px;
+}
+
+/* Animations for nav counter badges: badge border flashing. */
+
+.flight-NavCounterBadge-animate-flash-enter {
+}
+
+.flight-NavCounterBadge-animate-flash-enter-active {
+  animation: flight-bright-border-flash 0.75s ease-out;
+  animation-iteration-count: 3;
+}

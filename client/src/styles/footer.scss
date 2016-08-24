@@ -1,0 +1,63 @@
+
+/* *************************************
+ *
+ *   footer
+ *   -> Styles for the footer
+ *
+ * *************************************/
+footer {
+    @extend %stickyFooter-footer;
+    background: $c-primary-background;
+
+    font-family: $c-plain-fontFamily;
+    font-weight: bold;
+    font-size: rem($c-footer-fontSize);
+    line-height: rem($l-footer-height);
+    text-align: center;
+    color: $c-fg-color--light;
+    z-index: $l-footer-zIndex;
+}
+
+footer.footer--animate {
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+
+.flightFooter-us {
+    color: $c-fg-color--lighter;
+    text-decoration: none;
+
+    &:hover {
+        color: $c-fg-color--lighter;
+        text-decoration: underline;
+    }
+}
+
+.flightFooter-link {
+    @extend .text-muted;
+    font-weight: normal;
+    text-decoration: none;
+    font-size: 12px;
+    vertical-align: middle;
+
+    &:hover {
+        text-decoration: underline;
+        color: inherit;
+    }
+}
+
+.flightFooter-bar {
+    @extend .text-muted;
+    vertical-align: middle;
+    border-left: rem(1px) dotted;
+    display: inline-block;
+    margin: rem(6px) rem(5px) rem(9px) rem(5px);
+    height: rem($l-footer-height - 15px);
+}
+
+.flightFooter-copyright {
+    font-size: rem($c-footer-fontSize + 6px);
+    font-weight: normal;
+    vertical-align: middle;
+}
