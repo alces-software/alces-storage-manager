@@ -1,7 +1,6 @@
 
-import _ from 'lodash';
 import React from 'react';
-import { Navbar, Nav, NavItem} from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router';
 
 // Import these components directly to make Babel optimizations happy.  One of
@@ -12,14 +11,12 @@ import NavbarBrand from 'react-bootstrap/lib/NavbarBrand';
 import NavbarHeader from 'react-bootstrap/lib/NavbarHeader';
 import NavbarCollapse from 'react-bootstrap/lib/NavbarCollapse';
 
-import Icon from 'components/Icon';
 import {NavItemLink} from 'components/Links';
 
 class Header extends React.Component {
   render() {
     const {
       currentStorage,
-      logout,
     } = this.props;
 
     // We only show logout button when in the context for a cluster - doesn't
