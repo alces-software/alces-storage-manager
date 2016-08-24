@@ -24,14 +24,6 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
-  # Legacy URLs
-  get 'login/index'
-  post 'login/authenticate'
-  get 'logout', to: 'login#logout'
-
-  get 'files', to: 'files#index'
-  get 'finder/api'
-  post 'finder/api'
   post 'file-upload', to: 'upload#handle'
 
   # Make these static assets available (else they get caught in the final catch-all redirect)

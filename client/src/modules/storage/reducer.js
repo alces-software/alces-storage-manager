@@ -23,7 +23,10 @@ export default function reducer(state=initialState, action) {
         hosts: modifyStorageInState(
           state.hosts,
         storageHostAddress,
-        (s) => { s.username = username }
+        (s) => {
+          s.username = username,
+          s.hasTargets = action.meta.payload.hasTargets
+        }
       )};
 
     default:

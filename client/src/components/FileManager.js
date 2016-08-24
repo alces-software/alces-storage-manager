@@ -2,6 +2,7 @@ import React from 'react';
 
 import $ from 'elfinder/elfinder';
 import Uploader from 'plupload/Uploader';
+import NoTargetsMessage from 'storage/components/NoTargetsMessage';
 import { storageToHash } from 'storage/utils';
 const Base64 = require('js-base64').Base64;
 
@@ -21,6 +22,11 @@ export default class FileManager extends React.Component {
   }
 
   componentWillMount() {
+    const {collection} = this.props;
+
+    if (!collection || !collection.hasTargets) {
+      return;
+    }
     const resizeFinder = function() {
       if (elfinder) {
         // For some reason elfinder.resize() triggers $(window).resize() so we need to jump through
@@ -100,6 +106,9 @@ export default class FileManager extends React.Component {
   }
 
   render() {
+    if (this.props.collection && !this.props.collection.hasTargets) {
+      return <NoTargetsMessage />;
+    }
     return (
       <div>
         <div id="elfinder" ref="elfinder"></div>
