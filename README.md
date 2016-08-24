@@ -1,5 +1,5 @@
 # Alces Storage Manager
-Copyright (C) 2015 Stephen F. Norledge and Alces Software Ltd. See LICENSE.txt.
+Copyright (C) 2015-2016 Stephen F. Norledge and Alces Software Ltd. See LICENSE.txt.
 
 
 ## Description
@@ -9,14 +9,31 @@ provides users with a means to manage uploading, downloading and manipulating
 files in their cluster storage via their web browser.
 
 ## Configuration
-Alces Storage Manager is a Ruby on Rails application. You must have Ruby 
-installed before installing Alces Storage Manager.
+
+There are three components to a functional ASM system:
+1. An ASM daemon
+2. The ASM web service
+3. The ASM web application
+
+The Alces Storage Manager Daemon is available on
+[GitHub](https://github.com/alces-software/alces-storage-manager-daemon).
+
+The Alces Storage Manager web service is a Ruby on Rails application. You must
+have Ruby installed before installing Alces Storage Manager.
+
+The Alces Storage Manager web application is written in node.js and needs to be
+compiled using `npm`. Once compiled, it can be deployed into the ASM web
+service.
+
+The instructions below build and configure the ASM web service and application,
+and assume a working ASM daemon
 
 1. Clone the git repository:
 
    ```$ git clone git@github.com:alces-software/alces-storage-manager.git```
 
-2. From your repository, install Ruby dependencies with bundler:
+2. From the `server` directory of your repository, install Ruby dependencies
+with bundler:
 
    ```$ ./bin/bundle install```
 
@@ -51,13 +68,44 @@ directory. A sample configuration file is provided at
    setting prevents users from downloading files too large, which may
    potentially cause disk space issues. Default value is 50MB.
 
-5. Start Alces Storage Manager by running 
-
-   ```$ ./bin/rails server```
+5. Generate a server key to be used by Alces Storage Manager:
+   ```
+   $ export SECRET_KEY_BASE=`./bin/rake secret`
+   ```
    
-   By default, the server will run in development mode and listen to localhost
-   on port 3000. Other options are available and can be seen with the `-h` 
-   switch, e.g.
+5. From the `client` directory of your repository, install `node.js`
+dependencies with `npm`:
+
+   ```$ npm install```
+   
+6. Build the ASM web application:
+
+   ```$ npm run build```
+
+   Make a note of the build's hash. This is shown in the output of the
+   previous command, for example:
+   
+   ```
+   Hash: 2b10fb50fd55b8281565  
+   Version: webpack 1.12.14
+   Time: 61996ms
+   ```
+
+7. Copy the ASM web application assets into the server's `public` directory:
+
+   ```$ cp dist/* ../server/public```
+
+8. Point Alces Storage Manager to the correct assets using the build hash from
+   earlier:
+
+   ```$ export ASM_ASSETS_HASH=<hash>```
+
+9. Start Alces Storage Manager by running from the `server` directory:
+
+   ```$ ./bin/rails server -e production```
+   
+   By default, the server will listen to localhost port 3000. Other options are
+   available and can be seen with the `-h` switch, e.g.
    
    ```$ ./bin/rails server -h```
    
@@ -67,8 +115,7 @@ directory. A sample configuration file is provided at
    ```$ ./bin/rails server -e production -b * -p 8080```
    
    For production environments it may be more suitable to run ASM under nginx
-   or Apache. You will also need to specify a secret key for the server in 
-   production mode.
+   or Apache.
  
 ## Usage
  1. Load the Storage Manager in your web browser. If running as in the above
