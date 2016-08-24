@@ -19,8 +19,6 @@ class Header extends React.Component {
       currentStorage,
     } = this.props;
 
-    // We only show logout button when in the context for a cluster - doesn't
-    // make sense to show otherwise.
     let navbarRight;
     if (currentStorage) {
       navbarRight = (
