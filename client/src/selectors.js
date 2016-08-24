@@ -3,6 +3,7 @@ import {createSelector} from 'reselect';
 const Base64 = require('js-base64').Base64;
 
 const uiState = (state) => state.ui;
+const routerState = (state) => state.router;
 const storageState = (state) => state.storage;
 
 const notificationsSelector = createSelector(
@@ -26,18 +27,6 @@ export const storageCollectionsSelector = createSelector(
   }
 );
 
-export const appSelector = createSelector(
-  notificationsSelector,
-  uiState,
-
-  (notifications, ui) => {
-    return {
-      notifications,
-      ui,
-    }
-  }
-);
-
 export const storageHostFromRouteSelector = createSelector(
   (state, props) => {
     const hashedStorageAddress = props.routeParams.hashedAddress;
@@ -50,3 +39,30 @@ export const storageHostFromRouteSelector = createSelector(
     }
   }
 );
+
+export const currentStorageSelector = createSelector(
+  storageState,
+  routerState,
+  (storage, router) => {
+    const address = Base64.decode(router.params.hashedAddress);
+    const currentStorage = _.find(storage.hosts, ['address', address]);
+    return currentStorage;
+  }
+
+);
+
+export const appSelector = createSelector(
+  notificationsSelector,
+  uiState,
+  currentStorageSelector,
+
+  (notifications, ui, currentStorage) => {
+    return {
+      notifications,
+      ui,
+      currentStorage,
+    }
+  }
+);
+
+

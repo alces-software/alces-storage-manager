@@ -18,22 +18,19 @@ import {NavItemLink} from 'components/Links';
 class Header extends React.Component {
   render() {
     const {
-      currentCluster,
+      currentStorage,
       logout,
-      singleClusterMode,
-      singleCluster,
     } = this.props;
 
     // We only show logout button when in the context for a cluster - doesn't
     // make sense to show otherwise.
     let navbarRight;
-    if (currentCluster) {
-      const logoutCluster = _.partial(logout, currentCluster);
+    if (currentStorage) {
       navbarRight = (
         <Nav pullRight>
-          <NavItem onClick={logoutCluster}>
-            Logout of {currentCluster.name} <Icon name="cluster-logout"/>
-          </NavItem>
+          <p className="navbar-text">
+            Logged in as <strong>{currentStorage.username}</strong> to {currentStorage.address}
+          </p>
         </Nav>
       );
     }
@@ -41,23 +38,16 @@ class Header extends React.Component {
       navbarRight = null;
     }
 
-    let homePageLink = '/';
-    if (singleClusterMode && singleCluster.authenticated_username) {
-      // When authed for the single cluster in single cluster mode, we treat
-      // the cluster's sessions page as the home page.
-      homePageLink = `/cluster/${singleCluster.ip}`
-    }
-
     return (
       <Navbar className="flight-Navbar" fluid fixedTop>
         <NavbarHeader>
           <NavbarBrand className="flight-Navbar-brand">
-            <Link to={homePageLink}/>
+            <Link to="/"/>
           </NavbarBrand>
         </NavbarHeader>
         <NavbarCollapse>
           <Nav>
-            <NavItemLink to={homePageLink}>
+            <NavItemLink to="/">
               Alces Storage Manager
             </NavItemLink>
           </Nav>
