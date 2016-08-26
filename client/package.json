@@ -31,6 +31,7 @@
     "debounce": "^1.0.0",
     "debug": "^2.2.0",
     "faye": "^1.1.2",
+    "flight-common": "file:../../flight-common",
     "font-awesome": "^4.5.0",
     "good-listener": "^1.1.7",
     "history": "^1.11.0",

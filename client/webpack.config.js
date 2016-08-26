@@ -8,7 +8,7 @@ var env = process.env.NODE_ENV;
 
 var appName = "alces-storage-manager";
 var entries, devServer, devtool, outputFile, pathinfo, plugins, publicPath,
-    loaders;
+    loaders, resolveAlias, resolveRoot;
 
 if (env === "production") {
   devtool = "source-map";
@@ -61,6 +61,9 @@ if (env === "production") {
     }
   ]
 
+  resolveAlias = [];
+  resolveRoot = [];
+
 } else {
   devtool = "cheap-module-inline-source-map";
   outputFile = appName + ".js";
@@ -96,7 +99,21 @@ if (env === "production") {
     {
       test: /\.scss$/,
       loader: "style!css?sourceMap!sass?sourceMap"
+    },
+    // In a development environment we want to build and bundle flight-common.
+    {
+      include: path.resolve(__dirname, '../../flight-common/src'),
+      test: /\.js$/,
+      loader: "babel",
     }
+  ]
+
+  resolveAlias = {
+    "flight-common": path.resolve(__dirname, '../../flight-common/src')
+  }
+
+  resolveRoot = [
+    path.resolve(__dirname, '../../flight-common/src')
   ]
 
 }
@@ -112,10 +129,14 @@ module.exports = {
     root: [
       path.resolve('src'),
       path.resolve('src/modules')
-    ],
+    ].concat(resolveRoot),
     extensions: [
       '', '.js'
-    ]
+    ],
+    alias: Object.assign({
+      react: path.resolve('./node_modules/react')
+    },
+    resolveAlias)
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -126,7 +147,7 @@ module.exports = {
   plugins: plugins,
   module: {
     preLoaders: [
-      {test: /\.js$/, loader: "eslint-loader", exclude: /node_modules/}
+      {test: /\.js$/, loader: "eslint-loader", exclude: /node_modules|flight-common/}
     ],
     loaders: loaders.concat([
       { test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/,   loader: "url-loader?limit=10000&mimetype=application/font-woff" },
