@@ -1,6 +1,6 @@
 
-import { pushState } from 'redux-router';
+import { push } from 'redux-router';
 
 export function redirectTo(redirectPath) {
-  return pushState(null, redirectPath);
+  return push(redirectPath);
 }

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {replaceState} from 'redux-router'
+import {replace} from 'redux-router';
 
 //import {} from 'selectors';
 import {hashToStorageAddress} from 'storage/utils';
@@ -18,5 +18,5 @@ export function authenticatedWithCurrentStorage(store) {
 // Authorization failure handlers.
 
 export function redirectToIndexPage() {
-  this.props.dispatch(replaceState(null, '/'));
+  this.props.dispatch(replace('/'));
 }
