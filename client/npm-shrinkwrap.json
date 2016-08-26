@@ -682,6 +682,11 @@
       "from": "boom@>=2.0.0 <3.0.0",
       "resolved": "./node_shrinkwrap/boom-2.10.1.tar"
     },
+    "bootstrap-sass": {
+      "version": "3.3.7",
+      "from": "bootstrap-sass@>=3.2.0 <4.0.0",
+      "resolved": "./node_shrinkwrap/bootstrap-sass-3.3.7.tar"
+    },
     "bowser": {
       "version": "0.7.3",
       "from": "bowser@>=0.7.2 <0.8.0",
@@ -1037,6 +1042,11 @@
       "version": "3.2.8",
       "from": "crypto-browserify@>=3.2.6 <3.3.0",
       "resolved": "./node_shrinkwrap/crypto-browserify-3.2.8.tar"
+    },
+    "csprng": {
+      "version": "0.1.1",
+      "from": "csprng@*",
+      "resolved": "./node_shrinkwrap/csprng-0.1.1.tar"
     },
     "css-color-names": {
       "version": "0.0.4",
@@ -1698,6 +1708,11 @@
       "from": "extend@>=3.0.0 <3.1.0",
       "resolved": "./node_shrinkwrap/extend-3.0.0.tar"
     },
+    "extended-proptypes": {
+      "version": "1.1.3",
+      "from": "extended-proptypes@>=1.1.3 <2.0.0",
+      "resolved": "./node_shrinkwrap/extended-proptypes-1.1.3.tar"
+    },
     "extglob": {
       "version": "0.3.2",
       "from": "extglob@>=0.3.1 <0.4.0",
@@ -1734,6 +1749,16 @@
       "version": "1.1.1",
       "from": "fastparse@>=1.1.1 <2.0.0",
       "resolved": "./node_shrinkwrap/fastparse-1.1.1.tar"
+    },
+    "faye": {
+      "version": "1.2.2",
+      "from": "faye@>=1.1.2 <2.0.0",
+      "resolved": "./node_shrinkwrap/faye-1.2.2.tar"
+    },
+    "faye-websocket": {
+      "version": "0.11.0",
+      "from": "faye-websocket@>=0.9.1",
+      "resolved": "./node_shrinkwrap/faye-websocket-0.11.0.tar"
     },
     "fbjs": {
       "version": "0.6.1",
@@ -1834,6 +1859,18 @@
       "version": "1.0.2",
       "from": "flatten@1.0.2",
       "resolved": "./node_shrinkwrap/flatten-1.0.2.tar"
+    },
+    "flight-common": {
+      "version": "0.0.0",
+      "from": "../../flight-common",
+      "resolved": "./node_shrinkwrap/flight-common-0.0.0.tar",
+      "dependencies": {
+        "history": {
+          "version": "2.1.2",
+          "from": "history@>=2.0.1 <3.0.0",
+          "resolved": "./node_shrinkwrap/history-2.1.2.tar"
+        }
+      }
     },
     "flux-standard-action": {
       "version": "0.6.0",
@@ -3136,6 +3173,11 @@
       "from": "mocha-jsdom@>=1.0.0 <2.0.0",
       "resolved": "./node_shrinkwrap/mocha-jsdom-1.1.0.tar"
     },
+    "moment": {
+      "version": "2.14.1",
+      "from": "moment@>=2.10.6 <3.0.0",
+      "resolved": "./node_shrinkwrap/moment-2.14.1.tar"
+    },
     "ms": {
       "version": "0.7.1",
       "from": "ms@0.7.1",
@@ -3845,6 +3887,11 @@
       "from": "react-addons-test-utils@>=0.14.3 <0.15.0",
       "resolved": "./node_shrinkwrap/react-addons-test-utils-0.14.8.tar"
     },
+    "react-addons-update": {
+      "version": "0.14.8",
+      "from": "react-addons-update@>=0.14.5 <0.15.0",
+      "resolved": "./node_shrinkwrap/react-addons-update-0.14.8.tar"
+    },
     "react-bootstrap": {
       "version": "0.28.5",
       "from": "react-bootstrap@>=0.28.1 <0.29.0",
@@ -3911,6 +3958,11 @@
       "from": "react-fontawesome@>=0.3.3 <0.4.0",
       "resolved": "./node_shrinkwrap/react-fontawesome-0.3.3.tar"
     },
+    "react-input-autosize": {
+      "version": "0.5.3",
+      "from": "react-input-autosize@>=0.5.3 <0.6.0",
+      "resolved": "./node_shrinkwrap/react-input-autosize-0.5.3.tar"
+    },
     "react-lazy-cache": {
       "version": "3.0.1",
       "from": "react-lazy-cache@>=3.0.0 <4.0.0",
@@ -3971,6 +4023,16 @@
           "resolved": "./node_shrinkwrap/warning-3.0.0.tar"
         }
       }
+    },
+    "react-router-bootstrap": {
+      "version": "0.20.1",
+      "from": "react-router-bootstrap@>=0.20.1 <0.21.0",
+      "resolved": "./node_shrinkwrap/react-router-bootstrap-0.20.1.tar"
+    },
+    "react-select": {
+      "version": "0.6.12",
+      "from": "react-select@>=0.6.12 <0.7.0",
+      "resolved": "./node_shrinkwrap/react-select-0.6.12.tar"
     },
     "react-timeago": {
       "version": "2.2.1",
@@ -4310,6 +4372,11 @@
       "version": "1.1.3",
       "from": "sentence-case@>=1.1.1 <2.0.0",
       "resolved": "./node_shrinkwrap/sentence-case-1.1.3.tar"
+    },
+    "sequin": {
+      "version": "0.1.0",
+      "from": "sequin@latest",
+      "resolved": "./node_shrinkwrap/sequin-0.1.0.tar"
     },
     "serve-static": {
       "version": "1.11.1",
@@ -4969,6 +5036,16 @@
         }
       }
     },
+    "websocket-driver": {
+      "version": "0.6.5",
+      "from": "websocket-driver@>=0.5.1",
+      "resolved": "./node_shrinkwrap/websocket-driver-0.6.5.tar"
+    },
+    "websocket-extensions": {
+      "version": "0.1.1",
+      "from": "websocket-extensions@>=0.1.1",
+      "resolved": "./node_shrinkwrap/websocket-extensions-0.1.1.tar"
+    },
     "whatwg-fetch": {
       "version": "0.9.0",
       "from": "whatwg-fetch@>=0.9.0 <0.10.0",
@@ -5102,6 +5179,11 @@
           "resolved": "./node_shrinkwrap/lodash.assign-4.2.0.tar"
         }
       }
+    },
+    "zxcvbn": {
+      "version": "4.3.0",
+      "from": "zxcvbn@>=4.1.1 <5.0.0",
+      "resolved": "./node_shrinkwrap/zxcvbn-4.3.0.tar"
     }
   }
 }
