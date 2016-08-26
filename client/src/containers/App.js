@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Header from 'components/Header';
-import Footer from 'components/Footer';
-import LoadingPage from 'components/LoadingPage';
+import { Footer, LoadingPage } from 'flight-common';
 import * as notificationActions from 'notification/actions';
 import NotificationModals from 'notification/components/NotificationModals';
 import {appSelector} from 'selectors';
@@ -14,6 +13,8 @@ import {appSelector} from 'selectors';
 if (!__TEST__){
   require("styles/main.scss");
 }
+
+const productName = "Alces Storage Manager";
 
 class App extends React.Component {
   render() {
@@ -31,12 +32,12 @@ class App extends React.Component {
             currentModal={currentModal}
             exitingModal={exitingModal}
           />
-          <Header {...this.props}/>
+          <Header productName={productName} {...this.props} />
           <div className="pageContainer">
             {this.page()}
           </div>
         </div>
-        <Footer ref={(footer) => this.footer = footer}/>
+        <Footer ref={(footer) => this.footer = footer} productName={productName} />
       </div>
     )
   }
@@ -58,7 +59,7 @@ class App extends React.Component {
         transitionName="fade-in-out"
         >
         <FadeTransitionHandler key={key} className="page" footer={this.footer}>
-          {loaded ? this.props.children : <LoadingPage/>}
+          {loaded ? this.props.children : <LoadingPage productName={productName} />}
         </FadeTransitionHandler>
       </ReactCSSTransitionGroup>
     )

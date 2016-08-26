@@ -1,27 +1,29 @@
 
-import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
-import { Link } from 'react-router';
-
-// Import these components directly to make Babel optimizations happy.  One of
-// the optimization plugins we use for production builds doesn't like the use
-// of `Navbar.Brand` in JSX elements.
-// TODO: Do same in Aviator.
-import NavbarBrand from 'react-bootstrap/lib/NavbarBrand';
-import NavbarHeader from 'react-bootstrap/lib/NavbarHeader';
-import NavbarCollapse from 'react-bootstrap/lib/NavbarCollapse';
+import React, {PropTypes} from 'react';
+import { Nav } from 'react-bootstrap';
+import { Header as FlightHeader } from 'flight-common';
 
 import {NavItemLink} from 'components/Links';
 
 class Header extends React.Component {
   render() {
-    const {
-      currentStorage,
-    } = this.props;
+    const {productName} = this.props;
+    return (
+      <FlightHeader productName={productName} >
+        <Nav>
+          <NavItemLink to="/">
+            {productName}
+          </NavItemLink>
+        </Nav>
+        {this.navbarRight()}
+      </FlightHeader>
+    )
+  }
 
-    let navbarRight;
+  navbarRight() {
+    const {currentStorage} = this.props;
     if (currentStorage) {
-      navbarRight = (
+      return (
         <Nav pullRight>
           <p className="navbar-text">
             Logged in as <strong>{currentStorage.username}</strong> to {currentStorage.address}
@@ -30,27 +32,14 @@ class Header extends React.Component {
       );
     }
     else {
-      navbarRight = null;
+      return null;
     }
-
-    return (
-      <Navbar className="flight-Navbar" fluid fixedTop>
-        <NavbarHeader>
-          <NavbarBrand className="flight-Navbar-brand">
-            <Link to="/"/>
-          </NavbarBrand>
-        </NavbarHeader>
-        <NavbarCollapse>
-          <Nav>
-            <NavItemLink to="/">
-              Alces Storage Manager
-            </NavItemLink>
-          </Nav>
-          {navbarRight}
-        </NavbarCollapse>
-      </Navbar>
-    )
   }
+}
+
+Header.propTypes = {
+  currentStorage: PropTypes.object,
+  productName: PropTypes.string.isRequired,
 }
 
 export default Header;
