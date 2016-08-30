@@ -44,12 +44,6 @@ with bundler:
 directory. A sample configuration file is provided at 
 `config/storagemanager.yml.ex`. The two sections of this file are as follows:
 
-   ### :auth
-   Specifies options for connecting to the ASM daemon used for authentication.
-   * `:address` - the IP address and port of the ASM daemon to connect to. This
-   should be the (or one of the) ASMD(s) configured in step 3. Required.
-   * `:ssl` - set to `true` to use an SSL connection. Recommended.
-
    ### :ssl
 
    Specifies SSL configuration options. Only used if there are remote
@@ -121,11 +115,34 @@ dependencies with `npm`:
    
    For production environments it may be more suitable to run ASM under nginx
    or Apache.
+   
+12. When not running in an Alces Clusterware environment, it may be necessary
+    to manually register any ASM daemons with the running ASM web server. This
+    can be achieved with a suitable POST request to (e.g.)
+    `http://storagemanagerhost:8080/api/v1/storage/register`
+    
+    The body of the POST should be a JSON cluster record, similar to the
+    following:
+    
+    ```json
+    {
+        "cluster": {
+            "name": "Important File Storage",
+            "ip": "192.168.1.42",
+            "auth_port": 25268,
+            "ssl": true
+        }
+    }
+    ```
+    
+    Multiple ASM daemons may be registered with multiple ASM web servers in
+    this way. Registrations are persisted even if the ASM server is restarted.
  
 ## Usage
  1. Load the Storage Manager in your web browser. If running as in the above
  example, this may be at http://storagemanagerhost:8080.
- 2. Log in using your cluster username and password.
+ 2. Log in to your chosen storage collection using your cluster username and
+    password.
 
 ## Defining storage targets
  
