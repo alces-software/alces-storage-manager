@@ -1,9 +1,7 @@
 
 import React, {PropTypes} from 'react';
 import { Nav } from 'react-bootstrap';
-import { Header as FlightHeader } from 'flight-common';
-
-import {NavItemLink} from 'components/Links';
+import { Header as FlightHeader, NavItemLink } from 'flight-common';
 
 class Header extends React.Component {
   render() {
