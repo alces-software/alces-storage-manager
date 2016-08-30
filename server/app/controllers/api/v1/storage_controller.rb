@@ -4,7 +4,25 @@ require 'base64'
 
 class Api::V1::StorageController < ApplicationController
   def index
-    render json: AlcesStorageManager::config['collections']
+    render json: AlcesStorageManager::config['collections'].tap { |collections|
+      authentications = session[:authentications]
+      collections.each do |id, collection|
+        if authentications.key?(id)
+          collection['username'] = authentications[id]
+
+          daemon = AlcesStorageManager::daemon_for(id)
+          targets = Alces::Targets.new(authentications[id], daemon)
+          allTargets = targets.all
+          warnings = targets.errors.map { |name, file, error|
+            "Invalid target definition for '#{name}' defined in #{file}: #{error}"
+          }
+
+          collection['warnings'] = warnings
+          collection['hasTargets'] = !allTargets.empty?
+
+        end
+      end
+    }
   end
 
   # params[:cluster] should contain:
