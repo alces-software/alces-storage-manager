@@ -77,7 +77,7 @@ class Api::V1::StorageController < ApplicationController
   end
 
   def logout
-    session[:authentications] = {}
+    session[:authentications].delete(params[:id])
     render json: {success: true}
   end
 
