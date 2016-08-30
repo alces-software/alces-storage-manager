@@ -38,10 +38,6 @@ module AlcesStorageManager
       DaemonClient::Connection.new(connection_opts(config['collections'][id]))
     end
 
-    def authentication_daemon
-      DaemonClient::Connection.new(connection_opts(config[:auth]))
-    end
-
     def download_size_limit
       (AlcesStorageManager::config[:downloadSizeLimit] || 50) * 1024 * 1024
     end
