@@ -1,6 +1,4 @@
-import _ from 'lodash';
 import {createSelector} from 'reselect';
-const Base64 = require('js-base64').Base64;
 
 const uiState = (state) => state.ui;
 const routerState = (state) => state.router;
@@ -29,9 +27,8 @@ export const storageCollectionsSelector = createSelector(
 
 export const storageHostFromRouteSelector = createSelector(
   (state, props) => {
-    const hashedStorageAddress = props.routeParams.hashedAddress;
-    const address = Base64.decode(hashedStorageAddress);
-    return _.find(storageState(state).hosts, ['address', address]);
+    const storageId = props.routeParams.hashedAddress;
+    return storageState(state).hosts[storageId];
   },
   (storage) => {
     return {
@@ -44,8 +41,8 @@ export const currentStorageSelector = createSelector(
   storageState,
   routerState,
   (storage, router) => {
-    const address = Base64.decode(router.params.hashedAddress);
-    const currentStorage = _.find(storage.hosts, ['address', address]);
+    const id = router.params.hashedAddress;
+    const currentStorage = storage.hosts[id];
     return currentStorage;
   }
 

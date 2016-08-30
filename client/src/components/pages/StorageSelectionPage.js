@@ -34,8 +34,8 @@ export default class StorageSelectionPage extends React.Component {
 
     return (
       <SelectionPage
-        items={hosts}
-        keyProp="address"
+        items={_(hosts).map((host) => (host)).value()}
+        keyProp="id"
         header={header}
         selectionBoxComponent={StorageSelectionCard}
         selectionBoxProps={clusterSelectionBoxProps}

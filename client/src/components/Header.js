@@ -24,7 +24,7 @@ class Header extends React.Component {
       return (
         <Nav pullRight>
           <NavItem>
-            Logged in as <strong>{currentStorage.username}</strong> to {currentStorage.address}&nbsp;
+            Logged in as <strong>{currentStorage.username}</strong> to {currentStorage.ip}:{currentStorage.auth_port}&nbsp;
           </NavItem>
           <NavItem onClick={() => {logout(currentStorage)}}>
             Log out <Icon name="sign-out" />

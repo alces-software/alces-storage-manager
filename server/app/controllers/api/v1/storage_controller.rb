@@ -1,13 +1,36 @@
 
 require 'targets'
+require 'base64'
 
 class Api::V1::StorageController < ApplicationController
   def index
-    render json: [AlcesStorageManager::config[:auth]]
+    render json: AlcesStorageManager::config['collections']
   end
 
+  # params[:cluster] should contain:
+  # name (string)
+  # ip (string)
+  # auth_port (integer)
+  # ssl (boolean, optional, defaults to true)
+  #
+  # We keep the 'cluster' moniker for consistency with AAM.
   def register
-    # TODO multi-storage support
+    config = AlcesStorageManager::config
+
+    if params.key?(:cluster)
+
+      new_storage_collection = params[:cluster]
+
+      if new_storage_collection.key?('ip') && new_storage_collection.key?('auth_port') && new_storage_collection.key?('name')
+        collection_hash = Base64.strict_encode64("#{new_storage_collection['ip']}:#{new_storage_collection['auth_port']}")
+
+        config['collections'][collection_hash] = new_storage_collection
+
+        AlcesStorageManager::write_config(config)
+        render json: {success: true} and return
+      end
+    end
+    handle_error 'invalid_configuration', :bad_request
   end
 
   def authenticate

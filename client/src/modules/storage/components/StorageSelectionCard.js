@@ -16,14 +16,14 @@ class StorageSelectionCard extends React.Component {
         >
         <FlipCard>
           <div className="flip-selection-box-front">
-            {item.address}
+            {item.name}
             <p>
               <em>Click to log in</em>
             </p>
           </div>
           <div className="flip-selection-box-back">
             <p>
-              <strong>{item.address}</strong>
+              <strong>{item.name}</strong>
             </p>
             <StorageLoginForm
               authenticate={authenticate}

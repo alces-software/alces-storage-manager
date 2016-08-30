@@ -25,20 +25,30 @@ require 'daemon_client'
 module AlcesStorageManager
   class << self
     def config
-      @config ||= YAML.load_file(Rails.root.join("config", "storagemanager.yml"))
+      @config ||= YAML.load_file(config_file).tap do |config|
+        config['collections'] ||= {}
+      end
+    end
+
+    def write_config(new_config)
+      File.write(config_file, YAML.dump(new_config))
     end
 
     def authentication_daemon
-      DaemonClient::Connection.new(connection_opts)
+      DaemonClient::Connection.new(connection_opts(config[:auth]))
     end
 
     def download_size_limit
       (AlcesStorageManager::config[:downloadSizeLimit] || 50) * 1024 * 1024
     end
     private
+
+    def config_file
+      Rails.root.join("config", "storagemanager.yml")
+    end
     
-    def connection_opts
-      auth_config = AlcesStorageManager::config[:auth].dup
+    def connection_opts(storage_config)
+      auth_config = storage_config.dup
       do_ssl = auth_config.delete(:ssl) != false
       {
         timeout: 5,
@@ -67,7 +77,7 @@ module AlcesStorageManager
         end
       end.new().ssl_config
     end
-    
+
   end
 end
 

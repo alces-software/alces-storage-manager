@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
 import {redirectTo} from 'actions/router';
-import {storageToHash} from './utils';
 
 export function loadStorageData() {
   return {
@@ -26,7 +25,7 @@ export function authenticate(storageHost, {username, password}) {
     meta: {
       apiRequest: {
         config: {
-          url: `/api/v1/storage/${storageToHash(storageHost)}/authenticate`,
+          url: `/api/v1/storage/${storageHost.id}/authenticate`,
           method: 'post',
           data: {username, password},
         },
@@ -37,7 +36,7 @@ export function authenticate(storageHost, {username, password}) {
   return (dispatch) => {
     return dispatch(authenticateRequest).
     then( () => {
-      dispatch(redirectTo(`/storage/${storageToHash(storageHost)}`));
+      dispatch(redirectTo(`/storage/${storageHost.id}`));
     });
   };
 }
@@ -51,7 +50,7 @@ export function logout(storageHost) {
     meta: {
       apiRequest: {
         config: {
-          url: `/api/v1/storage/${storageToHash(storageHost)}/logout`,
+          url: `/api/v1/storage/${storageHost.id}/logout`,
           method: 'get',
         },
       },

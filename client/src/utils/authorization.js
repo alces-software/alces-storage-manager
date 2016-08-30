@@ -1,8 +1,4 @@
-import _ from 'lodash';
 import {replace} from 'redux-router';
-
-//import {} from 'selectors';
-import {hashToStorageAddress} from 'storage/utils';
 
 // Functions for use with AuthorizedComponent.
 
@@ -10,8 +6,8 @@ import {hashToStorageAddress} from 'storage/utils';
 // Authorization functions.
 
 export function authenticatedWithCurrentStorage(store) {
-  const address = hashToStorageAddress(store.params.hashedAddress);
-  const currentStorage = _.find(store.storage.hosts, ['address', address]);
+  const storageId = store.params.hashedAddress;
+  const currentStorage = store.storage.hosts[storageId];
   return currentStorage && !!currentStorage.username;
 }
 
