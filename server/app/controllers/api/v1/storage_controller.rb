@@ -56,24 +56,32 @@ class Api::V1::StorageController < ApplicationController
     params.require(:password)
     daemon = AlcesStorageManager::daemon_for(params[:id])
 
-    auth_response = daemon.authenticate?(params[:username], params[:password])
-    if auth_response
-      reset_session
-      if !session.key?(:authentications)
-        session[:authentications] = {}
+    if daemon
+      auth_response = daemon.authenticate?(params[:username], params[:password])
+      if auth_response
+        reset_session
+        if !session.key?(:authentications)
+          session[:authentications] = {}
+        end
+        session[:authentications][params[:id]] = params[:username]
+
+        targets = Alces::Targets.new(params[:username], daemon)
+        allTargets = targets.all
+        warnings = targets.errors.map { |name, file, error|
+          "Invalid target definition for '#{name}' defined in #{file}: #{error}"
+        }
+
+        render json: {success: true, warnings: warnings, hasTargets: !allTargets.empty?}
+      else
+        handle_error 'invalid_credentials', :unauthorized
       end
-      session[:authentications][params[:id]] = params[:username]
-
-      targets = Alces::Targets.new(params[:username], daemon)
-      allTargets = targets.all
-      warnings = targets.errors.map { |name, file, error|
-        "Invalid target definition for '#{name}' defined in #{file}: #{error}"
-      }
-
-      render json: {success: true, warnings: warnings, hasTargets: !allTargets.empty?}
     else
-      handle_error 'invalid_credentials', :unauthorized
+      handle_error 'not_found', :not_found
     end
+  rescue DaemonClient::ConnError
+    config = AlcesStorageManager.config
+    config['collections'].delete(params[:id])
+    handle_error 'unavailable', :service_unavailable
   end
 
   def logout

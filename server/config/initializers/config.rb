@@ -35,7 +35,11 @@ module AlcesStorageManager
     end
 
     def daemon_for(id)
-      DaemonClient::Connection.new(connection_opts(config['collections'][id]))
+      if config['collections'].key?(id)
+        DaemonClient::Connection.new(connection_opts(config['collections'][id]))
+      else
+        nil
+      end
     end
 
     def download_size_limit
