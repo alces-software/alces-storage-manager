@@ -41,3 +41,27 @@ export function authenticate(storageHost, {username, password}) {
     });
   };
 }
+
+export function logout(storageHost) {
+  const signOutRequest = {
+    type: actionTypes.LOGOUT,
+    payload: {
+      storageHost,
+    },
+    meta: {
+      apiRequest: {
+        config: {
+          url: `/api/v1/storage/${storageToHash(storageHost)}/logout`,
+          method: 'get',
+        },
+      },
+    },
+  };
+
+  return (dispatch) => {
+    return dispatch(signOutRequest).
+    then( () => {
+      dispatch(redirectTo(`/`));
+    });
+  };
+}

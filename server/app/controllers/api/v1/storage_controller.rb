@@ -32,6 +32,11 @@ class Api::V1::StorageController < ApplicationController
     end
   end
 
+  def logout
+    session[:authenticated_username] = nil
+    render json: {success: true}
+  end
+
   private
 
   def handle_error(message, status)

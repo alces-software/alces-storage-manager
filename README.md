@@ -72,13 +72,18 @@ directory. A sample configuration file is provided at
    ```
    $ export SECRET_KEY_BASE=`./bin/rake secret`
    ```
+
+6. Clone the `flight-common` repository into the same parent directory as your
+   `alces-storage-manager` repository:
    
-5. From the `client` directory of your repository, install `node.js`
+   ```$ git clone git@github.com:alces-software/flight-common.git```
+   
+7. From the `client` directory of your ASM repository, install `node.js`
 dependencies with `npm`:
 
    ```$ npm install```
    
-6. Build the ASM web application:
+8. Build the ASM web application:
 
    ```$ npm run build```
 
@@ -91,16 +96,16 @@ dependencies with `npm`:
    Time: 61996ms
    ```
 
-7. Copy the ASM web application assets into the server's `public` directory:
+9. Copy the ASM web application assets into the server's `public` directory:
 
    ```$ cp dist/* ../server/public```
 
-8. Point Alces Storage Manager to the correct assets using the build hash from
+10. Point Alces Storage Manager to the correct assets using the build hash from
    earlier:
 
    ```$ export ASM_ASSETS_HASH=<hash>```
 
-9. Start Alces Storage Manager by running from the `server` directory:
+11. Start Alces Storage Manager by running from the `server` directory:
 
    ```$ ./bin/rails server -e production```
    

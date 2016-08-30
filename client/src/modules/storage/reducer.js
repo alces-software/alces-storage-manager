@@ -30,6 +30,18 @@ export default function reducer(state=initialState, action) {
         }
       )};
 
+    case resolve(actionTypes.LOGOUT):
+      return {
+        hosts: modifyStorageInState(
+          state.hosts,
+          action.meta.payload.storageHost.address,
+          (s) => {
+            s.username = undefined;
+            s.hasTargets = undefined;
+            s.warnings = undefined;
+          }
+        )};
+
     default:
       return state;
   }

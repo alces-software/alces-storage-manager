@@ -35,7 +35,7 @@ export default class FileManager extends React.Component {
         // For some reason elfinder.resize() triggers $(window).resize() so we need to jump through
         // some hoops here to avoid unfortunate recursion
         $(window).off("resize", null, resizeFinder);
-        var shouldBeHeight = $(window).height() - $('#elfinder').offset().top - 30;
+        var shouldBeHeight = $(window).height() - $('#elfinder').offset().top - 50;
         elfinder.resize('auto', shouldBeHeight);
         $(window).on("resize", null, resizeFinder);
       }
@@ -56,7 +56,7 @@ export default class FileManager extends React.Component {
           cwd: ['reload', 'back', '|', 'mkdir', 'mkfile', 'paste', '|', 'sort', '|', 'info'],
           files: ['getfile', 'submit', '|', 'download', 'open', 'quicklook', '|', 'duplicate', 'copy', 'cut', 'paste', '|', 'rename', 'rm', 'edit', '|', 'archive', 'extract', '|', 'info'],
         },
-        height: $(window).height() - $('#elfinder').offset().top - 30,
+        height: $(window).height() - $('#elfinder').offset().top - 50,
         resizable: false,
         ui: ['toolbar', 'tree', 'path', 'stat'],
         uiOptions: {
