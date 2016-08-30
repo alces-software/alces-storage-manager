@@ -47,6 +47,10 @@ Rails.application.routes.draw do
            to: 'storage#authenticate',
            **storage_route_params
 
+      get 'storage/:address/logout',
+           to: 'storage#logout',
+           **storage_route_params
+
       get 'storage/:address/files',
           to: 'finder#api',
           **storage_route_params

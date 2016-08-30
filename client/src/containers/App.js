@@ -7,6 +7,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Header from 'components/Header';
 import { Footer, LoadingPage } from 'flight-common';
 import * as notificationActions from 'notification/actions';
+import * as storageActions from 'storage/actions';
 import NotificationModals from 'notification/components/NotificationModals';
 import {appSelector} from 'selectors';
 
@@ -96,5 +97,6 @@ export default connect(
   appSelector,
   {
     closeNotificationModal: notificationActions.closeModal,
+    logout: storageActions.logout,
   }
 )(App);

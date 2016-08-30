@@ -1,7 +1,7 @@
 
 import React, {PropTypes} from 'react';
-import { Nav } from 'react-bootstrap';
-import { Header as FlightHeader, NavItemLink } from 'flight-common';
+import { Nav, NavItem } from 'react-bootstrap';
+import { Header as FlightHeader, NavItemLink, Icon } from 'flight-common';
 
 class Header extends React.Component {
   render() {
@@ -19,13 +19,16 @@ class Header extends React.Component {
   }
 
   navbarRight() {
-    const {currentStorage} = this.props;
+    const {currentStorage, logout} = this.props;
     if (currentStorage) {
       return (
         <Nav pullRight>
-          <p className="navbar-text">
-            Logged in as <strong>{currentStorage.username}</strong> to {currentStorage.address}
-          </p>
+          <NavItem>
+            Logged in as <strong>{currentStorage.username}</strong> to {currentStorage.address}&nbsp;
+          </NavItem>
+          <NavItem onClick={() => {logout(currentStorage)}}>
+            Log out <Icon name="sign-out" />
+          </NavItem>
         </Nav>
       );
     }
