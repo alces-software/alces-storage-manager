@@ -19,7 +19,7 @@
 # For more information on the Alces Storage Manager, please visit:
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
-class UploadController < ApplicationController
+class Api::V1::UploadController < ApplicationController
   def handle
     render plain: "", :status => 201
   end

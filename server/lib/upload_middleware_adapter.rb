@@ -28,7 +28,15 @@ module Alces
     end
 
     def call(env)
-      env['HTTP_X_FINDER_KEY'] = env['rack.session'][:authenticated_username]
+
+      storage_regex = /(\/storage\/)([0-9A-Za-z]+)(\/upload)/
+      match = storage_regex.match(env['REQUEST_PATH'])
+
+      storageId = match ? match[2] : nil
+      if storageId
+        env['HTTP_X_FINDER_KEY'] = env['rack.session'][:authentications][storageId]
+        env['STORAGE_ID'] = storageId
+      end
       @app.call(env)
     end
   end

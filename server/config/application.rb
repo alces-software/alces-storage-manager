@@ -29,6 +29,7 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module AlcesStorageManager
+
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -48,8 +49,9 @@ module AlcesStorageManager
     # This require statement must be within the scope of Application
     require 'targets'
     require 'upload_middleware_adapter'
-    config.middleware.use Alces::UploadMiddleware, targets_class: Alces::Targets, paths: ['/file-upload']
-    config.middleware.insert_before Alces::UploadMiddleware, Alces::UploadMiddlewareAdapter
+    require 'alces/multi_cluster_upload_middleware'
+    config.middleware.use Alces::MultiClusterUploadMiddleware, targets_class: Alces::Targets, paths: ['/storage/*/upload']
+    config.middleware.insert_before Alces::MultiClusterUploadMiddleware, Alces::UploadMiddlewareAdapter
   end
 end
 

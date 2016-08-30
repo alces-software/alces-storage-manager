@@ -12,6 +12,7 @@ export default class Uploader extends React.Component {
     const elfinderNode = $(this.props.elfinderNode());
     const uploadSettings = this.uploadSettings.bind(this);
     const refreshElfinder = this.refreshElfinder.bind(this);
+    const collectionId = this.props.collectionId;
 
     $(function() {
       uploader.dialog({
@@ -22,7 +23,7 @@ export default class Uploader extends React.Component {
       }).plupload({
           // General settings
           runtimes : 'html5,flash,silverlight,html4',
-          url : "/file-upload",
+          url : `/api/v1/storage/${collectionId}/upload`,
           multipart: false, // Alces::UploadMiddleware doesn't support multipart
 
           headers : {

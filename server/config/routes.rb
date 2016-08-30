@@ -40,7 +40,7 @@ Rails.application.routes.draw do
       end
 
       storage_route_params = {
-          constraints: {address: /[^\/]+/} # Allow address to have any chars except '/'.
+          constraints: {id: /[^\/]+/} # Allow id to have any chars except '/'.
       }
 
       post 'storage/:id/authenticate',
@@ -57,6 +57,10 @@ Rails.application.routes.draw do
 
       post 'storage/:id/files',
           to: 'finder#api',
+          **storage_route_params
+
+      post 'storage/:id/upload',
+          to: 'upload#handle',
           **storage_route_params
     end
   end

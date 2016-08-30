@@ -120,7 +120,7 @@ export default class FileManager extends React.Component {
       <div>
         {warningsBoxes}
         <div id="elfinder" ref="elfinder"></div>
-        <Uploader elfinder={this.state.elfinder} elfinderNode={this.getElfinderNode.bind(this)} cwd={this.state.cwd} />
+        <Uploader elfinder={this.state.elfinder} elfinderNode={this.getElfinderNode.bind(this)} cwd={this.state.cwd} collectionId={collection.id} />
       </div>
     );
   }
