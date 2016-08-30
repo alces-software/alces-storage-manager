@@ -41,7 +41,7 @@ export default class FileManager extends React.Component {
       }
     };
 
-    const finderApiUrl = `/api/v1/storage/${storageToHash(this.props.collection)}/files`;
+    const finderApiUrl = `/api/v1/storage/${collection.id}/files`;
 
     $(window).on("resize", resizeFinder);
 
