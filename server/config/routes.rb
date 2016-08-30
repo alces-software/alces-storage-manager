@@ -43,19 +43,19 @@ Rails.application.routes.draw do
           constraints: {address: /[^\/]+/} # Allow address to have any chars except '/'.
       }
 
-      post 'storage/:address/authenticate',
+      post 'storage/:id/authenticate',
            to: 'storage#authenticate',
            **storage_route_params
 
-      get 'storage/:address/logout',
+      get 'storage/:id/logout',
            to: 'storage#logout',
            **storage_route_params
 
-      get 'storage/:address/files',
+      get 'storage/:id/files',
           to: 'finder#api',
           **storage_route_params
 
-      post 'storage/:address/files',
+      post 'storage/:id/files',
           to: 'finder#api',
           **storage_route_params
     end

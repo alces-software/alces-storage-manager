@@ -22,7 +22,7 @@
 class Api::V1::FinderController < ElfinderController
   def api
 # Munge the request parameters since ElfinderRailsConnector expects a username there
-    params[:username] = session[:authenticated_username]
+    params[:username] = session[:authentications][params[:id]]
     super
   end
 end

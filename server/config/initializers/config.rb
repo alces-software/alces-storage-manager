@@ -34,6 +34,10 @@ module AlcesStorageManager
       File.write(config_file, YAML.dump(new_config))
     end
 
+    def daemon_for(id)
+      DaemonClient::Connection.new(connection_opts(config['collections'][id]))
+    end
+
     def authentication_daemon
       DaemonClient::Connection.new(connection_opts(config[:auth]))
     end

@@ -27,7 +27,7 @@ require 'arriba/target/posix'
 require 'arriba/target/s3'
 
 module Alces
-  class Targets < Struct.new(:username)
+  class Targets < Struct.new(:username, :daemon)
     delegate :targets, :secret, :to => self
 
     def each(&block)
@@ -36,7 +36,7 @@ module Alces
 
     def all
       @errors = []
-      targets(username).keys.map { |name| get(name) }.compact
+      targets(username, daemon).keys.map { |name| get(name) }.compact
     end
 
     def errors
@@ -45,7 +45,7 @@ module Alces
 
     def get(name)
       begin
-      data = targets(username)[name].merge(
+      data = targets(username, daemon)[name].merge(
         :name => name,
         :username => username
       )
@@ -66,10 +66,10 @@ module Alces
     private
 
     class << self
-      def targets(username)
+      def targets(username, daemon)
         @targets =
           begin
-            d = data(username).stringify_keys
+            d = data(username, daemon).stringify_keys
             d.merge(d) do |k,meta|
               if (ssl_key = meta.delete(:ssl)) != false
                 meta[:ssl] = ssl_for(ssl_key) 
@@ -98,12 +98,12 @@ module Alces
         end
       end
 
-      def data(username)
+      def data(username, daemon)
         opts = {
           :handler => 'Alces::StorageManagerDaemon::TargetsHandler',
           :username => username
         }
-        wrapper = DaemonClient::Wrapper.new(AlcesStorageManager::authentication_daemon, opts)
+        wrapper = DaemonClient::Wrapper.new(daemon, opts)
         wrapper.targets_for(username)
       end
     end

@@ -34,16 +34,19 @@ class Api::V1::StorageController < ApplicationController
   end
 
   def authenticate
-    p params
     params.require(:username)
     params.require(:password)
+    daemon = AlcesStorageManager::daemon_for(params[:id])
 
-    auth_response = AlcesStorageManager::authentication_daemon.authenticate?(params[:username], params[:password])
+    auth_response = daemon.authenticate?(params[:username], params[:password])
     if auth_response
       reset_session
-      session[:authenticated_username] = params[:username]
+      if !session.key?(:authentications)
+        session[:authentications] = {}
+      end
+      session[:authentications][params[:id]] = params[:username]
 
-      targets = Alces::Targets.new(params[:username])
+      targets = Alces::Targets.new(params[:username], daemon)
       allTargets = targets.all
       warnings = targets.errors.map { |name, file, error|
         "Invalid target definition for '#{name}' defined in #{file}: #{error}"
@@ -56,7 +59,7 @@ class Api::V1::StorageController < ApplicationController
   end
 
   def logout
-    session[:authenticated_username] = nil
+    session[:authentications] = {}
     render json: {success: true}
   end
 
