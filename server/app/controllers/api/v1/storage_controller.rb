@@ -37,12 +37,16 @@ class Api::V1::StorageController < ApplicationController
 
     if params.key?(:cluster)
 
-      new_storage_collection = params[:cluster]
+      new_storage_collection = {}.tap {|hash|
+        params[:cluster].each do |key, val|
+          hash[key] = val
+        end
+      }
 
       if new_storage_collection.key?('ip') && new_storage_collection.key?('auth_port') && new_storage_collection.key?('name')
         collection_hash = Base64.strict_encode64("#{new_storage_collection['ip']}:#{new_storage_collection['auth_port']}")
 
-        config['collections'][collection_hash] = new_storage_collection
+        config['collections'][collection_hash] = new_storage_collection.to_h
 
         AlcesStorageManager::write_config(config)
         render json: {success: true} and return
