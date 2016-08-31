@@ -1,6 +1,8 @@
 
 import React from 'react';
 
+import * as storageActionTypes from 'storage/actionTypes';
+
 import {ContactCustomerSupport} from 'flight-common';
 
 import MessageGenerator from "./MessageGenerator";
@@ -69,18 +71,15 @@ export function setupDefaultErrorMessageGenerators(generatorsMap) {
 // customize as they see fit.
 //
 export function addActionTypeCustomizations(generatorsMap) {
-  generatorsMap
-  // generatorsMap.
-  //
-  //   customizeMessage(
-  //     401,
-  //     clusterActionTypes.AUTHENTICATE,
-  //     {
-  //       title: 'Authentication failure',
-  //       content: `The provided username and/or password are incorrect for the
-  //         selected cluster. Please correct these and try again.`,
-  //     }
-  //   );
+  generatorsMap.customizeMessage(
+    401,
+    storageActionTypes.AUTHENTICATE,
+    {
+      title: 'Authentication failure',
+      content: `The provided username and/or password are incorrect for the
+           selected storage collection. Please correct these and try again.`,
+    }
+  );
 
 }
 
