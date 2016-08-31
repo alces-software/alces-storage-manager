@@ -71,6 +71,23 @@ class Header extends React.Component {
         </Nav>
       );
     }
+    else if (storageHosts.length > 0) {
+      const titleText = `Logged in to ${storageHosts.length} collection${storageHosts.length == 1 ? '' : 's'}`;
+      return (
+        <Nav pullRight>
+          <NavDropdown title={titleText} id="navbar-right-menu">
+            <MenuItem header>Logged in to:</MenuItem>
+            {_(storageHosts).map(
+              (host) => {
+                return (
+                  <MenuItem onClick={() => redirectTo(`/storage/${host.id}/`)} iconName="hdd-o">{host.name} (<em>{host.username}</em>)</MenuItem>
+                );
+              }
+            ).value()}
+          </NavDropdown>
+        </Nav>
+      );
+    }
     else {
       return null;
     }
