@@ -6,3 +6,21 @@
 .navbar-default .navbar-text {
   color: white;
 }
+
+.dropdown-header {
+    color: #CCCCCC;
+}
+
+.dropdown-menu {
+  font-size: inherit;
+  min-width: 350px;
+  li a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .divider {
+    background-color: $c-primary-color--dark;
+    margin: 9px;
+  }
+}
