@@ -1,7 +1,23 @@
 import _ from 'lodash';
 import React, {PropTypes} from 'react';
-import { MenuItem, Nav, NavDropdown } from 'react-bootstrap';
+import { MenuItem as BsMenuItem, Nav, NavDropdown } from 'react-bootstrap';
 import { Header as FlightHeader, NavItemLink, Icon } from 'flight-common';
+
+const MenuItem = ({onClick, iconName, children, header, divider}) => {
+  if (header) {
+    return <BsMenuItem header>{children}</BsMenuItem>;
+  }
+  if (divider) {
+    return <BsMenuItem divider />;
+  }
+
+  return (
+    <BsMenuItem onClick={onClick}>
+      <Icon name={iconName || "fw"} />
+      {children}
+    </BsMenuItem>
+  );
+};
 
 class Header extends React.Component {
   render() {
@@ -28,10 +44,8 @@ class Header extends React.Component {
         return (
           <Nav pullRight>
             <NavDropdown title={currentText} id="navbar-right-menu">
-              <MenuItem onClick={() => {logout(currentStorage)}}>
-                Log out of {currentStorage.name} <Icon name="sign-out" />
-              </MenuItem>
-              <MenuItem onClick={() => redirectTo('/')}>Back to main menu</MenuItem>
+              <MenuItem onClick={() => {logout(currentStorage)}} iconName="sign-out">Log out of {currentStorage.name}</MenuItem>
+              <MenuItem onClick={() => redirectTo('/')} iconName="arrow-return">Back to main menu</MenuItem>
             </NavDropdown>
 
           </Nav>
@@ -45,15 +59,13 @@ class Header extends React.Component {
             {_(otherStorageHosts).map(
               (host) => {
                 return (
-                  <MenuItem onClick={() => redirectTo(`/storage/${host.id}/`)}>{host.name} (<em>{host.username}</em>)</MenuItem>
+                  <MenuItem onClick={() => redirectTo(`/storage/${host.id}/`)} iconName="hdd-o">{host.name} (<em>{host.username}</em>)</MenuItem>
                 );
               }
             ).value()}
             <MenuItem divider />
-            <MenuItem onClick={() => {logout(currentStorage)}}>
-              Log out of {currentStorage.name} <Icon name="sign-out" />
-            </MenuItem>
-            <MenuItem onClick={() => redirectTo('/')}>Back to main menu</MenuItem>
+            <MenuItem onClick={() => {logout(currentStorage)}} iconName="sign-out">Log out of {currentStorage.name}</MenuItem>
+            <MenuItem onClick={() => redirectTo('/')} iconName="arrow-return">Back to main menu</MenuItem>
           </NavDropdown>
 
         </Nav>
