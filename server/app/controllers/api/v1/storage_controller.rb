@@ -4,25 +4,30 @@ require 'base64'
 
 class Api::V1::StorageController < ApplicationController
   def index
-    render json: AlcesStorageManager::config['collections'].tap { |collections|
-      authentications = session[:authentications]
-      collections.each do |id, collection|
-        if authentications.key?(id)
-          collection['username'] = authentications[id]
 
-          daemon = AlcesStorageManager::daemon_for(id)
-          targets = Alces::Targets.new(authentications[id], daemon)
-          allTargets = targets.all
-          warnings = targets.errors.map { |name, file, error|
-            "Invalid target definition for '#{name}' defined in #{file}: #{error}"
-          }
+    all_collections = AlcesStorageManager::config['collections']
+    authentications = session[:authentications]
+    our_collections = {}
 
-          collection['warnings'] = warnings
-          collection['hasTargets'] = !allTargets.empty?
+    all_collections.each do |id, collection|
+      our_collection = collection.dup
+      if authentications.key?(id)
+        our_collection['username'] = authentications[id]
 
-        end
+        daemon = AlcesStorageManager::daemon_for(id)
+        targets = Alces::Targets.new(authentications[id], daemon)
+        allTargets = targets.all
+        warnings = targets.errors.map { |name, file, error|
+          "Invalid target definition for '#{name}' defined in #{file}: #{error}"
+        }
+
+        our_collection['warnings'] = warnings
+        our_collection['hasTargets'] = !allTargets.empty?
       end
-    }
+      our_collections[id] = our_collection
+    end
+
+    render json: our_collections
   end
 
   # params[:cluster] should contain:
@@ -63,7 +68,6 @@ class Api::V1::StorageController < ApplicationController
     if daemon
       auth_response = daemon.authenticate?(params[:username], params[:password])
       if auth_response
-        reset_session
         if !session.key?(:authentications)
           session[:authentications] = {}
         end
