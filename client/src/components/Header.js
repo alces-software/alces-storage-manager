@@ -36,6 +36,21 @@ class Header extends React.Component {
 
   navbarRight() {
     const {currentStorage, storageHosts, logout, redirectTo} = this.props;
+
+    const StorageMenuItem = ({host}) => {
+      return (
+        <MenuItem onClick={() => redirectTo(`/storage/${host.id}/`)} iconName="hdd-o">{host.name} (<em>{host.username}</em>)</MenuItem>
+      );
+    };
+
+    const storageMenuItems = (hosts) => _(hosts).map(
+      (host) => (<StorageMenuItem host={host} />)
+    ).value();
+
+    const LogoutMenuItem = ({storage}) => <MenuItem onClick={() => {logout(storage)}} iconName="sign-out">Log out of {storage.name}</MenuItem>;
+
+    const MainMenuItem = ({}) => <MenuItem onClick={() => redirectTo('/')} iconName="arrow-return">Back to main menu</MenuItem>;
+
     if (currentStorage) {
       const currentText = <span>Logged in as <strong>{currentStorage.username}</strong> to <strong>{currentStorage.name}</strong> (<em>{currentStorage.ip}:{currentStorage.auth_port}</em>)</span>;
       const otherStorageHosts = _(storageHosts).reject((host) => host.id == currentStorage.id).value();
@@ -44,8 +59,8 @@ class Header extends React.Component {
         return (
           <Nav pullRight>
             <NavDropdown title={currentText} id="navbar-right-menu">
-              <MenuItem onClick={() => {logout(currentStorage)}} iconName="sign-out">Log out of {currentStorage.name}</MenuItem>
-              <MenuItem onClick={() => redirectTo('/')} iconName="arrow-return">Back to main menu</MenuItem>
+              <LogoutMenuItem storage={currentStorage} />
+              <MainMenuItem />
             </NavDropdown>
 
           </Nav>
@@ -56,16 +71,10 @@ class Header extends React.Component {
         <Nav pullRight>
           <NavDropdown title={currentText} id="navbar-right-menu">
             <MenuItem header>Also logged in to:</MenuItem>
-            {_(otherStorageHosts).map(
-              (host) => {
-                return (
-                  <MenuItem onClick={() => redirectTo(`/storage/${host.id}/`)} iconName="hdd-o">{host.name} (<em>{host.username}</em>)</MenuItem>
-                );
-              }
-            ).value()}
+            {storageMenuItems(otherStorageHosts)}
             <MenuItem divider />
-            <MenuItem onClick={() => {logout(currentStorage)}} iconName="sign-out">Log out of {currentStorage.name}</MenuItem>
-            <MenuItem onClick={() => redirectTo('/')} iconName="arrow-return">Back to main menu</MenuItem>
+            <LogoutMenuItem storage={currentStorage} />
+            <MainMenuItem />
           </NavDropdown>
 
         </Nav>
@@ -77,13 +86,7 @@ class Header extends React.Component {
         <Nav pullRight>
           <NavDropdown title={titleText} id="navbar-right-menu">
             <MenuItem header>Logged in to:</MenuItem>
-            {_(storageHosts).map(
-              (host) => {
-                return (
-                  <MenuItem onClick={() => redirectTo(`/storage/${host.id}/`)} iconName="hdd-o">{host.name} (<em>{host.username}</em>)</MenuItem>
-                );
-              }
-            ).value()}
+            {storageMenuItems(storageHosts)}
           </NavDropdown>
         </Nav>
       );
