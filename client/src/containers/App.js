@@ -99,6 +99,6 @@ export default connect(
   {
     closeNotificationModal: notificationActions.closeModal,
     logout: storageActions.logout,
-    redirectTo: routerActions.redirectTo
+    redirectTo: routerActions.redirectTo,
   }
 )(App);
