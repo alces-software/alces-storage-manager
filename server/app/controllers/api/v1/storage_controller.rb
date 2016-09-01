@@ -11,7 +11,7 @@ class Api::V1::StorageController < ApplicationController
 
     all_collections.each do |id, collection|
       our_collection = collection.dup
-      if authentications.key?(id)
+      if authentications && authentications.key?(id)
         our_collection['username'] = authentications[id]
 
         daemon = AlcesStorageManager::daemon_for(id)
