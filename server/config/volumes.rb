@@ -23,7 +23,7 @@
 require 'targets'
 
 ElfinderRailsConnector::Configuration.configure do |config|
-  Alces::Targets.new(params[:username]).tap do |targets|
+  Alces::Targets.new(params[:username], AlcesStorageManager::daemon_for(params[:id])).tap do |targets|
     raise "Invalid user identification provided" unless targets.valid?
   end.each do |target|
     config.volume(target.to_volume)

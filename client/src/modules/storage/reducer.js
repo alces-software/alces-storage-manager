@@ -13,16 +13,16 @@ export default function reducer(state=initialState, action) {
     case resolve(actionTypes.LOAD_STORAGE_DATA):
       return {
         ...state,
-        hosts: action.payload,
+        hosts: _(action.payload).forEach((item, key) => {item.id = key}),
       };
 
     case resolve(actionTypes.AUTHENTICATE):
-      const storageHostAddress = action.meta.payload.storageHost.address;
+      const storageHostId = action.meta.payload.storageHost.id;
       const username = action.meta.payload.username;
       return {
         hosts: modifyStorageInState(
           state.hosts,
-        storageHostAddress,
+        storageHostId,
         (s) => {
           s.username = username;
           s.hasTargets = action.payload.hasTargets;
@@ -34,7 +34,7 @@ export default function reducer(state=initialState, action) {
       return {
         hosts: modifyStorageInState(
           state.hosts,
-          action.meta.payload.storageHost.address,
+          action.meta.payload.storageHost.id,
           (s) => {
             s.username = undefined;
             s.hasTargets = undefined;
@@ -48,11 +48,10 @@ export default function reducer(state=initialState, action) {
 }
 
 
-function modifyStorageInState(state, address, modifyFn) {
+function modifyStorageInState(state, id, modifyFn) {
   let newState = _.clone(state);
-  const clusterIndex = _.findIndex(newState, ['address', address]);
-  const newCluster = _.clone(newState[clusterIndex]);
+  const newCluster = _.clone(newState[id]);
   modifyFn(newCluster);
-  newState[clusterIndex] = newCluster;
+  newState[id] = newCluster;
   return newState;
 }

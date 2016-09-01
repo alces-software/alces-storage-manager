@@ -19,17 +19,8 @@
 # For more information on the Alces Storage Manager, please visit:
 # https://github.com/alces-software/alces-storage-manager
 #==============================================================================
-module Alces
-  # Munge the environment to put the username into the variable at which Alces
-  # Upload Middleware looks to find it. 
-  class UploadMiddlewareAdapter
-    def initialize(app)
-      @app = app
-    end
-
-    def call(env)
-      env['HTTP_X_FINDER_KEY'] = env['rack.session'][:authenticated_username]
-      @app.call(env)
-    end
+class Api::V1::UploadController < ApplicationController
+  def handle
+    render plain: "", :status => 201
   end
 end
