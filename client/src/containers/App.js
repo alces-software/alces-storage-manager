@@ -8,6 +8,7 @@ import Header from 'components/Header';
 import { Footer, LoadingPage } from 'flight-common';
 import * as notificationActions from 'notification/actions';
 import * as storageActions from 'storage/actions';
+import * as routerActions from 'actions/router';
 import NotificationModals from 'notification/components/NotificationModals';
 import {appSelector} from 'selectors';
 
@@ -98,5 +99,6 @@ export default connect(
   {
     closeNotificationModal: notificationActions.closeModal,
     logout: storageActions.logout,
+    redirectTo: routerActions.redirectTo,
   }
 )(App);

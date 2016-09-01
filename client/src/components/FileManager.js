@@ -5,7 +5,6 @@ import $ from 'elfinder/elfinder';
 import Uploader from 'plupload/Uploader';
 import NoTargetsMessage from 'storage/components/NoTargetsMessage';
 import { Panel } from 'react-bootstrap';
-import { storageToHash } from 'storage/utils';
 import Icon from 'components/Icon';
 const Base64 = require('js-base64').Base64;
 

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {createSelector} from 'reselect';
 
 const uiState = (state) => state.ui;
@@ -48,16 +49,25 @@ export const currentStorageSelector = createSelector(
 
 );
 
+const authenticatedStorageSelector = createSelector(
+  storageState,
+  (storage) => {
+    return _(storage.hosts).filter((storage) => !!storage.username).value()
+  }
+);
+
 export const appSelector = createSelector(
   notificationsSelector,
   uiState,
   currentStorageSelector,
+  authenticatedStorageSelector,
 
-  (notifications, ui, currentStorage) => {
+  (notifications, ui, currentStorage, storageHosts) => {
     return {
       notifications,
       ui,
       currentStorage,
+      storageHosts,
     }
   }
 );

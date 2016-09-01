@@ -32,10 +32,10 @@ class StorageLoginForm extends Component {
     const authenticateWithStorageHost = _.partial(authenticate, host);
     const incomplete = !(username.value && password.value);
 
-    const submitButtonIcon = submitting ? "cluster-authenticating" : "cluster";
+    const submitButtonIcon = submitting ? "aam-cluster-authenticating" : "aam-cluster";
     const submitButtonText = (
       <span>
-        Login&nbsp;&nbsp;<Icon name={submitButtonIcon}/>
+        Log in&nbsp;&nbsp;<Icon name={submitButtonIcon}/>
       </span>
     );
 
