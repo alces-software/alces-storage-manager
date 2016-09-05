@@ -5,7 +5,7 @@ import $ from 'elfinder/elfinder';
 import Uploader from 'plupload/Uploader';
 import NoTargetsMessage from 'storage/components/NoTargetsMessage';
 import { Panel } from 'react-bootstrap';
-import Icon from 'components/Icon';
+import {Icon} from 'flight-common';
 const Base64 = require('js-base64').Base64;
 
 require('elfinder/style/elfinder.min.css');

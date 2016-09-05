@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import {Button, Input} from 'react-bootstrap';
 import {reduxForm} from 'redux-form';
 
-import Icon from 'components/Icon';
+import {Icon} from 'flight-common';
 
 // redux-form needs the form name to be passed as a parameter to the component
 // to be wrapped with the reduxForm method (or passed into this method
