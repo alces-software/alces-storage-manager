@@ -108,7 +108,7 @@ if (env === "production") {
   ]
 
   resolveAlias = {
-    "flight-common": path.resolve(__dirname, '../../flight-common/src')
+    "flight-common": path.resolve(__dirname, '../../flight-common')
   }
 }
 
