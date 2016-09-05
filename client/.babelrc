@@ -5,7 +5,9 @@
   // We also use the "object rest spread operator":
   //   {...state, myKey: newValue}
   // Which isn't part of es2015.
-  "plugins": ["transform-object-rest-spread"],
+  // flight-common makes use of export extensions, so we need to include them
+  // here so that we can build flight-common from a git checkout of it.
+  "plugins": ["transform-object-rest-spread", "transform-export-extensions"],
 
   // Plugins to use depending on the environment.
   "env": {
