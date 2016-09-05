@@ -98,15 +98,22 @@ if (env === "production") {
     {
       test: /\.scss$/,
       loader: "style!css!resolve-url!sass?sourceMap"
-    },
-    // In a development environment we want to build and bundle flight-common.
+    }
+  ];
+
+  // In a development environment we want to build and bundle flight-common
+  // from a local directory.  The following loader and resolveAlias
+  // configurations allow that.
+  //
+  // This could be replaced with https://github.com/thebeansgroup/webpack-link
+  // perhaps that would be the better option.
+  loaders.push(
     {
       include: path.resolve(__dirname, '../../flight-common/src'),
       test: /\.js$/,
       loader: "babel",
     }
-  ]
-
+  );
   resolveAlias = {
     "flight-common": path.resolve(__dirname, '../../flight-common')
   }
