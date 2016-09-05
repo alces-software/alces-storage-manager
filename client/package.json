@@ -30,7 +30,7 @@
     "clipboard": "^1.5.5",
     "debounce": "^1.0.0",
     "debug": "^2.2.0",
-    "flight-common": "file:../../flight-common",
+    "flight-common": "git+file:///home/barmston/src/flight-common#experimental/production-build-ben",
     "font-awesome": "^4.5.0",
     "history": "^1.11.0",
     "jquery": "^3.1.0",
