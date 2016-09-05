@@ -8,7 +8,7 @@ var env = process.env.NODE_ENV;
 
 var appName = "alces-storage-manager";
 var entries, devServer, devtool, outputFile, pathinfo, plugins, publicPath,
-    loaders, resolveAlias, resolveRoot;
+    loaders, resolveAlias;
 
 if (env === "production") {
   devtool = "source-map";
@@ -62,7 +62,6 @@ if (env === "production") {
   ]
 
   resolveAlias = [];
-  resolveRoot = [];
 
 } else {
   devtool = "cheap-module-inline-source-map";
@@ -111,11 +110,6 @@ if (env === "production") {
   resolveAlias = {
     "flight-common": path.resolve(__dirname, '../../flight-common/src')
   }
-
-  resolveRoot = [
-    path.resolve(__dirname, '../../flight-common/src')
-  ]
-
 }
 
 module.exports = {
@@ -129,7 +123,7 @@ module.exports = {
     root: [
       path.resolve('src'),
       path.resolve('src/modules')
-    ].concat(resolveRoot),
+    ],
     extensions: [
       '', '.js'
     ],
