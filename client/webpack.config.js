@@ -53,11 +53,11 @@ if (env === "production") {
     },
     {
       test: /\.css$/,
-      loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+      loader: ExtractTextPlugin.extract("style", "css?sourceMap!resolve-url")
     },
     {
       test: /\.scss$/,
-      loader: ExtractTextPlugin.extract("css!sass")
+      loader: ExtractTextPlugin.extract("style", "css?sourceMap!resolve-url!sass?sourceMap")
     }
   ]
 
@@ -94,11 +94,11 @@ if (env === "production") {
     },
     {
       test: /\.css$/,
-      loader: "style!css?sourceMap"
+      loader: "style!css?sourceMap!resolve-url"
     },
     {
       test: /\.scss$/,
-      loader: "style!css?sourceMap!sass?sourceMap"
+      loader: "style!css!resolve-url!sass?sourceMap"
     },
     // In a development environment we want to build and bundle flight-common.
     {
