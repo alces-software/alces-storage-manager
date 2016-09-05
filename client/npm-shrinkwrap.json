@@ -1945,7 +1945,7 @@
     },
     "flight-common": {
       "version": "0.0.0",
-      "from": "git+file://../../flight-common#experimental/production-build",
+      "from": "git://github.com/alces-software/flight-common#experimental/production-build-ben",
       "resolved": "./node_shrinkwrap/flight-common-0.0.0.tar",
       "dependencies": {
         "history": {
