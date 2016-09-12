@@ -1,6 +1,6 @@
 {
   "name": "alces-storage-manager-client",
-  "version": "0.0.0",
+  "version": "2016.02.0",
   "description": "Alces Storage Manager Client",
   "engines": {
     "node": "4.1.2"
