@@ -36,7 +36,9 @@ module AlcesStorageManager
 
     def daemon_for(id)
       if config['collections'].key?(id)
-        DaemonClient::Connection.new(connection_opts(config['collections'][id]))
+        DaemonClient::Connection.new(connection_opts(config['collections'][id].tap { |opts|
+          opts['address'] = "#{opts['ip']}:#{opts['auth_port']}"
+        }))
       else
         nil
       end
