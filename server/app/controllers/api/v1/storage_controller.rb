@@ -10,21 +10,25 @@ class Api::V1::StorageController < ApplicationController
     our_collections = {}
 
     all_collections.each do |id, collection|
-      our_collection = collection.dup
-      if authentications && authentications.key?(id)
-        our_collection['username'] = authentications[id]
+      begin
+        our_collection = collection.dup
+        if authentications && authentications.key?(id)
+          our_collection['username'] = authentications[id]
 
-        daemon = AlcesStorageManager::daemon_for(id)
-        targets = Alces::Targets.new(authentications[id], daemon)
-        allTargets = targets.all
-        warnings = targets.errors.map { |name, file, error|
-          "Invalid target definition for '#{name}' defined in #{file}: #{error}"
-        }
+          daemon = AlcesStorageManager::daemon_for(id)
+          targets = Alces::Targets.new(authentications[id], daemon)
+          allTargets = targets.all
+          warnings = targets.errors.map { |name, file, error|
+            "Invalid target definition for '#{name}' defined in #{file}: #{error}"
+          }
 
-        our_collection['warnings'] = warnings
-        our_collection['hasTargets'] = !allTargets.empty?
+          our_collection['warnings'] = warnings
+          our_collection['hasTargets'] = !allTargets.empty?
+        end
+        our_collections[id] = our_collection
+      rescue DaemonClient::ConnError => e
+        handle_daemon_conn_error(id, e)
       end
-      our_collections[id] = our_collection
     end
 
     render json: our_collections
@@ -86,9 +90,8 @@ class Api::V1::StorageController < ApplicationController
     else
       handle_error 'not_found', :not_found
     end
-  rescue DaemonClient::ConnError
-    config = AlcesStorageManager.config
-    config['collections'].delete(params[:id])
+  rescue DaemonClient::ConnError => e
+    handle_daemon_conn_error(params[:id], e)
     handle_error 'unavailable', :service_unavailable
   end
 
@@ -101,6 +104,12 @@ class Api::V1::StorageController < ApplicationController
 
   def handle_error(message, status)
     render json: {success: false, error: message}, status: status
+  end
+
+  def handle_daemon_conn_error(id, error)
+    logger.error(error)
+    config = AlcesStorageManager.config
+    config['collections'].delete(id)
   end
 
 end
