@@ -46,6 +46,20 @@ export function setupDefaultErrorMessageGenerators(generatorsMap) {
     </div>
   );
 
+  const notFoundErrorMessageGenerator = new MessageGenerator(
+    'Not found',
+    <div>
+      The requested item was not found.
+    </div>
+  );
+
+  const unavailableErrorMessageGenerator = new MessageGenerator(
+    'Not found',
+    <div>
+      The requested item is not currently available.
+    </div>
+  );
+
   // Any bad gateway response that we have not planned for is an unexpected
   // error, so display the standard message.
   // TODO: this is needed in order to override the message for this status code
@@ -57,9 +71,11 @@ export function setupDefaultErrorMessageGenerators(generatorsMap) {
   generatorsMap.
     addGeneratorForCode(0,   serverUnavailableErrorMessageGenerator).
     addGeneratorForCode(401, unauthorizedErrorMessageGenerator).
+    addGeneratorForCode(404, notFoundErrorMessageGenerator).
     addGeneratorForCode(422, unprocessableEntityErrorMessageGenerator).
     addGeneratorForCode(500, serverErrorMessageGenerator).
     addGeneratorForCode(502, badGatewayErrorMessageGenerator).
+    addGeneratorForCode(503, unavailableErrorMessageGenerator).
     addUnexpectedGenerator(unexpectedErrorMessageGenerator);
 }
 
@@ -78,6 +94,25 @@ export function addActionTypeCustomizations(generatorsMap) {
       title: 'Authentication failure',
       content: `The provided username and/or password are incorrect for the
            selected storage collection. Please correct these and try again.`,
+    }
+  );
+
+  generatorsMap.customizeMessage(
+    404,
+    storageActionTypes.AUTHENTICATE,
+    {
+      title: 'Storage collection not found',
+      content: `The selected storage collection is not available.`,
+    }
+  );
+
+  generatorsMap.customizeMessage(
+    503,
+    storageActionTypes.AUTHENTICATE,
+    {
+      title: 'Storage collection unavailable',
+      content: `The selected storage collection is currently unavailable. Please try again later
+            or contact your network administrator.`,
     }
   );
 
