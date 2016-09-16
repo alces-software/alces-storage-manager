@@ -22,8 +22,8 @@ export function setupDefaultErrorMessageGenerators(generatorsMap) {
   const serverUnavailableErrorMessageGenerator = new MessageGenerator(
     'Unable to communicate with server',
     <div>
-      Alces Access Manager was unable to complete your action as it was unable
-      to communicate with the Access Manager web server; please check your
+      Alces Storage Manager was unable to complete your action as it was unable
+      to communicate with the Storage Manager web server; please check your
       internet connection and try again. <ContactCustomerSupport/>
     </div>
   );
@@ -41,7 +41,7 @@ export function setupDefaultErrorMessageGenerators(generatorsMap) {
   const serverErrorMessageGenerator = new MessageGenerator(
     'Unexpected error',
     <div>
-      The Alces Access Manager web server errored while attempting to complete
+      The Alces Storage Manager web server errored while attempting to complete
       your request. <ContactCustomerSupport/>
     </div>
   );
