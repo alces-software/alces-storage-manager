@@ -110,6 +110,7 @@ class Api::V1::StorageController < ApplicationController
     logger.error(error)
     config = AlcesStorageManager.config
     config['collections'].delete(id)
+    AlcesStorageManager.write_config
   end
 
 end
