@@ -21,6 +21,10 @@
 #==============================================================================
 class Api::V1::UploadController < ApplicationController
   def handle
-    render plain: "", :status => 201
+    if request.env[:upload_middleware_error]
+      render :json => {success: false, error: request.env[:upload_middleware_error].message}, :status => 503
+    else
+      render plain: "", :status => 201
+    end
   end
 end
