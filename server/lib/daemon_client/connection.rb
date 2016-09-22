@@ -58,7 +58,7 @@ module DaemonClient
       @address = addresses.find do |a|
         ::Net::Ping::TCP.new(*a.split(':'), options[:timeout]||2).ping
       end
-      ::Kernel.raise ::DaemonClient::ConnError, "Could not communicate with any ASM daemons: #{addresses.inspect}" if @address.nil?
+      ::Kernel.raise ::DaemonClient::ConnError, "Could not communicate with the storage collection  #{addresses.inspect}" if @address.nil?
       @executor = ::DaemonClient::Executor.new(@address, options)
     end
 
