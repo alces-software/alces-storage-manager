@@ -30,7 +30,7 @@ module AlcesStorageManager
       end
     end
 
-    def write_config(new_config)
+    def write_config(new_config=config)
       File.write(config_file, YAML.dump(new_config))
     end
 
