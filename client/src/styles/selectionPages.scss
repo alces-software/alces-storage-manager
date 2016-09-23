@@ -1,0 +1,146 @@
+
+$selection-box-height: 330px;
+$selection-box-color: #eee;
+
+@mixin selection-box-border() {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 25px;
+}
+
+@mixin selection-box-inside() {
+    margin: 25px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+// We use flexbox for selection boxes (in selection-box-inside) so we can make
+// this container fill the remaining space, and can then position
+// selection-box-button-inner-container at the bottom of this so the buttons
+// are aligned at the bottom of each selection box.
+.selection-box-button-container {
+  flex-grow: 1;
+  position: relative;
+}
+
+.selection-box-button-inner-container {
+  // Position this element across the bottom of the outer container.
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+}
+
+.selection-box-button {
+  width: 100%;
+  margin-bottom: 5px;
+  input {
+    width: inherit;
+  }
+}
+
+.selection-details-box {
+  @include selection-box-border();
+  @include selection-box-inside();
+
+  background-color: $selection-box-color;
+}
+
+.flip-selection-box {
+  @include selection-box-inside();
+
+  .ReactFlipCard,
+  .ReactFlipCard__Front,
+  .ReactFlipCard__Back {
+    height: $selection-box-height;
+    width: 100%;
+  }
+
+  .ReactFlipCard__Front,
+  .ReactFlipCard__Back {
+    @include selection-box-border();
+  }
+
+  .ReactFlipCard__Front {
+    background-color: $selection-box-color;
+  }
+
+  .ReactFlipCard__Back {
+    background-color: #cef;
+  }
+}
+
+.static-selection-box {
+  @include selection-box-border();
+  @include selection-box-inside();
+
+  height: $selection-box-height;
+  background-color: $selection-box-color;
+}
+
+.cross-fade-leave {
+  opacity: 1;
+}
+.cross-fade-leave.cross-fade-leave-active {
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+
+.cross-fade-enter {
+  opacity: 0;
+}
+.cross-fade-enter.cross-fade-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.cross-fade-height {
+  transition: height .5s ease-in-out;
+}
+
+.pageContainer {
+  // Prevent selection box spinning flashing the scrollbar in
+  // Firefox.
+  overflow: visible;
+}
+
+.cluster-filter-container {
+  position: relative;
+}
+
+.cluster-filter {
+  opacity: 0.6;
+}
+
+.cluster-filter-message {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20;
+}
+
+.cluster-pinging-icon {
+  font-size: 72;
+}
+
+.add-item-box {
+  background-color: #D9F2D0;
+}
+
+.external-access-section {
+  text-align: left;
+}
+
+.password-revealer {
+  // Make buttons line up with input exactly - don't know why they don't
+  // otherwise.
+  .btn {
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+}

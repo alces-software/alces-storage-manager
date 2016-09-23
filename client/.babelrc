@@ -1,0 +1,38 @@
+{
+  // We use React and ECMAScript 2015.
+  "presets": ["react", "es2015"],
+
+  // We also use the "object rest spread operator":
+  //   {...state, myKey: newValue}
+  // Which isn't part of es2015.
+  // flight-common makes use of export extensions, so we need to include them
+  // here so that we can build flight-common from a git checkout of it.
+  "plugins": ["transform-object-rest-spread", "transform-export-extensions"],
+
+  // Plugins to use depending on the environment.
+  "env": {
+    // Only enable in development builds (when process.env.NODE_ENV is
+    //  'development' or undefined).
+    "development": {
+      "plugins": [
+        ["react-transform", {
+          "transforms": [{
+            "transform": "react-transform-hmr",
+            "imports": [ "react" ],
+            "locals": ["module"]
+          },
+          {
+            "transform": "react-transform-catch-errors",
+            "imports": ["react", "delicate-error-reporter"]
+          }]
+        }]
+      ]
+    },
+    "production": {
+      "plugins": [
+        "transform-react-constant-elements",
+        "transform-react-inline-elements"
+      ]
+    }
+  }
+}

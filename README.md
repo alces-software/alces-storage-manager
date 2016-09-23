@@ -1,5 +1,5 @@
 # Alces Storage Manager
-Copyright (C) 2015 Stephen F. Norledge and Alces Software Ltd. See LICENSE.txt.
+Copyright (C) 2015-2016 Stephen F. Norledge and Alces Software Ltd. See LICENSE.txt.
 
 
 ## Description
@@ -9,14 +9,31 @@ provides users with a means to manage uploading, downloading and manipulating
 files in their cluster storage via their web browser.
 
 ## Configuration
-Alces Storage Manager is a Ruby on Rails application. You must have Ruby 
-installed before installing Alces Storage Manager.
+
+There are three components to a functional ASM system:
+1. An ASM daemon
+2. The ASM web service
+3. The ASM web application
+
+The Alces Storage Manager Daemon is available on
+[GitHub](https://github.com/alces-software/alces-storage-manager-daemon).
+
+The Alces Storage Manager web service is a Ruby on Rails application. You must
+have Ruby installed before installing Alces Storage Manager.
+
+The Alces Storage Manager web application is written in node.js and needs to be
+compiled using `npm`. Once compiled, it can be deployed into the ASM web
+service.
+
+The instructions below build and configure the ASM web service and application,
+and assume a working ASM daemon
 
 1. Clone the git repository:
 
    ```$ git clone git@github.com:alces-software/alces-storage-manager.git```
 
-2. From your repository, install Ruby dependencies with bundler:
+2. From the `server` directory of your repository, install Ruby dependencies
+with bundler:
 
    ```$ ./bin/bundle install```
 
@@ -27,12 +44,6 @@ installed before installing Alces Storage Manager.
 directory. A sample configuration file is provided at 
 `config/storagemanager.yml.ex`. The two sections of this file are as follows:
 
-   ### :auth
-   Specifies options for connecting to the ASM daemon used for authentication.
-   * `:address` - the IP address and port of the ASM daemon to connect to. This
-   should be the (or one of the) ASMD(s) configured in step 3. Required.
-   * `:ssl` - set to `true` to use an SSL connection. Recommended.
-
    ### :ssl
 
    Specifies SSL configuration options. Only used if there are remote
@@ -41,15 +52,59 @@ directory. A sample configuration file is provided at
    * `:root` - Path to directory containing required SSL artefacts.
    * `:certificate` - Client SSL certificate, relative to `:root`.
    * `:key` - Client SSL keyfile, relative to `:root`.
+   * `:verify` - Enable/disable certificate verification against CA.
    * `:ca` - CA certificate, relative to `:root`.
 
-5. Start Alces Storage Manager by running 
+   ### :downloadSizeLimit
+   Limits the maximum size (in MB) of files able to be downloaded or previewed
+   from S3 volumes. Currently files on S3 volumes must be proxied with a 
+   temporary file on the ASM host before they can be downloaded by users. This
+   setting prevents users from downloading files too large, which may
+   potentially cause disk space issues. Default value is 50MB.
 
-   ```$ ./bin/rails server```
+5. Generate a server key to be used by Alces Storage Manager:
+   ```
+   $ export SECRET_KEY_BASE=`./bin/rake secret`
+   ```
+
+6. Clone the `flight-common` repository into the same parent directory as your
+   `alces-storage-manager` repository:
    
-   By default, the server will run in development mode and listen to localhost
-   on port 3000. Other options are available and can be seen with the `-h` 
-   switch, e.g.
+   ```$ git clone git@github.com:alces-software/flight-common.git```
+   
+7. From the `client` directory of your ASM repository, install `node.js`
+dependencies with `npm`:
+
+   ```$ npm install```
+   
+8. Build the ASM web application:
+
+   ```$ npm run build```
+
+   Make a note of the build's hash. This is shown in the output of the
+   previous command, for example:
+   
+   ```
+   Hash: 2b10fb50fd55b8281565  
+   Version: webpack 1.12.14
+   Time: 61996ms
+   ```
+
+9. Copy the ASM web application assets into the server's `public` directory:
+
+   ```$ cp dist/* ../server/public```
+
+10. Point Alces Storage Manager to the correct assets using the build hash from
+   earlier:
+
+   ```$ export ASM_ASSETS_HASH=<hash>```
+
+11. Start Alces Storage Manager by running from the `server` directory:
+
+   ```$ ./bin/rails server -e production```
+   
+   By default, the server will listen to localhost port 3000. Other options are
+   available and can be seen with the `-h` switch, e.g.
    
    ```$ ./bin/rails server -h```
    
@@ -59,13 +114,35 @@ directory. A sample configuration file is provided at
    ```$ ./bin/rails server -e production -b * -p 8080```
    
    For production environments it may be more suitable to run ASM under nginx
-   or Apache. You will also need to specify a secret key for the server in 
-   production mode.
+   or Apache.
+   
+12. When not running in an Alces Clusterware environment, it may be necessary
+    to manually register any ASM daemons with the running ASM web server. This
+    can be achieved with a suitable POST request to (e.g.)
+    `http://storagemanagerhost:8080/api/v1/storage/register`
+    
+    The body of the POST should be a JSON cluster record, similar to the
+    following:
+    
+    ```json
+    {
+        "cluster": {
+            "name": "Important File Storage",
+            "ip": "192.168.1.42",
+            "auth_port": 25268,
+            "ssl": true
+        }
+    }
+    ```
+    
+    Multiple ASM daemons may be registered with multiple ASM web servers in
+    this way. Registrations are persisted even if the ASM server is restarted.
  
 ## Usage
  1. Load the Storage Manager in your web browser. If running as in the above
  example, this may be at http://storagemanagerhost:8080.
- 2. Log in using your cluster username and password.
+ 2. Log in to your chosen storage collection using your cluster username and
+    password.
 
 ## Defining storage targets
  
@@ -111,6 +188,9 @@ address: "127.0.0.2:25268"
 daemon providing this volume, and defaults to the daemon configured for
 authentication. For `s3` targets, the address of the S3-compatible gateway;
 defaults to Amazon's AWS S3 service.
+* `sortKey` - when present, this will be used instead of `name` to determine
+the ordering of the target. Targets are sorted alphabetically, and system
+targets are always displayed before user targets.
 
 #### Options specific to 'posix' targets
 
@@ -133,6 +213,6 @@ https://aws.amazon.com/datasets/ for more details.
 
 #### Errors in targets
 
-Any errors in target configuration files are reported to the ASM log, but not
-(currently) the user. Such files are skipped and will not appear in the browser
-interface.
+Any errors in target configuration files are reported to the ASM log, and will
+also be shown to the user in an error box at the top of the page. Invalid
+targets are skipped and will not appear in the file browser interface.

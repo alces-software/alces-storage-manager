@@ -1,0 +1,38 @@
+
+@import "~flight-common/src/styles/main";
+
+@import "selectionPages";
+
+.navbar-default .navbar-text {
+  color: white;
+}
+
+.dropdown-header {
+    color: #CCCCCC;
+}
+
+.dropdown-menu {
+  font-size: inherit;
+  min-width: 350px;
+  li a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .divider {
+    background-color: $c-primary-color--dark;
+    margin: 9px;
+  }
+
+  .flight-icon {
+    padding-right: 10px;
+  }
+}
+
+div.elfinder-dialog-notify {
+  top: 50% !important;
+  left: 0 !important;
+  right: 0 ;
+  margin: auto auto;
+  transform: translateY(-50%);
+}
