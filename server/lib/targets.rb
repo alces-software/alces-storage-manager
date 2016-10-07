@@ -47,7 +47,8 @@ module Alces
       begin
       data = targets(username, daemon)[name].merge(
         :name => name,
-        :username => username
+        :username => username,
+        :address => daemon.address
       )
         Arriba::Target.new(data)
       rescue => e
