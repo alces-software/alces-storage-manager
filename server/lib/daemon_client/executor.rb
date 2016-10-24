@@ -23,6 +23,7 @@ require 'drb'
 require 'timeout'
 require 'active_support/core_ext/array/extract_options'
 require 'daemon_client/errors'
+require 'thread'
 
 module DRb
   class << self
@@ -55,6 +56,7 @@ module DaemonClient
       @ssl_config = options.key?(:ssl_config) && options.delete(:ssl_config)
       @remote = establish_connection
       @timeout = options.delete(:timeout) || 2
+      @lock = Mutex.new
     end
 
     def establish_connection
@@ -68,11 +70,13 @@ module DaemonClient
         r.forked_io(*a,&b)
       end
     end
-      
+
     def exec(s, *a, &b)
       options = a.extract_options!
       remotely do |r|
-        r.send(s, options, *a, &b)
+        @lock.synchronize {
+          r.send(s, options, *a, &b)
+        }
       end
     end
 
