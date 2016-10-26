@@ -45,11 +45,14 @@ module Alces
 
     def get(name)
       begin
-      data = targets(username, daemon)[name].merge(
-        :name => name,
-        :username => username,
-        :address => daemon.address
-      )
+        data = targets(username, daemon)[name].merge(
+          :name => name,
+          :username => username
+        ).tap { |d|
+          if d[:type] == 'posix'  # Daemon address is needed in the target data for posix but would break s3
+            d[:address] = daemon.address
+          end
+        }
         Arriba::Target.new(data)
       rescue => e
         STDERR.puts("WARNING: error in target #{name} for user #{username}, ignoring definition (#{e})")
