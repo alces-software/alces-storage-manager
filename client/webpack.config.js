@@ -115,7 +115,8 @@ if (env === "production") {
     }
   );
   resolveAlias = {
-    "flight-common": path.resolve(__dirname, '../../flight-common')
+    "flight-common/lib": path.resolve(__dirname, '../../flight-common/src'),
+    "flight-common": path.resolve(__dirname, '../../flight-common'),
   }
 }
 
@@ -138,6 +139,9 @@ module.exports = {
       react: path.resolve('./node_modules/react')
     },
     resolveAlias)
+  },
+  resolveLoader: {
+    root: path.resolve('node_modules'),
   },
   output: {
     path: path.join(__dirname, 'dist'),
